@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
@@ -21,63 +21,60 @@ client.ping({
   }
 });
 
-class App extends React.Component {
+function App() {
 
-  onChange(event) {
-    // Intended to run on the change of every form element
-    event.preventDefault()
-    this.setState({
-        [event.target.name]: event.target.value,
-    })
+  const [formData, updateFormData] = useState(null);
+  const [searchResult, updateResult] = useState(null);
+
+  const handleChange = (e) => {
+    updateFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
-  
-  handleSave() {
-    fetch("http://localhost:5000/JSON", {
-          method: 'POST',
-          mode: 'cors',
-          headers : {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({'searchTerm': this.state.searchTerm}),
-          }).then((response) => response.json()).then((responseJson) => {
-        const isolateJSON = JSON.parse(responseJson);
-        
-        const payload = {
-          "isolate": isolateJSON.isolateName,
-          "features": isolateJSON.features,
-        }
-        console.log(payload)
-        client.index({
-            index: "isolates",
-            type: "doc",
-            refresh: true,
-            body: payload
-        }).then(function (resp) {
-        }, function (err) {
-            console.log(err.message);
-        });
-      });
-    };
 
-  render() {
-    return (
-      <div className="App">
+  const getResult = async () => {
+    await client.indices.refresh({ index: 'isolate-features-spc' })
+    await client.search({
+      index: "isolate-features-spc",
+      type: "doc",
+      body: {query : {match : {isolateName: formData.searchTerm}}}
+      }).then(function (resp) {
+        
+        const resultArray = [];
+        for (var i in resp.hits.hits) {
+          var name = resp.hits.hits[i]._source.isolateName
+          resultArray.push((name + "\n"));
+        }
+        console.log(resultArray);
+        updateResult(resultArray);
+      }, function (err) {
+          console.log(err.message);
+      });
+  };
+
+  return (
+    <div className="App">
+      <>
         <InputGroup className="mb-3">
           <FormControl
             name="searchTerm"
             placeholder="Search term"
             aria-label="Search term"
             aria-describedby="basic-addon2"
-            onChange={this.onChange.bind(this)}
+            onChange={handleChange}
           />
           <InputGroup.Append>
-            <Button onClick={this.handleSave.bind(this)} variant="outline-primary">Search</Button>
+            <Button onClick={getResult} variant="outline-primary">Search</Button>
           </InputGroup.Append>
         </InputGroup>
-      </div>
-    );
-  };
+        <div>
+          { (searchResult===null) && <p>No result...</p> }
+          { (searchResult!==null) && <p> {searchResult}</p> }
+        </div>
+      </>
+    </div>
+  );
 };
 
 export default App;
