@@ -13,7 +13,7 @@ http.cors:
 
 Then to start the index at [http://localhost:9200](http://localhost:9200), run:
 ```
-cd OneDrive/Desktop/elasticsearch-7.11.0-windows-x86_64/elasticsearch-7.11.0
+cd elasticsearch-7.11.0-windows-x86_64/elasticsearch-7.11.0
 bin\elasticsearch.bat
 ```
 
