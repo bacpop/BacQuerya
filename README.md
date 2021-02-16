@@ -2,6 +2,21 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Running elasticsearch
+
+To query locally hosted elasticsearch indices, it is necessary to download elasticsearch (https://www.elastic.co/downloads/elasticsearch), uncompress the directory and add the following to ```config/elasticsearch.yml```:
+```
+http.cors:
+  enabled: true
+  allow-origin: /https?:\/\/localhost(:[0-9]+)?/
+```
+
+Then to start the index at [http://localhost:9200](http://localhost:9200), run:
+```
+cd OneDrive/Desktop/elasticsearch-7.11.0-windows-x86_64/elasticsearch-7.11.0
+bin\elasticsearch.bat
+```
+
 ## Available Scripts
 
 In the project directory, you can run:

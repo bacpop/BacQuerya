@@ -21,7 +21,7 @@ client.ping({
   }
 });
 
-function constructIndex() {
+function App() {
 
   const [formData, updateFormData] = useState(null);
 
@@ -48,7 +48,7 @@ function constructIndex() {
         for (var i in isolateJSON.information) {
           console.log(isolateJSON.information[i]);
           client.index({
-            index: "isolate-features-spc",
+            index: "isolates",
             type: "doc",
             refresh: true,
             body: isolateJSON.information[i]
@@ -81,4 +81,4 @@ function constructIndex() {
   );
 };
 
-export default constructIndex;
+export default App;
