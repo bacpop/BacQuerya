@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
+import IsolateQuery from './components/indexQuerying/isolateQuery'
 import PaperQuery from './components/indexQuerying/paperQuery'
 
 function App() {
@@ -50,7 +51,8 @@ function App() {
             <Button onClick={loadResult} variant="outline-primary">Search</Button>
         </Form>
         <div>
-          { (search===true && queryType==="isolate") && <PaperQuery searchTerm={formData}/> }
+          { (search===true && queryType==="isolate") && <IsolateQuery searchTerm={formData}/> }
+          { (search===true && queryType==="paper") && <PaperQuery searchTerm={formData}/> }
         </div>
       </>
     </div>
