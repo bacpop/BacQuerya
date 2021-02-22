@@ -46,8 +46,8 @@ function IsolateQuery(props) {
                 console.log(resp)
                 const resultArray = [];
                 for (var i in resp.hits.hits) {
-                var name = resp.hits.hits[i]._source
-                resultArray.push((name));
+                    var name = resp.hits.hits[i]._source
+                    resultArray.push((name));
                 }
                 console.log(resultArray);
                 updateResult(resultArray);
