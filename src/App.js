@@ -7,6 +7,7 @@ import './App.css';
 
 import IsolateQuery from './components/indexQuerying/isolateQuery'
 import PaperQuery from './components/indexQuerying/paperQuery'
+import SequenceQuery from './components/indexQuerying/sequenceQuery'
 
 function App() {
 
@@ -47,12 +48,14 @@ function App() {
               <option value='0'>choose...</option>
               <option value="isolate">isolate</option>
               <option value="paper">paper</option>
+              <option value="sequence">sequence</option>
           </FormControl>
             <Button onClick={loadResult} variant="outline-primary">Search</Button>
         </Form>
         <div>
           { (search===true && queryType==="isolate") && <IsolateQuery searchTerm={formData}/> }
           { (search===true && queryType==="paper") && <PaperQuery searchTerm={formData}/> }
+          { (search===true && queryType==="sequence") && <SequenceQuery searchTerm={formData}/> }
         </div>
       </>
     </div>
