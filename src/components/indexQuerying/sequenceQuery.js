@@ -16,7 +16,7 @@ function SequenceQuery(props) {
             },
             body: JSON.stringify({'searchTerm': props.searchTerm}),
             }).then((response) => response.json()).then((responseJson) => {
-          const sequenceResult = responseJson.sequenceResult;
+          const sequenceResult = responseJson.resultMetrics;
           console.log(sequenceResult)
           updateResult(sequenceResult);
           setSearched(true)
@@ -24,7 +24,7 @@ function SequenceQuery(props) {
     }, [updateResult, setSearched]);
 
     const renderResult = results =>
-      results.map(result => <p key={result.index}>{result[1]}</p>);
+      results.map(result => <p key={searchResult.indexOf(result)}>Gene: {result.geneName}, Isolate: {result.isolateName}, Match proportion: {result.numberMatching}%</p>);
 
     return (
         <div className="search_results">
