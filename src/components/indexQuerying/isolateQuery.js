@@ -1,11 +1,15 @@
 import {useState, useEffect} from 'react';
 import elasticsearch from "elasticsearch";
+import Button from 'react-bootstrap/Button';
 import '../../App.css';
+
+import IsolateDisplay from '../isolateDisplay'
 
 function IsolateQuery(props) {
 
     const [searched, setSearched] = useState(false)
     const [searchResult, updateResult] = useState();
+    const [selectedIsolate, selectIsolate] = useState(null);
 
     var client = new elasticsearch.Client({ host: 'localhost:9200', log: 'error' }) //locallyhosted elasticsearch index
     // Check if Connection is ok or not
@@ -21,9 +25,9 @@ function IsolateQuery(props) {
 
     useEffect(() => {
         (async () => {
-            await client.indices.refresh({ index: 'python_isolate_index2' })
+            await client.indices.refresh({ index: 'python_isolate_index3' })
             await client.search({
-            index: "python_isolate_index2",
+            index: "python_isolate_index3",
             type: "_doc",
             body: {
                 query : {
@@ -49,7 +53,6 @@ function IsolateQuery(props) {
                     var name = resp.hits.hits[i]._source
                     resultArray.push((name));
                 }
-                console.log(resultArray);
                 updateResult(resultArray);
                 setSearched(true)
             }, function (err) {
@@ -58,13 +61,29 @@ function IsolateQuery(props) {
         })();
       }, [updateResult, setSearched]);
 
+    function isolateClick(clickedIsolate) {
+        selectIsolate(clickedIsolate);
+    };
+
+    function displayResults() {
+        selectIsolate(null);
+    };
+
     const renderResult = results =>
-        results.map(result => <p key={result.index}>{result.isolateName}</p>);
+        results.map(result => <p key={result.index}><a href="#" onClick={() => isolateClick(result)}>{result.isolateName}</a></p>);
 
     return (
         <div className="search_results">
-            {(searched === true && searchResult.length > 0) && <ul>{renderResult(searchResult)}</ul>}
-            {(searched === true && searchResult.length === 0) && <p>No result...</p>}
+            {(searched === true && selectedIsolate === null && searchResult.length > 0) && <ul>{renderResult(searchResult)}</ul>}
+            {(searched === true && selectedIsolate === null && searchResult.length === 0) && <p>No result...</p>}
+            {(selectedIsolate !== null) &&
+                <div>
+                    <>
+                        <Button onClick={displayResults} variant="primary">Back to search results</Button>
+                        <IsolateDisplay isolateInfo={selectedIsolate} />
+                    </>
+                </div>
+            }
         </div>
     );
 };
