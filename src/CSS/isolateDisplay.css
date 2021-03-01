@@ -1,0 +1,33 @@
+.isolate-grid {
+    display: inline-grid;
+    grid-template-columns: 50% 50%;
+    padding: 5% 5% 5% 5%;
+    height: 100%;
+    width: 100%
+}
+
+.assembly-stats {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row:1;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.sequence-stats {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row:1;
+    margin-top: auto;
+    margin-bottom: auto;
+}

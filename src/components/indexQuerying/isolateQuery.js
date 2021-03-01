@@ -25,9 +25,9 @@ function IsolateQuery(props) {
 
     useEffect(() => {
         (async () => {
-            await client.indices.refresh({ index: 'python_isolate_index3' })
+            await client.indices.refresh({ index: 'python_isolate_index4' })
             await client.search({
-            index: "python_isolate_index3",
+            index: "python_isolate_index4",
             type: "_doc",
             body: {
                 query : {
