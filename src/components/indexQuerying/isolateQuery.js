@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import elasticsearch from "elasticsearch";
 import Button from 'react-bootstrap/Button';
-import '../../App.css';
+import { Link } from "react-router-dom";
 
 import IsolateDisplay from '../isolateDisplay'
 
@@ -16,11 +16,11 @@ function IsolateQuery(props) {
     client.ping({
         requestTimeout: Infinity,
         }, function (error) {
-            if (error) {
-                console.trace('elasticsearch cluster is down!');
-            } else {
-                console.log('All is well');
-            }
+        if (error) {
+            console.trace('elasticsearch cluster is down!');
+        } else {
+            console.log('All is well');
+        }
     });
 
     useEffect(() => {
@@ -47,7 +47,6 @@ function IsolateQuery(props) {
                 }
             }
             }).then(function (resp) {
-                console.log(resp)
                 const resultArray = [];
                 for (var i in resp.hits.hits) {
                     var name = resp.hits.hits[i]._source
@@ -61,16 +60,16 @@ function IsolateQuery(props) {
         })();
       }, [updateResult, setSearched]);
 
-    function isolateClick(clickedIsolate) {
-        selectIsolate(clickedIsolate);
-    };
-
     function displayResults() {
         selectIsolate(null);
     };
 
     const renderResult = results =>
-        results.map(result => <p key={result.index}><a href="#" onClick={() => isolateClick(result)}>{result.isolateName}</a></p>);
+        results.map(result =>
+            <li>
+                <Link to={"/isolate/" + result.Assembly_name} onClick={() => selectIsolate(result.isolateName)}>{result.isolateName}</Link>
+            </li>
+            );
 
     return (
         <div className="search_results">
@@ -78,10 +77,7 @@ function IsolateQuery(props) {
             {(searched === true && selectedIsolate === null && searchResult.length === 0) && <p>No result...</p>}
             {(selectedIsolate !== null) &&
                 <div>
-                    <>
-                        <Button onClick={displayResults} variant="primary">Back to search results</Button>
-                        <IsolateDisplay isolateInfo={selectedIsolate} />
-                    </>
+                    <Button onClick={displayResults} variant="primary">Back to search results</Button>
                 </div>
             }
         </div>

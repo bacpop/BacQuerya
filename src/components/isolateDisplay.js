@@ -1,7 +1,6 @@
 import '../CSS/isolateDisplay.css';
 
 function IsolateDisplay(props) {
-
     return(
         <div>
             <>
