@@ -3,10 +3,10 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 
-import UploadAssembly from './uploadAssembly'
 import IsolateQuery from './indexQuerying/isolateQuery'
 import PaperQuery from './indexQuerying/paperQuery'
-import SequenceQuery from './indexQuerying/sequenceQuery'
+import GeneQuery from './indexQuerying/geneQuery'
+import AssemblyQuery from './indexQuerying/assemblyQuery'
 
 function SearchPage() {
 
@@ -48,14 +48,15 @@ function SearchPage() {
                 <option value="isolate">isolate</option>
                 <option value="paper">paper</option>
                 <option value="sequence">sequence</option>
+                <option value="assembly">assembly</option>
             </FormControl>
                 <Button onClick={loadResult} variant="outline-primary">Search</Button>
             </Form>
-            <UploadAssembly />
             <div>
             { (search===true && queryType==="isolate") && <IsolateQuery searchTerm={formData}/> }
             { (search===true && queryType==="paper") && <PaperQuery searchTerm={formData}/> }
-            { (search===true && queryType==="sequence") && <SequenceQuery searchTerm={formData}/> }
+            { (search===true && queryType==="sequence") && <GeneQuery searchTerm={formData}/> }
+            { (queryType==="assembly") && <AssemblyQuery searchTerm={formData} postAssembly={search}/> }
             </div>
             </>
         </div>

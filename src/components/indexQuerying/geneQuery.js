@@ -1,7 +1,6 @@
 import {useState, useEffect} from 'react';
-import '../../App.css';
 
-function SequenceQuery(props) {
+function GeneQuery(props) {
 
     const [searched, setSearched] = useState(false)
     const [searchResult, updateResult] = useState();
@@ -34,4 +33,4 @@ function SequenceQuery(props) {
     );
 };
 
-export default SequenceQuery;
+export default GeneQuery;

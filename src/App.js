@@ -13,7 +13,7 @@ function App() {
       <Router>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/search" component={SearchPage} />
-        <Route path="/isolate/:Assembly_name" component={IsolatePage} />
+        <Route path="/isolate/:BioSample" component={IsolatePage} />
       </Router>
     </>
   );

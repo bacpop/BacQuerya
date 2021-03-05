@@ -52,6 +52,7 @@ function IsolateQuery(props) {
                     var name = resp.hits.hits[i]._source
                     resultArray.push((name));
                 }
+                console.log(resultArray)
                 updateResult(resultArray);
                 setSearched(true)
             }, function (err) {
@@ -67,7 +68,7 @@ function IsolateQuery(props) {
     const renderResult = results =>
         results.map(result =>
             <li>
-                <Link to={"/isolate/" + result.Assembly_name} onClick={() => selectIsolate(result.isolateName)}>{result.isolateName}</Link>
+                <Link to={"/isolate/" + result.BioSample} onClick={() => selectIsolate(result.BioSample)}>{result.BioSample}</Link>
             </li>
             );
 

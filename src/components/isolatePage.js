@@ -5,7 +5,7 @@ import IsolateDisplay from './isolateDisplay'
 
 const IsolatePage = ({ match }) => {
     const {
-        params: { Assembly_name },
+        params: { BioSample },
     } = match;
 
     const [searched, setSearched] = useState(false)
@@ -32,7 +32,7 @@ const IsolatePage = ({ match }) => {
             body: {
                 query: {
                   match: {
-                    Assembly_name: Assembly_name
+                    BioSample: BioSample
                   }
                 }
             }}
