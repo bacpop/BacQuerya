@@ -1,30 +1,46 @@
 import {useState, useEffect} from 'react';
-import '../../App.css';
+import { Link } from "react-router-dom";
 
 function PaperQuery(props) {
 
+    const [searched, setSearched] = useState(false)
     const [searchResult, updateResult] = useState();
+    const [selectedPaper, selectPaper] = useState(null);
+
+    //useEffect(() => {
+          //fetch("https://opencitations.net/index/api/v1/metadata/10.6084/m9.figshare.5915314.v2").then((response) => response.json()).then((responseJson) => {
+            //console.log(responseJson)
+          //});
+    //}, [updateResult]);
 
     useEffect(() => {
-        fetch("https://cors-anywhere.herokuapp.com/https://w3id.org/oc/index/coci/api/v1", {
-            method: 'POST',
-            mode: 'cors',
-            headers : {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: {'citing': "10.1186/1756-8722-6-59"},
-            }).then((response) => {
-            //.then((response) => response.json()).then((responseJson) => {
-          //const paperJSON = JSON.parse(responseJson);
-          console.log(response)
-      });
+      fetch('http://localhost:5000/paper', {
+          method: 'POST',
+          mode: 'cors',
+          headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({'searchTerm': props.searchTerm, 'source': 'searchBar'}),
+          }).then((response) => response.json()).then((responseJson) => {
+          setSearched(true)
+          updateResult(responseJson.result)
+        });
     }, [updateResult]);
 
-    return (
-        <div className="search_results">
-        </div>
-    );
+    const renderResult = results =>
+      results.map(result =>
+          <li>
+              <Link to={"/paper/" + result.encodedDOI} onClick={() => selectPaper(result.encodedDOI)}>{result.Title}</Link>
+          </li>
+          );
+
+  return (
+    <div className="search_results">
+        {(searched === true && selectedPaper === null && searchResult !== undefined) && <ul>{renderResult(searchResult)}</ul>}
+        {(searched === true && selectedPaper === null && searchResult === undefined) && <p>No result...</p>}
+    </div>
+    )
 };
 
 export default PaperQuery;

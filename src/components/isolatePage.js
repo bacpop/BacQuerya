@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import elasticsearch from "elasticsearch";
 
-import IsolateDisplay from './isolateDisplay'
+import IsolateDisplay from './displayPages/isolateDisplay'
 
 const IsolatePage = ({ match }) => {
     const {

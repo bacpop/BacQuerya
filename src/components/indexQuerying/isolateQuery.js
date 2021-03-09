@@ -3,7 +3,7 @@ import elasticsearch from "elasticsearch";
 import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
 
-import IsolateDisplay from '../isolateDisplay'
+import IsolateDisplay from '../displayPages/isolateDisplay'
 
 function IsolateQuery(props) {
 

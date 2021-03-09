@@ -1,4 +1,4 @@
-import '../CSS/isolateDisplay.css';
+import '../../CSS/isolateDisplay.css';
 
 function IsolateDisplay(props) {
     //Organism_name: NCBI Assemblies and ENA reads
@@ -15,15 +15,15 @@ function IsolateDisplay(props) {
                 <div className="assembly-stats">
                     <h5>Isolate overview</h5>
                     <p>Organism: {props.isolateInfo.Organism_name}</p>
-                    <p>Strain: {props.isolateInfo.Infraspecific_name}</p>
-                    <p>Assembly name: {props.isolateInfo.Assembly_name}</p>
-                    <p>Assembly level: {props.isolateInfo.Assembly_level}</p>
+                    { (props.isolateInfo.Infraspecific_name !== undefined) && <p>Strain: {props.isolateInfo.Infraspecific_name}</p> }
+                    { (props.isolateInfo.Assembly_name !== undefined) &&<p>Assembly name: {props.isolateInfo.Assembly_name}</p> }
+                    { (props.isolateInfo.Assembly_level !== undefined) && <p>Assembly level: {props.isolateInfo.Assembly_level}</p> }
                     <p>Genome representation: {props.isolateInfo.Genome_representation}</p>
                     <p>Submitter: {props.isolateInfo.Submitter}</p>
                     <p>Date submitted: {props.isolateInfo.Date}</p>
                     <p>Taxid: {props.isolateInfo.Taxid}</p>
-                    <p>GenBank assembly accession: {props.isolateInfo.GenBank_assembly_accession}</p>
-                    <p>RefSeq assembly accession: {props.isolateInfo.RefSeq_assembly_accession}</p>
+                    { (props.isolateInfo.GenBank_assembly_accession !== undefined) && <p>GenBank assembly accession: {props.isolateInfo.GenBank_assembly_accession}</p> }
+                    { (props.isolateInfo.RefSeq_assembly_accession !== undefined) && <p>RefSeq assembly accession: {props.isolateInfo.RefSeq_assembly_accession}</p> }
                     <p>BioProject link: {props.isolateInfo.BioProject}</p>
                     <p>BioProject sample: {props.isolateInfo.BioSample}</p>
                 </div>
