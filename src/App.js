@@ -10,12 +10,14 @@ import PaperPage from './components/paperPage'
 function App() {
 
   return (
+    <main className="App">
       <Router>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/search" component={SearchPage} />
         <Route path="/isolate/:BioSample" component={IsolatePage} />
         <Route path="/paper/:encodedDOI" component={PaperPage} />
       </Router>
+    </main>
   );
 };
 

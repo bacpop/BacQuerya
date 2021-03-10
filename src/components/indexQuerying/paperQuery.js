@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import { Link } from "react-router-dom";
+import Spinner from 'react-bootstrap/Spinner';
 
 function PaperQuery(props) {
 
@@ -37,7 +38,8 @@ function PaperQuery(props) {
 
   return (
     <div className="search_results">
-        {(searched === true && selectedPaper === null && searchResult !== undefined) && <ul>{renderResult(searchResult)}</ul>}
+        {(searched == false) && <Spinner animation="border" variant="primary" />}
+        {(searched === true && selectedPaper === null && searchResult !== undefined) && <div>{renderResult(searchResult)}</div>}
         {(searched === true && selectedPaper === null && searchResult === undefined) && <p>No result...</p>}
     </div>
     )

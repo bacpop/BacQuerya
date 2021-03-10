@@ -8,6 +8,8 @@ import PaperQuery from './indexQuerying/paperQuery'
 import GeneQuery from './indexQuerying/geneQuery'
 import AssemblyQuery from './indexQuerying/assemblyQuery'
 
+import "../CSS/searchPage.css"
+
 function SearchPage() {
 
     const [formData, updateFormData] = useState(null);
@@ -29,29 +31,30 @@ function SearchPage() {
     }
 
     return(
-        <div>
+        <div className="App">
             <>
-            <Form inline className="mb-3">
-            <FormControl
-                name="searchTerm"
-                placeholder="Search term"
-                aria-label="Search term"
-                aria-describedby="basic-addon2"
-                onChange={getTerm}/>
-            <FormControl
-                as="select"
-                className="my-1 mr-sm-2"
-                id="type"
-                custom
-                onChange={getType}>
-                <option value='0'>choose...</option>
-                <option value="isolate">isolate</option>
-                <option value="paper">paper</option>
-                <option value="sequence">sequence</option>
-                <option value="assembly">assembly</option>
-            </FormControl>
-                <Button onClick={loadResult} variant="outline-primary">Search</Button>
-            </Form>
+            { (search === false) &&
+                <Form inline className="mb-3">
+                    <FormControl
+                        name="searchTerm"
+                        placeholder="Search term"
+                        aria-label="Search term"
+                        aria-describedby="basic-addon2"
+                        onChange={getTerm} />
+                    <FormControl
+                        as="select"
+                        className="my-1 mr-sm-2"
+                        id="type"
+                        custom
+                        onChange={getType}>
+                        <option value='0'>choose...</option>
+                        <option value="isolate">isolate</option>
+                        <option value="paper">paper</option>
+                        <option value="sequence">sequence</option>
+                        <option value="assembly">assembly</option>
+                    </FormControl>
+                    <Button onClick={loadResult} variant="outline-primary">Search</Button>
+                </Form>}
             <div>
             { (search===true && queryType==="isolate") && <IsolateQuery searchTerm={formData}/> }
             { (search===true && queryType==="paper") && <PaperQuery searchTerm={formData}/> }

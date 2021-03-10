@@ -2,8 +2,7 @@ import {useState, useEffect} from 'react';
 import elasticsearch from "elasticsearch";
 import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
-
-import IsolateDisplay from '../displayPages/isolateDisplay'
+import Spinner from 'react-bootstrap/Spinner';
 
 function IsolateQuery(props) {
 
@@ -74,7 +73,8 @@ function IsolateQuery(props) {
 
     return (
         <div className="search_results">
-            {(searched === true && selectedIsolate === null && searchResult.length > 0) && <ul>{renderResult(searchResult)}</ul>}
+            {(searched == false) && <Spinner animation="border" variant="primary" />}
+            {(searched === true && selectedIsolate === null && searchResult.length > 0) && <div>{renderResult(searchResult)}</div>}
             {(searched === true && selectedIsolate === null && searchResult.length === 0) && <p>No result...</p>}
             {(selectedIsolate !== null) &&
                 <div>

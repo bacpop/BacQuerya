@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import Spinner from 'react-bootstrap/Spinner';
 
 function GeneQuery(props) {
 
@@ -27,6 +28,7 @@ function GeneQuery(props) {
 
     return (
         <div className="search_results">
+          {(searched == false) && <Spinner animation="border" variant="primary" />}
           {(searched === true && searchResult.length > 0) && <ul>{renderResult(searchResult)}</ul>}
           {(searched === true && searchResult.length === 0) && <p>No result...</p>}
         </div>
