@@ -18,7 +18,7 @@ function PaperQuery(props) {
       fetch('http://localhost:5000/paper', {
           method: 'POST',
           mode: 'cors',
-          headers : {
+          headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },

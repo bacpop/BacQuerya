@@ -26,13 +26,13 @@ function IsolateQuery(props) {
 
     useEffect(() => {
         (async () => {
-            await client.indices.refresh({ index: 'python_isolate_index4' })
+            await client.indices.refresh({ index: 'sparc_isolate_index' })
             await client.search({
-            index: "python_isolate_index4",
+            index: "sparc_isolate_index",
             type: "_doc",
             body: {
-                query : {
-                    multi_match : {
+                query: {
+                    multi_match: {
                         "query": props.searchTerm,
                         "fields": [
                             "isolateName",
@@ -43,7 +43,7 @@ function IsolateQuery(props) {
                             "BioSample"
                         ],
                         "operator": "or",
-                        "fuzziness" : "AUTO",
+                        "fuzziness": "AUTO",
                       },
                 }
             }

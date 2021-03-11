@@ -19,3 +19,11 @@
     position: absolute;
     margin-left: 55%;
 }
+
+.isolate-summary:hover {
+    visibility: visible;
+    position: absolute;
+    margin-left: 55%;
+    background-color: white;
+    box-shadow: -3px -4px 12px 0px rgba(0,0,0,0.7);
+}

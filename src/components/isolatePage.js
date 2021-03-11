@@ -25,9 +25,9 @@ const IsolatePage = ({ match }) => {
 
     useEffect(() => {
         (async () => {
-            await client.indices.refresh({ index: 'python_isolate_index4' })
+            await client.indices.refresh({ index: 'sparc_isolate_index' })
             await client.search({
-            index: "python_isolate_index4",
+            index: "sparc_isolate_index",
             type: "_doc",
             body: {
                 query: {

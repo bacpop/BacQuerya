@@ -7,6 +7,9 @@ function IsolateDisplay(props) {
     //Date: NCBI Assemblies and ENA reads
     //Taxid: NCBI Assemblies and ENA reads
     //Biosample: NCBI Assemblies and ENA reads
+    const sequenceLinks = links =>
+        links.map(link => <p><a href={link} rel="noreferrer">{link}</a></p>);
+
     return(
         <div>
             <>
@@ -24,8 +27,10 @@ function IsolateDisplay(props) {
                     <p>Taxid: {props.isolateInfo.Taxid}</p>
                     { (props.isolateInfo.GenBank_assembly_accession !== undefined) && <p>GenBank assembly accession: {props.isolateInfo.GenBank_assembly_accession}</p> }
                     { (props.isolateInfo.RefSeq_assembly_accession !== undefined) && <p>RefSeq assembly accession: {props.isolateInfo.RefSeq_assembly_accession}</p> }
-                    <p>BioProject link: {props.isolateInfo.BioProject}</p>
-                    <p>BioProject sample: {props.isolateInfo.BioSample}</p>
+                    { (props.isolateInfo.BioProject !== undefined) && <p>BioProject link: {props.isolateInfo.BioProject}</p> }
+                    <p>BioProject sample: <a href={"https://www.ncbi.nlm.nih.gov/biosample/"+props.isolateInfo.BioSample}>{props.isolateInfo.BioSample}</a></p>
+                    { (typeof props.isolateInfo.sequenceURL === 'string') && <p>Click to download assembly file: <a href={props.isolateInfo.sequenceURL} rel="noreferrer"> {props.isolateInfo.sequenceURL} </a></p>}
+                    { (Array.isArray(props.isolateInfo.sequenceURL) === true) && <div>Click to download read files: {sequenceLinks(props.isolateInfo.sequenceURL)}</div>}
                 </div>
                     { (props.isolateInfo.scaffold_stats !== undefined) &&
                         <div className="sequence-stats">
