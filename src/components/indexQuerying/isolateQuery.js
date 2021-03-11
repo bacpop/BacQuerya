@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
 
+import '../../CSS/isolateQuery.css'
+
 function IsolateQuery(props) {
 
     const [searched, setSearched] = useState(false)
@@ -66,9 +68,22 @@ function IsolateQuery(props) {
 
     const renderResult = results =>
         results.map(result =>
-            <li>
-                <Link to={"/isolate/" + result.BioSample} onClick={() => selectIsolate(result.BioSample)}>{result.BioSample}</Link>
-            </li>
+            <div className="isolate-returned">
+                <>
+                <div className="isolate-link">
+                    <Link to={"/isolate/" + result.BioSample} onClick={() => selectIsolate(result.BioSample)}>{result.BioSample}</Link>
+                    <div className="isolate-summary">
+                        <p>Organism: {result.Organism_name}</p>
+                        <p>Genome representation: {result.Genome_representation}</p>
+                        {(result.source !== undefined) && <p>Source: {result.source}</p>}
+                        <p>BioProject sample: {result.BioSample}</p>
+                        {(result.scaffold_stats !== undefined) && <p>Total sequence length: {result.scaffold_stats.total_bps}</p>}
+                        {(result.scaffold_stats !== undefined) && <p>N50: {result.contig_stats.N50}</p>}
+                        {(result.scaffold_stats !== undefined) && <p>G/C content (%): {result.contig_stats.gc_content}</p>}
+                    </div>
+                </div>
+                </>
+            </div>
             );
 
     return (
