@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import { Link } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
 
 function GeneQuery(props) {
@@ -24,7 +25,11 @@ function GeneQuery(props) {
     }, [updateResult, setSearched]);
 
     const renderResult = results =>
-      results.map(result => <p key={searchResult.indexOf(result)}>Gene: {result.geneName}, Isolate: {result.isolateName}, Match proportion: {result.numberMatching}%</p>);
+      results.map((result, index) => {
+        <p key={index}>
+          Gene: <Link to={"/gene/" + result.geneName}>{result.geneName}</Link>, Match proportion: {result.numberMatching}%
+        </p>
+      });
 
     return (
         <div className="search_results">

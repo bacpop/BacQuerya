@@ -6,6 +6,8 @@ import HomePage from './components/homePage'
 import SearchPage from './components/searchPage'
 import IsolatePage from './components/isolatePage'
 import PaperPage from './components/paperPage'
+import GenePage from './components/genePage'
+
 
 function App() {
 
@@ -16,6 +18,7 @@ function App() {
         <Route exact path="/search" component={SearchPage} />
         <Route path="/isolate/:BioSample" component={IsolatePage} />
         <Route path="/paper/:encodedDOI" component={PaperPage} />
+        <Route path="/gene/:geneName" component={GenePage} />
       </Router>
     </main>
   );

@@ -7,6 +7,8 @@ function IsolateDisplay(props) {
     //Date: NCBI Assemblies and ENA reads
     //Taxid: NCBI Assemblies and ENA reads
     //Biosample: NCBI Assemblies and ENA reads
+    console.log(props.isolateInfo)
+
     const sequenceLinks = links =>
         links.map(link => <p><a href={link} rel="noreferrer">{link}</a></p>);
 
