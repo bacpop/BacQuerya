@@ -25,16 +25,16 @@ function GeneQuery(props) {
     }, [updateResult, setSearched]);
 
     const renderResult = results =>
-      results.map((result, index) => {
-        <p key={index}>
+      results.map(result =>
+        <p key={result.geneName}>
           Gene: <Link to={"/gene/" + result.geneName}>{result.geneName}</Link>, Match proportion: {result.numberMatching}%
         </p>
-      });
+      );
 
     return (
-        <div className="search_results">
+        <div className="gene-results">
           {(searched == false) && <Spinner animation="border" variant="primary" />}
-          {(searched === true && searchResult.length > 0) && <ul>{renderResult(searchResult)}</ul>}
+          {(searched === true && searchResult.length > 0) && <div>{renderResult(searchResult)}</div>}
           {(searched === true && searchResult.length === 0) && <p>No result...</p>}
         </div>
     );

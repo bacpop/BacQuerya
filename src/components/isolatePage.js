@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import elasticsearch from "elasticsearch";
 
 import IsolateDisplay from './displayPages/isolateDisplay'
 
@@ -11,38 +10,26 @@ const IsolatePage = ({ match }) => {
     const [searched, setSearched] = useState(false)
     const [searchResult, updateResult] = useState();
 
-    var client = new elasticsearch.Client({ host: 'localhost:9200', log: 'error' }) //locallyhosted elasticsearch index
-    // Check if Connection is ok or not
-    client.ping({
-        requestTimeout: Infinity,
-        }, function (error) {
-            if (error) {
-                console.trace('elasticsearch cluster is down!');
-            } else {
-                console.log('All is well');
-            }
-    });
+    const index = ""
+    const searchURL = "" + index + ""
+    const apiKey = ""
 
+    const obj =  {
+        method: 'POST',
+        headers : {
+            'Authorization': apiKey,
+            'Content-Type': 'application/json'
+        },
+        body:
+            JSON.stringify({"query" : {"match": {"BioSample": BioSample}}})
+        };
+    
     useEffect(() => {
-        (async () => {
-            await client.indices.refresh({ index: 'sparc_isolate_index' })
-            await client.search({
-            index: "sparc_isolate_index",
-            type: "_doc",
-            body: {
-                query: {
-                  match: {
-                    BioSample: BioSample
-                  }
-                }
-            }}
-            ).then(function (resp) {
-                updateResult(resp.hits.hits[0]._source);
-                setSearched(true)
-            }, function (err) {
-                console.log(err.message);
-            });
-        })();
+        fetch(searchURL, obj).then((response) => response.json()).then((responseJson) => {
+            updateResult(responseJson.hits.hits[0]._source)
+            setSearched(true)
+            },
+            );
       }, [updateResult, setSearched]);
 
       return (

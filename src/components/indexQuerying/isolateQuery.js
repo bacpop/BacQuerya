@@ -1,5 +1,4 @@
 import {useState, useEffect} from 'react';
-import elasticsearch from "elasticsearch";
 import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
@@ -12,29 +11,23 @@ function IsolateQuery(props) {
     const [searchResult, updateResult] = useState();
     const [selectedIsolate, selectIsolate] = useState(null);
 
-    var client = new elasticsearch.Client({ host: 'localhost:9200', log: 'error' }) //locallyhosted elasticsearch index
-    // Check if Connection is ok or not
-    client.ping({
-        requestTimeout: Infinity,
-        }, function (error) {
-        if (error) {
-            console.trace('elasticsearch cluster is down!');
-        } else {
-            console.log('All is well');
-        }
-    });
+    const index = ""
+    const searchURL = "" + index + "/_search"
+    const apiKey = ""
 
-    useEffect(() => {
-        (async () => {
-            await client.indices.refresh({ index: 'sparc_isolate_index' })
-            await client.search({
-            index: "sparc_isolate_index",
-            type: "_doc",
-            body: {
-                query: {
-                    multi_match: {
-                        "query": props.searchTerm,
-                        "fields": [
+    const obj =  {
+        method: 'POST',
+        headers : {
+            'Authorization': apiKey,
+            'Content-Type': 'application/json'
+        },
+        body:
+            JSON.stringify({
+                "size" : 100,
+                "query" : {
+                    "multi_match" : {
+                        "query" : props.searchTerm,
+                        "fields" : [
                             "isolateName",
                             "Assembly_name",
                             "Infraspecific_name",
@@ -46,21 +39,21 @@ function IsolateQuery(props) {
                         "fuzziness": "AUTO",
                       },
                 }
+        })
+    };
+
+    useEffect(() => {
+        fetch(searchURL, obj).then((response) => response.json()).then((responseJson) => {
+            const resultArray = [];
+            for (var i in responseJson.hits.hits) {
+                var name = responseJson.hits.hits[i]._source
+                resultArray.push((name));
             }
-            }).then(function (resp) {
-                const resultArray = [];
-                for (var i in resp.hits.hits) {
-                    var name = resp.hits.hits[i]._source
-                    resultArray.push((name));
-                }
-                console.log(resultArray)
-                updateResult(resultArray);
-                setSearched(true)
-            }, function (err) {
-                console.log(err.message);
-            });
-        })();
-      }, [updateResult, setSearched]);
+            console.log(resultArray)
+            updateResult(resultArray);
+            setSearched(true)
+            })
+        }, [updateResult, setSearched]);
 
     function displayResults() {
         selectIsolate(null);

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import elasticsearch from "elasticsearch";
 
 function GeneDisplay(props) {
     const [searched, setSearched] = useState(false)
@@ -9,32 +8,7 @@ function GeneDisplay(props) {
     const renderDescriptions = results =>
       results.map(result => <li>{result}</li>)
 
-    const client = new elasticsearch.Client({ host: 'localhost:9200', log: 'error' })
-
-    useEffect(() => {
-        const biosampleLinks = props.geneInfo.foundIn_indices.map(isolateIndex => {
-            client.search({
-                index: "sparc_isolate_index",
-                type: "_doc",
-                body: {
-                    query: {
-                        match: {
-                            _id: isolateIndex
-                        }
-                    }
-                }
-                }).then(function (resp) {
-                    var response = resp.hits.hits[0]
-                    if(response !== undefined) {
-                        return response._source.BioSample
-                    };
-                    if(response === undefined) {
-                        return ""
-                    }
-                });
-            })
-        updateIsolateLinks(biosampleLinks)
-    }, [updateIsolateLinks])
+    console.log(props.geneInfo)
 
     const renderIsolateLinks = results =>
       results.map((result, index) => {
