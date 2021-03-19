@@ -10,20 +10,20 @@ const GenePage = ({ match }) => {
     const [searched, setSearched] = useState(false)
     const [searchResult, updateResult] = useState();
 
-    const index = ""
-    const searchURL = "" + index + ""
-    const apiKey = ""
+    const index = process.env.REACT_APP_GENE_INDEX
+    const searchURL = process.env.REACT_APP_API_URL + index + "/_search"
+    const apiKey = process.env.REACT_APP_API_KEY
 
     const obj =  {
         method: 'POST',
         headers : {
-            'Authorization': apiKey,
+            'Authorization': 'ApiKey ' + apiKey,
             'Content-Type': 'application/json'
         },
         body:
             JSON.stringify({"query" : {"match": {"panarooNames": geneName}}})
         };
-    
+
     useEffect(() => {
         fetch(searchURL, obj).then((response) => response.json()).then((responseJson) => {
             updateResult(responseJson.hits.hits[0]._source)

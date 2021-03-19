@@ -11,14 +11,14 @@ function IsolateQuery(props) {
     const [searchResult, updateResult] = useState();
     const [selectedIsolate, selectIsolate] = useState(null);
 
-    const index = ""
-    const searchURL = "" + index + "/_search"
-    const apiKey = ""
+    const index = process.env.REACT_APP_ISOLATE_INDEX
+    const searchURL = process.env.REACT_APP_API_URL + index + "/_search"
+    const apiKey = process.env.REACT_APP_API_KEY
 
     const obj =  {
         method: 'POST',
         headers : {
-            'Authorization': apiKey,
+            'Authorization': 'ApiKey ' + apiKey,
             'Content-Type': 'application/json'
         },
         body:
