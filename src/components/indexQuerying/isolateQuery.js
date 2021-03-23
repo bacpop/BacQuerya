@@ -11,7 +11,8 @@ function IsolateQuery(props) {
     const [searchResult, updateResult] = useState();
     const [selectedIsolate, selectIsolate] = useState(null);
 
-    const searchURL = process.env.REACT_APP_API_URL + "sparc_isolate_index/_search"
+    const index = process.env.REACT_APP_ISOLATE_INDEX
+    const searchURL = process.env.REACT_APP_API_URL + index + "/_search"
     const apiKey = process.env.REACT_APP_API_KEY
 
     const obj =  {

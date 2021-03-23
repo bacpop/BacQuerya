@@ -10,7 +10,8 @@ const GenePage = ({ match }) => {
     const [searched, setSearched] = useState(false)
     const [searchResult, updateResult] = useState();
 
-    const searchURL = process.env.REACT_APP_API_URL + "sparc_gene_index/_search"
+    const index = process.env.REACT_APP_GENE_INDEX
+    const searchURL = process.env.REACT_APP_API_URL + index + "/_search"
     const apiKey = process.env.REACT_APP_API_KEY
 
     const obj =  {
