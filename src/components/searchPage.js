@@ -51,7 +51,6 @@ function SearchPage() {
                         <option value="isolate">isolate</option>
                         <option value="paper">paper</option>
                         <option value="sequence">sequence</option>
-                        <option value="assembly">assembly</option>
                     </FormControl>
                     <Button onClick={loadResult} variant="outline-primary">Search</Button>
                 </Form>}

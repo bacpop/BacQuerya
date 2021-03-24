@@ -20,6 +20,8 @@ function PaperPage(props) {
         return recordArray
     };
 
+    console.log(props.paperInfo)
+
     return(
         <div>
             {(openCitaitonsResult === undefined) && <Spinner animation="border" variant="primary" />}
