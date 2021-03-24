@@ -49,8 +49,7 @@ function GeneDisplay(props) {
 
     const renderIsolateLinks = results =>
       results.map((result, index) => {
-          //return <li key={index}>Isolate: <Link to={"/search/" + biosample}>{props.geneInfo.foundIn_labels[index]}</Link><p>Sequence: {props.geneInfo.foundIn_sequences[index]}</p></li>
-          return <li key={index}>Isolate: {props.geneInfo.foundIn_labels[index]}<p>Sequence: {props.geneInfo.foundIn_sequences[index]}</p></li>
+          return <li key={index}>Isolate: <Link to={"/isolate/" + props.geneInfo.foundIn_biosamples[index]}>{props.geneInfo.foundIn_labels[index]}</Link><p>Sequence: {props.geneInfo.foundIn_sequences[index]}</p></li>
       })
 
     return(

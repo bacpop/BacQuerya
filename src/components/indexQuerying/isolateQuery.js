@@ -28,6 +28,7 @@ function IsolateQuery(props) {
                         "query" : props.searchTerm,
                         "fields" : [
                             "isolateName",
+                            "isolateNameUnderscore",
                             "Assembly_name",
                             "Infraspecific_name",
                             "GenBank_assembly_accession",
