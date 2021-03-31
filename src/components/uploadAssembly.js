@@ -13,7 +13,7 @@ class UploadAssembly extends React.Component {
         e.preventDefault();
         const data = new FormData();
         data.append('file', this.uploadInput.files[0]);
-        fetch('http://localhost:5000/assembly', {
+        fetch('https://bacquerya.azurewebsites.net:443/assembly', {
             method: 'POST',
             body: data,
             }).then((response) => {
