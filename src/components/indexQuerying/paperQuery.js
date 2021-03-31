@@ -15,7 +15,7 @@ function PaperQuery(props) {
     //}, [updateResult]);
 
     useEffect(() => {
-      fetch('http://localhost:5000/paper', {
+      fetch('https://bacquerya.azurewebsites.net:443/paper', {
           method: 'POST',
           mode: 'cors',
           headers: {

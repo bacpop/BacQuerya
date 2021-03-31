@@ -13,7 +13,7 @@ function UploadAssembly(props) {
         dataFile.append('file', FileMetadata);
         dataFile.append('filename', FileMetadata.name);
         console.log(dataFile)
-        fetch('http://localhost:5000/assembly', {
+        fetch('https://bacquerya.azurewebsites.net:443/assembly', {
             method: 'POST',
             body: dataFile
             }).then((response) => response.json()).then((responseJson) => {

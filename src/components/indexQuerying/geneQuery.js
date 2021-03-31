@@ -8,7 +8,7 @@ function GeneQuery(props) {
     const [searchResult, updateResult] = useState();
 
     useEffect(() => {
-        fetch("http://localhost:5000/sequence", {
+        fetch("https://bacquerya.azurewebsites.net:443/sequence", {
             method: 'POST',
             mode: 'cors',
             headers : {
