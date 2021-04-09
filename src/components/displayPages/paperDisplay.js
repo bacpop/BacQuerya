@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 
 function PaperPage(props) {
+
     const [openCitaitonsResult, setOpenCitations] = useState(undefined)
 
     useEffect(() => {
