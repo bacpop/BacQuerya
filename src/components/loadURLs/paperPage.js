@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import PaperDisplay from './displayPages/paperDisplay'
+import PaperDisplay from '../displayPages/paperDisplay'
 
 const PaperPage = ({ match }) => {
     const {

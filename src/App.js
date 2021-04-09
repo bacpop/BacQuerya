@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import HomePage from './components/homePage'
 import SearchPage from './components/searchPage'
-import IsolatePage from './components/isolatePage'
-import PaperPage from './components/paperPage'
-import GenePage from './components/genePage'
+import IsolatePage from './components/loadURLs/isolatePage'
+import PaperPage from './components/loadURLs/paperPage'
+import GenePage from './components/loadURLs/genePage'
 
 
 function App() {
