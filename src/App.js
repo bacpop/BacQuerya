@@ -13,11 +13,11 @@ import GenePage from './components/loadURLs/genePage'
 function App() {
 
   //resize component on window resize
-  const [windowWidth, setWidth] = useState(window.outerWidth)
-  const [windowHeight, setHeight] = useState(window.outerHeight)
+  const [windowWidth, setWidth] = useState(window.innerWidth)
+  const [windowHeight, setHeight] = useState(window.innerHeight)
   const updateDimensions = () => {
-      setWidth(window.outerWidth);
-      setHeight(window.outerHeight);
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight);
   };
   useEffect(() => {
       window.addEventListener("resize", updateDimensions);

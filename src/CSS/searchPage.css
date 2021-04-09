@@ -1,10 +1,89 @@
 .search-container {
+    position: relative;
     width: 100%;
     height: 100%;
 }
 
 .mb-3 {
-    align-items: center;
+    position: relative;
+    display: inline-block;
     justify-content: center;
-    margin-top: 300px;
+    display: inline-block;
+    top: 49.3%;
+    margin-bottom: 0% !important;
+}
+
+.mb-3-used{
+    position: relative;
+    display: inline-block;
+    justify-content: center;
+    display: inline-block;
+    top: 5% !important;
+    margin-bottom: 0% !important;
+}
+
+.search-spinner {
+    display: inline-block;
+    position: absolute;
+    justify-content: center;
+    margin-left: 1%;
+    top: 50%
+}
+
+.search-spinner-used {
+    position: absolute;
+    justify-content: center;
+    margin: auto !important;
+    top: 50%;
+}
+
+.searchResult-container {
+    position: relative;
+    justify-content: center;
+    top: 10%;
+    height: 80%;
+    width: 100%;
+}
+
+.searchResult-box {
+    height: 100%;
+    width: 80%;
+    margin: auto;
+    border-radius: 25px;
+    border: 2px solid;
+    background-color:ivory;
+}
+
+p {
+    margin-bottom: 0.25rem;
+}
+
+.isolate-returned {
+    flex-direction: column;
+}
+
+.isolate-link {
+    position: relative;
+}
+
+.isolate-link:hover .isolate-summary {
+    visibility: visible;
+    position: absolute;
+    margin-left: 55%;
+    background-color: white;
+    box-shadow: -3px -4px 12px 0px rgba(0,0,0,0.7);
+}
+
+.isolate-summary {
+    visibility: hidden;
+    position: absolute;
+    margin-left: 55%;
+}
+
+.isolate-summary:hover {
+    visibility: visible;
+    position: absolute;
+    margin-left: 55%;
+    background-color: white;
+    box-shadow: -3px -4px 12px 0px rgba(0,0,0,0.7);
 }
