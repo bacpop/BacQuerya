@@ -1,18 +1,31 @@
+import {useState, useEffect} from "react"
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import HomePage from './components/homePage'
 import SearchPage from './components/searchPage'
-import IsolatePage from './components/isolatePage'
-import PaperPage from './components/paperPage'
-import GenePage from './components/genePage'
+import IsolatePage from './components/loadURLs/isolatePage'
+import PaperPage from './components/loadURLs/paperPage'
+import GenePage from './components/loadURLs/genePage'
 
 
 function App() {
 
+  //resize component on window resize
+  const [windowWidth, setWidth] = useState(window.innerWidth)
+  const [windowHeight, setHeight] = useState(window.innerHeight)
+  const updateDimensions = () => {
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight);
+  };
+  useEffect(() => {
+      window.addEventListener("resize", updateDimensions);
+      return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
   return (
-    <main className="App">
+    <main className="App" style={{height: windowHeight + "px", width: windowWidth + " px"}}>
       <Router>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/search" component={SearchPage} />

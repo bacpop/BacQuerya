@@ -1,6 +1,7 @@
 import '../../CSS/isolateDisplay.css';
 
 function IsolateDisplay(props) {
+
     //Organism_name: NCBI Assemblies and ENA reads
     //Genome_representation: NCBI Assemblies and ENA reads
     //Submitter: NCBI Assemblies and ENA reads

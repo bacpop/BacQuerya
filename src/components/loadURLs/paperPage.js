@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import PaperDisplay from './displayPages/paperDisplay'
+import PaperDisplay from '../displayPages/paperDisplay'
 
 const PaperPage = ({ match }) => {
     const {
@@ -26,7 +26,7 @@ const PaperPage = ({ match }) => {
       }, [updateResult, setSearched]);
 
       return (
-        <div className="search_results">
+        <div className="">
             {searched === true &&
                 <div>
                     <PaperDisplay paperInfo={searchResult} />

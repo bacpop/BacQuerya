@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function GeneDisplay(props) {
+
     const [searched, setSearched] = useState(false)
     const [isolateLinks, updateIsolateLinks] = useState();
 

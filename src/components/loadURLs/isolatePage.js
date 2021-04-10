@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 
-import GeneDisplay from './displayPages/geneDisplay'
+import IsolateDisplay from '../displayPages/isolateDisplay'
 
-const GenePage = ({ match }) => {
+const IsolatePage = ({ match }) => {
     const {
-        params: { geneName },
-        } = match;
+        params: { BioSample },
+    } = match;
 
     const [searched, setSearched] = useState(false)
     const [searchResult, updateResult] = useState();
 
-    const searchURL = process.env.REACT_APP_API_URL + "/sparc_gene_index/_search"
+    const searchURL = process.env.REACT_APP_API_URL + "/sparc_isolate_index/_search"
     const apiKey = process.env.REACT_APP_API_KEY
 
     const obj =  {
@@ -20,7 +20,7 @@ const GenePage = ({ match }) => {
             'Content-Type': 'application/json'
         },
         body:
-            JSON.stringify({"query" : {"match": {"panarooNames": geneName}}})
+            JSON.stringify({"query" : {"match": {"BioSample": BioSample}}})
         };
 
     useEffect(() => {
@@ -35,11 +35,11 @@ const GenePage = ({ match }) => {
         <div className="search_results">
             {searched === true &&
                 <div>
-                    <GeneDisplay geneInfo={searchResult} />
+                    <IsolateDisplay isolateInfo={searchResult} />
                 </div>
             }
         </div>
     );
   };
 
-export default GenePage;
+export default IsolatePage;
