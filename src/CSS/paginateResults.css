@@ -1,0 +1,54 @@
+.searchResult-container {
+    position: relative;
+    justify-content: center;
+    top: 10%;
+    height: 80%;
+    width: 100%;
+}
+
+.searchResult-box {
+    height: 100%;
+    width: 80%;
+    margin: auto;
+    border-radius: 15px;
+    border: 2px solid;
+    background-color:ivory;
+}
+
+.navbar-collapse.collapse {
+    position: relative;
+    justify-content: center;
+}
+
+.searchResult-items {
+    padding-top: 2%;
+}
+
+.searchResult-bar {
+    background-color: gainsboro;
+    border-radius: 30px;
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.searchResult-bar-genetext {
+    position: relative;
+    float: left;
+    margin-left: 15%;
+    margin-right: auto;
+}
+
+.searchResult-bar-matchproportion {
+    position: relative;
+    float: right;
+    margin-right: 15%;
+    margin-left: auto;
+}
+
+.searchResult-bar-paper {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}

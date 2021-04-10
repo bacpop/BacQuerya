@@ -26,7 +26,7 @@ const PaperPage = ({ match }) => {
       }, [updateResult, setSearched]);
 
       return (
-        <div className="search_results">
+        <div className="">
             {searched === true &&
                 <div>
                     <PaperDisplay paperInfo={searchResult} />

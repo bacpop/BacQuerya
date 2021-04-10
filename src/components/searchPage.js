@@ -60,22 +60,22 @@ function SearchPage() {
     };
     //map array of search results to an intepretable output
     if (queryType === "paper" && queryResult) {
-        var resultsRendered = queryResult.map(result => {
+        var resultsRendered = queryResult.map((result, index) => {
             if (result.encodedDOI !== undefined) {
                 return (
-                    <li>
-                        <Link to={"/paper/" + result.encodedDOI}>{result.Title}</Link>
+                    <li key={index}>
+                        <Link to={"/paper/" + result.encodedDOI} target="_blank">{result.Title}</Link>
                     </li>
         )}});
     };
     if (queryType === "isolate" && queryResult) {
-        var resultsRendered = queryResult.map(result => {
+        var resultsRendered = queryResult.map((result, index) => {
             if (result.BioSample !== undefined) {
                 return (
                     <div className="isolate-returned">
                         <>
                         <div className="isolate-link">
-                            <Link to={"/isolate/" + result.BioSample}>{result.BioSample}</Link>
+                            <Link to={"/isolate/" + result.BioSample} target="_blank">{result.BioSample}</Link>
                             <div className="isolate-summary">
                                 <p>Organism: {result.Organism_name}</p>
                                 <p>Genome representation: {result.Genome_representation}</p>
@@ -91,11 +91,16 @@ function SearchPage() {
         )}});
     };
         if (queryType === "sequence" && queryResult) {
-            var resultsRendered = queryResult.map(result => {
+            var resultsRendered = queryResult.map((result, index)=> {
                 if (result.geneName !== undefined) {
                     return (
-                        <p key={result.geneName}>
-                            Gene: <Link to={"/gene/" + result.geneName}>{result.geneName}</Link>, Match proportion: {result.numberMatching}%
+                        <p key={index}>
+                            <Link className="geneResult-align" to={"/gene/" + result.geneName} target="_blank">
+                                {result.geneName}
+                            </Link>
+                            <p className="matchProportion-align">
+                                {result.numberMatching}%
+                            </p>
                         </p>
             )}});
     };
@@ -128,7 +133,7 @@ function SearchPage() {
                 <Button onClick={loadResult} variant="outline-primary">Search</Button>
             </Form>
             { (search===true && queryType !== "0") && <Spinner className={spinner_class} animation="border" variant="primary" /> }
-            { (search===false && searched == true && resultsRendered) && <Paginate resultsRendered={resultsRendered} />}
+            { (search===false && searched == true && resultsRendered) && <Paginate resultsRendered={resultsRendered} queryType={queryType}/>}
             { (search===false && searched == true && queryResult && queryResult.length === 0) && <div>No result...</div> }
             </>
         </div>

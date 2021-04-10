@@ -1,58 +1,80 @@
-import { useState, useEffect } from "react"
+import React from "react"
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 
-function Paginate(props) {
+import "../CSS/paginateResults.css"
 
-    const [loadPageNumber, selectPageNumber] = useState(1);
-    const [slicedResults, setSlicedResults] = useState(null);
-    const [slicedResultIndices, setSlicedResultIndices] = useState(null);
+class Paginate extends React.Component {
+    constructor() {
+      super();
+      this.state = {
+        currentPage: 1,
+        todosPerPage: 25
+      };
+      this.handleClick = this.handleClick.bind(this);
+    }
 
-    const clickedPage = (index) => {
-        selectPageNumber(index);
-    };
+    handleClick(event) {
+      this.setState({
+        currentPage: Number(event.target.id)
+      });
+    }
 
-    useEffect(() => {
-        var resultIndices = [];
-        var paginatedResults = [];
-        var i, j, temparray, chunk = 25;
-        if (paginatedResults.length === 0) {
-            for (i = 0, j = props.resultsRendered.length; i < j; i += chunk) {
-                temparray = props.resultsRendered.slice(i, i + chunk);
-                paginatedResults.push(temparray);
-                resultIndices.push((i + chunk) / chunk);
-            };
-        };
-        if (paginatedResults.length !== 0) {
-            setSlicedResults(paginatedResults)
-            setSlicedResultIndices(resultIndices)
-        };
-    }, [setSlicedResults, setSlicedResultIndices]);
-
-    var renderedButtons = null
-    if (slicedResultIndices) {
-        renderedButtons = slicedResultIndices.map((result, index) => {
-            return (
-                <Nav.Link onClick={() => { clickedPage(index) }}>{index + 1}</Nav.Link>
-            )});
-        };
-    return (
+    render() {
+      const { currentPage, todosPerPage} = this.state;
+      const indexOfLastTodo = currentPage * todosPerPage;
+      const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
+      const renderTodos = this.props.resultsRendered.slice(indexOfFirstTodo, indexOfLastTodo);
+      // Logic for displaying page numbers
+      const pageNumbers = [];
+      for (let i = 1; i <= Math.ceil(this.props.resultsRendered.length / todosPerPage); i++) {
+        pageNumbers.push(i);
+      }
+      const renderPageNumbers = pageNumbers.map(number => {
+          return (
+            <Nav.Link
+            key={number}
+            id={number}
+            onClick={this.handleClick}
+          >
+            {number}
+          </Nav.Link>
+        )})
+      return (
         <div className="searchResult-container">
+          <div className="searchResult-box">
             <>
-            <div className="searchResult-box">
-                { (slicedResults) && slicedResults[loadPageNumber] }
+            <div className="searchResult-bar">
+                {(this.props.queryType === "sequence") &&
+                <>
+                    <div className="searchResult-bar-genetext">
+                        Gene Name
+                    </div>
+                    <div className="searchResult-bar-matchproportion">
+                        Match proportion
+                    </div>
+                </>}
+                {(this.props.queryType === "paper") &&
+                    <div className="searchResult-bar-paper">
+                        Paper title
+                    </div>}
             </div>
-            <Navbar className="custom-navbar">
+            <div className="searchResult-items">
+                {renderTodos}
+            </div>
+            </>
+          </div>
+          <Navbar className="custom-navbar">
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav>
-                        {(renderedButtons) && renderedButtons}
+                        {renderPageNumbers}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
-            </>
         </div>
-    );
-};
+      );
+    }
+  }
 
 export default Paginate;
