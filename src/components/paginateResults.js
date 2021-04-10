@@ -6,7 +6,6 @@ function Paginate(props) {
 
     const [loadPageNumber, selectPageNumber] = useState(1);
     const [slicedResults, setSlicedResults] = useState(null);
-    const [createdButtons, setButtons] = useState(null)
     const [slicedResultIndices, setSlicedResultIndices] = useState(null);
 
     const clickedPage = (index) => {
@@ -17,10 +16,12 @@ function Paginate(props) {
         var resultIndices = [];
         var paginatedResults = [];
         var i, j, temparray, chunk = 25;
-        for (i = 0, j = props.resultsRendered.length; i < j; i += chunk) {
-            temparray = props.resultsRendered.slice(i, i + chunk);
-            paginatedResults.push(temparray);
-            resultIndices.push((i + chunk) / chunk);
+        if (paginatedResults.length === 0) {
+            for (i = 0, j = props.resultsRendered.length; i < j; i += chunk) {
+                temparray = props.resultsRendered.slice(i, i + chunk);
+                paginatedResults.push(temparray);
+                resultIndices.push((i + chunk) / chunk);
+            };
         };
         if (paginatedResults.length !== 0) {
             setSlicedResults(paginatedResults)
@@ -28,13 +29,13 @@ function Paginate(props) {
         };
     }, [setSlicedResults, setSlicedResultIndices]);
 
+    var renderedButtons = null
     if (slicedResultIndices) {
-        const renderedButtons = slicedResultIndices.map((result, index) => {
-            <Nav.Link onClick={() => { clickedPage(index) }}>{index + 1}</Nav.Link>
-        });
-        setButtons(renderedButtons)
-    };
-
+        renderedButtons = slicedResultIndices.map((result, index) => {
+            return (
+                <Nav.Link onClick={() => { clickedPage(index) }}>{index + 1}</Nav.Link>
+            )});
+        };
     return (
         <div className="searchResult-container">
             <>
@@ -45,7 +46,7 @@ function Paginate(props) {
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav>
-                        {(createdButtons) && createdButtons}
+                        {(renderedButtons) && renderedButtons}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
