@@ -9,7 +9,6 @@ class Paginate extends React.Component {
       super();
       this.state = {
         currentPage: 1,
-        todosPerPage: 25
       };
       this.handleClick = this.handleClick.bind(this);
     }
@@ -21,7 +20,8 @@ class Paginate extends React.Component {
     }
 
     render() {
-      const { currentPage, todosPerPage} = this.state;
+      const { currentPage } = this.state;
+      const todosPerPage = this.props.resultNumber
       const indexOfLastTodo = currentPage * todosPerPage;
       const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
       const renderTodos = this.props.resultsRendered.slice(indexOfFirstTodo, indexOfLastTodo);
@@ -57,6 +57,14 @@ class Paginate extends React.Component {
                 {(this.props.queryType === "paper") &&
                     <div className="searchResult-bar-paper">
                         Paper title
+                    </div>}
+                {(this.props.queryType === "isolate") &&
+                    <div className="searchResult-bar-isolate">
+                        Biosample accession
+                    </div>}
+                {(this.props.queryType === "genesContained") &&
+                    <div className="searchResult-bar-genesContained">
+                        Genes contained
                     </div>}
             </div>
             <div className="searchResult-items">

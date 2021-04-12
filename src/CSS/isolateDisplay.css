@@ -31,3 +31,10 @@
     margin-top: auto;
     margin-bottom: auto;
 }
+
+.searchResult-box {
+    position: absolute !important;
+    height: 500% !important;
+    width: 80% !important;
+    margin: auto;
+}

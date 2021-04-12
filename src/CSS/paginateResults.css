@@ -52,3 +52,15 @@
     width: 100%;
     text-align: center;
 }
+
+.searchResult-bar-isolate {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+
+.searchResult-bar-genesContained {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
