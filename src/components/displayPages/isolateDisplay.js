@@ -32,6 +32,14 @@ function IsolateDisplay(props) {
     return(
         <div>
             <>
+            <div className="geneDisplay-endpoint">
+                <p style={{display: "inline-block"}}> > </p>
+                <Link style={{display: "inline-block"}} to={"/streptococcus"} target="_blank">streptococcus</Link>
+                <p style={{display: "inline-block"}}> > </p>
+                <Link style={{display: "inline-block"}} to={"/streptococcus/" + "pneumoniae"} target="_blank">pneumoniae</Link>
+                <p style={{display: "inline-block"}}> > </p>
+                <Link style={{display: "inline-block"}} to={"/streptococcus/pneumoniae/" + props.isolateInfo.BioSample} target="_blank"> {props.isolateInfo.BioSample} </Link>
+            </div>
             <h3>Isolate: {props.isolateInfo.isolateName}</h3>
             <div className="isolate-grid">
                 <div className="assembly-stats">

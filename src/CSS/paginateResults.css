@@ -106,3 +106,9 @@
     margin-left: 3%;
     margin-right: 3%;
 }
+
+.searchResult-bar-genustext {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}

@@ -1,13 +1,9 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import Paginate from '../paginateResults';
 import "../../CSS/geneDisplay.css"
 
 function GeneDisplay(props) {
-
-    const [searched, setSearched] = useState(false)
-    const [isolateLinks, updateIsolateLinks] = useState();
 
     const renderDescriptions = results =>
       results.map(result => <li>{result}</li>)
@@ -29,7 +25,7 @@ function GeneDisplay(props) {
           if (result !== undefined) {
               return (
                 <div className="isolateItem">
-                    <Link className="isolateResult-align" to={"/isolate/" + props.geneInfo.foundIn_biosamples[index]} target="_blank">
+                    <Link className="isolateResult-align" to={"/streptococcus/pneumoniae/" + props.geneInfo.foundIn_biosamples[index]} target="_blank">
                       {props.geneInfo.foundIn_labels[index]}
                     </Link>
                     <p className="sequenceResult-align" id="sequenceResult-align-font">
@@ -48,9 +44,9 @@ function GeneDisplay(props) {
               <p>Description(s): {renderDescriptions(props.geneInfo.panarooDescriptions)}</p>
               <p>Found in isolates:</p>
             </div>
-            <div>
+            {(resultsRendered) && <div>
                 <Paginate resultNumber={20} resultsRendered={resultsRendered} queryType="sequencesContained"/>
-            </div>
+            </div>}
           </>
         </div>
     )

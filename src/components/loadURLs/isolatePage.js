@@ -4,7 +4,7 @@ import IsolateDisplay from '../displayPages/isolateDisplay'
 
 const IsolatePage = ({ match }) => {
     const {
-        params: { BioSample },
+        params: { Genus, Species, BioSample },
     } = match;
 
     const [searched, setSearched] = useState(false)
@@ -30,7 +30,6 @@ const IsolatePage = ({ match }) => {
             },
             );
       }, [updateResult, setSearched]);
-
       return (
         <div className="search_results">
             {searched === true &&
