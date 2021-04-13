@@ -21,7 +21,7 @@
 }
 
 .searchResult-items {
-    padding-top: 2%;
+    padding-top: 0.25%;
 }
 
 .searchResult-bar {
@@ -63,4 +63,30 @@
     position: relative;
     width: 100%;
     text-align: center;
+}
+
+.searchResult-items-compressed {
+    padding-top: 0.25%;
+}
+
+.searchResult-container-compressed {
+    position: absolute;
+    justify-content: center;
+    top: 62%;
+    height: 33%;
+    width: 100%;
+}
+
+.searchResult-bar-isolatetext {
+    position: relative;
+    float: left;
+    margin-left: 8%;
+    margin-right: auto;
+}
+
+.searchResult-bar-sequencetext {
+    position: relative;
+    float: right;
+    margin-right: 37.5%;
+    margin-left: auto;
 }

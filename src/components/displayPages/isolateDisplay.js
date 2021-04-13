@@ -22,7 +22,7 @@ function IsolateDisplay(props) {
             if (result !== undefined) {
                 return (
                     <p key={index}>
-                        <Link className="geneResult-align" to={"/gene/" + result} target="_blank">
+                        <Link to={"/gene/" + result} target="_blank">
                             {result}
                         </Link>
                     </p>
@@ -74,7 +74,7 @@ function IsolateDisplay(props) {
                         </div>
                     }
             </div>
-            <div className="paginatedGenes">
+            <div>
                 <Paginate resultNumber={10} resultsRendered={resultsRendered} queryType="genesContained"/>
             </div>
             </>

@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import Paginate from '../paginateResults';
+import "../../CSS/geneDisplay.css"
+
 function GeneDisplay(props) {
 
     const [searched, setSearched] = useState(false)
@@ -9,59 +12,41 @@ function GeneDisplay(props) {
     const renderDescriptions = results =>
       results.map(result => <li>{result}</li>)
 
-    const searchURL = process.env.REACT_APP_API_URL + "/sparc_isolate_index/_search"
-    const apiKey = process.env.REACT_APP_API_KEY
-
-    function isolateURL(label) {
-      const obj =  {
-        method: 'POST',
-        headers : {
-            'Authorization': 'ApiKey ' + apiKey,
-            'Content-Type': 'application/json'
-        },
-        body:
-            JSON.stringify({"query" : {"match": {"isolateName": label.replace("_", " ")}}})
-        };
-      fetch(searchURL, obj).then((response) => {
-        if(response.ok) {
-            return response.json();
-        }})
-        .then((json) => {
-          return json.hits.hits[0]._source.BioSample;
-        });
-      };
-
-    async function tj_customer_name(label) {
-      const obj =  {
-        method: 'POST',
-        headers : {
-            'Authorization': 'ApiKey ' + apiKey,
-            'Content-Type': 'application/json'
-        },
-        body:
-            JSON.stringify({"query" : {"match": {"isolateName": label.replace("_", " ")}}})
-        };
-      const response = await fetch(searchURL, obj);
-      const json = await response.json();
-      return json.hits.hits[0]._source.BioSample;
-    }
-
     console.log(props.geneInfo)
 
-    const renderIsolateLinks = results =>
-      results.map((result, index) => {
-          return <li key={index}>Isolate: <Link to={"/isolate/" + props.geneInfo.foundIn_biosamples[index]}>{props.geneInfo.foundIn_labels[index]}</Link><p>Sequence: {props.geneInfo.foundIn_sequences[index]}</p></li>
-      })
+    const divideSequence = sequence => {
+      return(sequence.match(/.{1,130}/g).map((result, index) => {
+        return (
+          <p key={index}>
+            {result}
+          </p>
+      )}))
+    };
 
+    //map array of search results to an intepretable output
+    if (props.geneInfo.foundIn_indices) {
+      var resultsRendered = props.geneInfo.foundIn_indices.map((result, index)=> {
+          if (result !== undefined) {
+              return (
+                <div className="isolateItem">
+                    <Link className="isolateResult-align" to={"/isolate/" + props.geneInfo.foundIn_biosamples[index]} target="_blank">
+                      {props.geneInfo.foundIn_labels[index]}
+                    </Link>
+                    <p className="sequenceResult-align" id="sequenceResult-align-font">
+                      {divideSequence(props.geneInfo.foundIn_sequences[index])}
+                    </p>
+                </div>
+      )}});
+    };
     return(
         <div>
-            <h5>Gene overview</h5>
+            <h3>Gene overview</h3>
             <p>Names/Aliases: {props.geneInfo.panarooNames.split("~~~").join(" ,")}</p>
             <p>Gene frequency: {props.geneInfo.panarooFrequency}%</p>
             <p>Description(s): {renderDescriptions(props.geneInfo.panarooDescriptions)}</p>
             <p>Found in isolates:</p>
-            <div className="foundIn-list">
-                {renderIsolateLinks(props.geneInfo.foundIn_indices)}
+            <div>
+                <Paginate resultNumber={20} resultsRendered={resultsRendered} queryType="sequencesContained"/>
             </div>
         </div>
     )

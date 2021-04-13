@@ -40,8 +40,12 @@ class Paginate extends React.Component {
             {number}
           </Nav.Link>
         )})
+
+    //conditional CSS
+    const searchResult_container = (this.props.queryType === "genesContained") ? "searchResult-container-compressed" : "searchResult-container";
+    const searchResult_items = (this.props.queryType === "genesContained" |  this.props.queryType === "sequencesContained") ? "searchResult-items-compressed" : "searchResult-items";
       return (
-        <div className="searchResult-container">
+        <div className={searchResult_container}>
           <div className="searchResult-box">
             <>
             <div className="searchResult-bar">
@@ -66,8 +70,17 @@ class Paginate extends React.Component {
                     <div className="searchResult-bar-genesContained">
                         Genes contained
                     </div>}
+                {(this.props.queryType === "sequencesContained") &&
+                <>
+                    <div className="searchResult-bar-isolatetext">
+                        Isolate
+                    </div>
+                    <div className="searchResult-bar-sequencetext">
+                        Sequence
+                    </div>
+                </>}
             </div>
-            <div className="searchResult-items">
+            <div className={searchResult_items}>
                 {renderTodos}
             </div>
             </>
