@@ -75,7 +75,7 @@ function IsolateDisplay(props) {
                     }
             </div>
             <div>
-                <Paginate resultNumber={10} resultsRendered={resultsRendered} queryType="genesContained"/>
+                <Paginate resultNumber={80} resultsRendered={resultsRendered} queryType="genesContained"/>
             </div>
             </>
         </div>
