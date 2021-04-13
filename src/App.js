@@ -5,10 +5,11 @@ import './App.css';
 
 import HomePage from './components/homePage'
 import SearchPage from './components/searchPage'
-import IsolatePage from './components/loadURLs/isolatePage'
 import PaperPage from './components/loadURLs/paperPage'
 import GenePage from './components/loadURLs/genePage'
-
+import SpeciesPage from './components/loadURLs/speciesPage'
+import GenusPage from './components/loadURLs/genusPage'
+import IsolatePage from './components/loadURLs/isolatePage'
 
 function App() {
 
@@ -29,9 +30,11 @@ function App() {
       <Router>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/search" component={SearchPage} />
-        <Route path="/isolate/:BioSample" component={IsolatePage} />
-        <Route path="/paper/:encodedDOI" component={PaperPage} />
-        <Route path="/gene/:geneName" component={GenePage} />
+        <Route exact path="/paper/:encodedDOI" component={PaperPage} />
+        <Route exact path="/gene/:geneName" component={GenePage} />
+        <Route exact path="/:Genus/:Species/:BioSample" component={IsolatePage} />
+        <Route exact path="/:Genus/:Species" component={SpeciesPage} />
+        <Route exact path="/:Genus" component={GenusPage} />
       </Router>
     </main>
   );

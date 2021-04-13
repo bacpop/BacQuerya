@@ -79,7 +79,7 @@ function SearchPage() {
                     <div className="isolate-returned">
                         <>
                         <div className="isolate-link">
-                            <Link to={"/isolate/" + result._source.BioSample} target="_blank">{result._source.BioSample}</Link>
+                            <Link to={"/streptococcus/pneumoniae/" + result._source.BioSample} target="_blank">{result._source.BioSample}</Link>
                             <div className="isolate-summary">
                                 <p>Organism: {result._source.Organism_name}</p>
                                 <p>Genome representation: {result._source.Genome_representation}</p>

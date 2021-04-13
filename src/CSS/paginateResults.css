@@ -1,8 +1,8 @@
 .searchResult-container {
     position: relative;
     justify-content: center;
-    top: 10%;
-    height: 80%;
+    top: 8%;
+    height: 82%;
     width: 100%;
 }
 
@@ -26,11 +26,13 @@
 
 .searchResult-bar {
     background-color: gainsboro;
-    border-radius: 30px;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
     position: relative;
     width: 100%;
     display: flex;
     flex-direction: row;
+    border-bottom: 3px ridge DarkGray;
 }
 
 .searchResult-bar-genetext {
@@ -89,4 +91,24 @@
     float: right;
     margin-right: 37.5%;
     margin-left: auto;
+}
+
+.searchResult-items-columned {
+    position: relative;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.searchResult-genesContained-column{
+    position: relative;
+    display: inline-block;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.searchResult-bar-genustext {
+    position: relative;
+    width: 100%;
+    text-align: center;
 }
