@@ -17,6 +17,7 @@ function SearchPage() {
     const [formData, updateFormData] = useState(null);
     const [searched, setSearched] = useState(false)
     const [queryType, setQueryType] = useState(null);
+    const [queryNumber, setQueryNumber] = useState(null);
     const [search, setSearch] = useState(false);
     const [queryResult, setQueryResult] = useState(null);
 
@@ -40,6 +41,7 @@ function SearchPage() {
             setSearch(false);
             setSearched(true);
             setQueryResult(result);
+            setQueryNumber(31)
         });
     };
     //call async function to search for isolates
@@ -48,11 +50,13 @@ function SearchPage() {
             setSearch(false);
             setSearched(true);
             setQueryResult(result);
+            setQueryNumber(31)
         });
     };
     //call async function to search for genes
     if (search === true && queryType === "sequence") {
         geneQuery(formData).then(result => {
+            setQueryNumber(28)
             setSearch(false);
             setSearched(true);
             setQueryResult(result);
@@ -70,20 +74,20 @@ function SearchPage() {
     };
     if (queryType === "isolate" && queryResult) {
         var resultsRendered = queryResult.map((result, index) => {
-            if (result.BioSample !== undefined) {
+            if (result._source !== undefined) {
                 return (
                     <div className="isolate-returned">
                         <>
                         <div className="isolate-link">
-                            <Link to={"/isolate/" + result.BioSample} target="_blank">{result.BioSample}</Link>
+                            <Link to={"/isolate/" + result._source.BioSample} target="_blank">{result._source.BioSample}</Link>
                             <div className="isolate-summary">
-                                <p>Organism: {result.Organism_name}</p>
-                                <p>Genome representation: {result.Genome_representation}</p>
-                                {(result.source !== undefined) && <p>Source: {result.source}</p>}
-                                <p>BioProject sample: {result.BioSample}</p>
-                                {(result.scaffold_stats !== undefined) && <p>Total sequence length: {result.scaffold_stats.total_bps}</p>}
-                                {(result.scaffold_stats !== undefined) && <p>N50: {result.contig_stats.N50}</p>}
-                                {(result.scaffold_stats !== undefined) && <p>G/C content (%): {result.contig_stats.gc_content}</p>}
+                                <p>Organism: {result._source.Organism_name}</p>
+                                <p>Genome representation: {result._source.Genome_representation}</p>
+                                {(result.source !== undefined) && <p>Source: {result._source.source}</p>}
+                                <p>BioProject sample: {result._source.BioSample}</p>
+                                {(result._source.scaffold_stats !== undefined) && <p>Total sequence length: {result._source.scaffold_stats.total_bps}</p>}
+                                {(result._source.scaffold_stats !== undefined) && <p>N50: {result._source.contig_stats.N50}</p>}
+                                {(result._source.scaffold_stats !== undefined) && <p>G/C content (%): {result._source.contig_stats.gc_content}</p>}
                             </div>
                         </div>
                         </>
@@ -133,7 +137,7 @@ function SearchPage() {
                 <Button onClick={loadResult} variant="outline-primary">Search</Button>
             </Form>
             { (search===true && queryType !== "0") && <Spinner className={spinner_class} animation="border" variant="primary" /> }
-            { (search===false && searched == true && resultsRendered) && <Paginate resultsRendered={resultsRendered} queryType={queryType}/>}
+            { (search===false && searched == true && resultsRendered && queryNumber) && <Paginate resultNumber={queryNumber} resultsRendered={resultsRendered} queryType={queryType}/>}
             { (search===false && searched == true && queryResult && queryResult.length === 0) && <div>No result...</div> }
             </>
         </div>

@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+
+import Paginate from '../paginateResults';
 import '../../CSS/isolateDisplay.css';
 
 function IsolateDisplay(props) {
@@ -12,6 +15,19 @@ function IsolateDisplay(props) {
 
     const sequenceLinks = links =>
         links.map(link => <p><a href={link} rel="noreferrer">{link.split("/")[link.split("/").length - 1]}</a></p>);
+
+    //map array of search results to an intepretable output
+    if (props.isolateInfo.panarooNames) {
+        var resultsRendered = props.isolateInfo.panarooNames.map((result, index)=> {
+            if (result !== undefined) {
+                return (
+                    <p key={index}>
+                        <Link to={"/gene/" + result} target="_blank">
+                            {result}
+                        </Link>
+                    </p>
+        )}});
+    };
 
     return(
         <div>
@@ -57,6 +73,9 @@ function IsolateDisplay(props) {
                                 <p>Mean contig length: {props.isolateInfo.contig_stats.mean}</p>
                         </div>
                     }
+            </div>
+            <div>
+                <Paginate resultNumber={10} resultsRendered={resultsRendered} queryType="genesContained"/>
             </div>
             </>
         </div>

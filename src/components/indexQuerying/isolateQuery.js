@@ -30,7 +30,7 @@ async function isolateQuery(formData) {
     };
     const fetchResponse = await fetch(searchURL, fetchData);
     const resolvedResponse = await fetchResponse.json();
-    return resolvedResponse
+    return resolvedResponse.hits.hits
 };
 
   export default isolateQuery;
