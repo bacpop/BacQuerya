@@ -40,14 +40,18 @@ function GeneDisplay(props) {
     };
     return(
         <div>
-            <h3>Gene overview</h3>
-            <p>Names/Aliases: {props.geneInfo.panarooNames.split("~~~").join(" ,")}</p>
-            <p>Gene frequency: {props.geneInfo.panarooFrequency}%</p>
-            <p>Description(s): {renderDescriptions(props.geneInfo.panarooDescriptions)}</p>
-            <p>Found in isolates:</p>
+          <>
+            <div>
+              <h3>Gene overview</h3>
+              <p>Names/Aliases: {props.geneInfo.panarooNames.split("~~~").join(" ,")}</p>
+              <p>Gene frequency: {props.geneInfo.panarooFrequency}%</p>
+              <p>Description(s): {renderDescriptions(props.geneInfo.panarooDescriptions)}</p>
+              <p>Found in isolates:</p>
+            </div>
             <div>
                 <Paginate resultNumber={20} resultsRendered={resultsRendered} queryType="sequencesContained"/>
             </div>
+          </>
         </div>
     )
 };

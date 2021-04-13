@@ -74,9 +74,9 @@ function IsolateDisplay(props) {
                         </div>
                     }
             </div>
-            <div>
+            {(props.isolateInfo.panarooNames) && <div>
                 <Paginate resultNumber={80} resultsRendered={resultsRendered} queryType="genesContained"/>
-            </div>
+            </div>}
             </>
         </div>
     )

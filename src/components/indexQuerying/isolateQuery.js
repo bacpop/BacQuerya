@@ -20,7 +20,8 @@ async function isolateQuery(formData) {
                             "Infraspecific_name",
                             "GenBank_assembly_accession",
                             "RefSeq_assembly_and_GenBank_assemblies_identical",
-                            "BioSample"
+                            "BioSample",
+                            "Organism_name"
                         ],
                         "operator": "or",
                         "fuzziness": "AUTO",

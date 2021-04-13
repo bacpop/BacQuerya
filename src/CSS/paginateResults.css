@@ -1,8 +1,8 @@
 .searchResult-container {
     position: relative;
     justify-content: center;
-    top: 10%;
-    height: 80%;
+    top: 8%;
+    height: 82%;
     width: 100%;
 }
 
@@ -10,8 +10,7 @@
     height: 100%;
     width: 80%;
     margin: auto;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+    border-radius: 15px;
     border: 2px solid;
     background-color:ivory;
 }
