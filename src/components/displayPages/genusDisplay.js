@@ -10,7 +10,7 @@ function GenusDisplay(props) {
         if (result !== undefined) {
             return (
                 <p key={index}>
-                    <Link to={"/" + props.genus + "/" + result} target="_blank">
+                    <Link to={"/isolate/" + props.genus + "/" + result}>
                         {props.genus + ' ' + result}
                     </Link>
                 </p>
@@ -21,7 +21,7 @@ function GenusDisplay(props) {
         <>
         <div className="genusDisplay-endpoint">
             <p style={{display: "inline-block"}}> > </p>
-            <Link style={{display: "inline-block"}} to={"/" + props.genus} target="_blank">{props.genus}</Link>
+            <Link style={{display: "inline-block"}} to={"/isolate/" + props.genus}>{props.genus}</Link>
         </div>
         {(resultsRendered) &&
             <div className="genus-pagination">

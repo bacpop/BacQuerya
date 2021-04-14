@@ -32,9 +32,9 @@ function App() {
         <Route exact path="/search" component={SearchPage} />
         <Route exact path="/paper/:encodedDOI" component={PaperPage} />
         <Route exact path="/gene/:geneName" component={GenePage} />
-        <Route exact path="/:Genus/:Species/:BioSample" component={IsolatePage} />
-        <Route exact path="/:Genus/:Species" component={SpeciesPage} />
-        <Route exact path="/:Genus" component={GenusPage} />
+        <Route exact path="/isolate/:Genus/:Species/:BioSample" component={IsolatePage} />
+        <Route exact path="/isolate/:Genus/:Species" component={SpeciesPage} />
+        <Route exact path="/isolate/:Genus/" component={GenusPage} />
       </Router>
     </main>
   );
