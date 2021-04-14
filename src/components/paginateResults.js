@@ -91,7 +91,7 @@ class Paginate extends React.Component {
                     <div className="searchResult-bar-paper">
                         Paper title
                     </div>}
-                {(this.props.queryType === "isolate" | this.props.queryType === "speciesContained") &&
+                {(this.props.queryType === "isolate" | this.props.queryType == 'isolatesContained') &&
                   <>
                     <div className="searchResult-bar-isolatebiosampletext">
                       Biosample accession
@@ -107,6 +107,12 @@ class Paginate extends React.Component {
                     </div>
                     <div className="searchResult-bar-isolatesequencelinktext">
                       Download links
+                    </div>
+                  </>}
+                  {(this.props.queryType === "speciesContained") &&
+                  <>
+                    <div className="searchResult-bar-allisolatesbiosample">
+                      Biosample accession
                     </div>
                   </>}
                 {(this.props.queryType === "genesContained") &&

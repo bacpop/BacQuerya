@@ -131,3 +131,9 @@
     width: 100%;
     text-align: center;
 }
+
+.searchResult-bar-allisolatesbiosample {
+    position: relative;
+    width: 100%;
+    justify-content: center;
+}

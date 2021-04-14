@@ -77,9 +77,11 @@ function SearchPage() {
         links.map((link, index) => {
             return (
                 <div className="readResult-fastlinks">
-                    {(index === 0) && <a href={link} rel="noreferrer">full</a>}
-                    {(index === 1) && <a href={link} rel="noreferrer">forward</a>}
-                    {(index === 2) && <a href={link} rel="noreferrer">reverse</a>}
+                    {(links.length === 2 && index === 0) && <a href={link} rel="noreferrer">forward</a>}
+                    {(links.length === 2 && index === 1) && <a href={link} rel="noreferrer">reverse</a>}
+                    {(links.length === 3 && index === 0) && <a href={link} rel="noreferrer">full</a>}
+                    {(links.length === 3 && index === 1) && <a href={link} rel="noreferrer">forward</a>}
+                    {(links.length === 3 && index === 2) && <a href={link} rel="noreferrer">reverse</a>}
                 </div>
         )});
 

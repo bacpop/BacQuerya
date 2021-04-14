@@ -11,7 +11,7 @@ function GeneDisplay(props) {
     console.log(props.geneInfo)
 
     const divideSequence = sequence => {
-      return(sequence.match(/.{1,130}/g).map((result, index) => {
+      return(sequence.match(/.{1,125}/g).map((result, index) => {
         return (
           <p key={index}>
             {result}
@@ -25,7 +25,7 @@ function GeneDisplay(props) {
           if (result !== undefined) {
               return (
                 <div className="isolateItem">
-                    <Link className="isolateResult-align" to={"/streptococcus/pneumoniae/" + props.geneInfo.foundIn_biosamples[index]} target="_blank">
+                    <Link className="isolateResult-align" to={"/isolate/streptococcus/pneumoniae/" + props.geneInfo.foundIn_biosamples[index]} target="_blank">
                       {props.geneInfo.foundIn_labels[index]}
                     </Link>
                     <p className="sequenceResult-align" id="sequenceResult-align-font">
