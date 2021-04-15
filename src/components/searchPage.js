@@ -72,6 +72,19 @@ function SearchPage() {
                     </li>
         )}});
     };
+
+    const fastSequenceLinks = links =>
+        links.map((link, index) => {
+            return (
+                <div className="readResult-fastlinks">
+                    {(links.length === 2 && index === 0) && <a href={link} rel="noreferrer">forward</a>}
+                    {(links.length === 2 && index === 1) && <a href={link} rel="noreferrer">reverse</a>}
+                    {(links.length === 3 && index === 0) && <a href={link} rel="noreferrer">full</a>}
+                    {(links.length === 3 && index === 1) && <a href={link} rel="noreferrer">forward</a>}
+                    {(links.length === 3 && index === 2) && <a href={link} rel="noreferrer">reverse</a>}
+                </div>
+        )});
+
     if (queryType === "isolate" && queryResult) {
         var resultsRendered = queryResult.map((result, index) => {
             if (result._source !== undefined) {
@@ -79,7 +92,6 @@ function SearchPage() {
                     <div className="isolate-returned">
                         <>
                         <div className="isolate-link">
-                            <Link to={"/streptococcus/pneumoniae/" + result._source.BioSample} target="_blank">{result._source.BioSample}</Link>
                             <div className="isolate-summary">
                                 <p>Organism: {result._source.Organism_name}</p>
                                 <p>Genome representation: {result._source.Genome_representation}</p>
@@ -88,6 +100,22 @@ function SearchPage() {
                                 {(result._source.scaffold_stats !== undefined) && <p>Total sequence length: {result._source.scaffold_stats.total_bps}</p>}
                                 {(result._source.scaffold_stats !== undefined) && <p>N50: {result._source.contig_stats.N50}</p>}
                                 {(result._source.scaffold_stats !== undefined) && <p>G/C content (%): {result._source.contig_stats.gc_content}</p>}
+                            </div>
+                            <Link className="isolate-link-biosample" to={"/isolate/streptococcus/pneumoniae/" + result._source.BioSample} target="_blank">{result._source.BioSample}</Link>
+                            <div className="isolate-link-organismname">
+                                {result._source.Organism_name}
+                            </div>
+                            <div className="isolate-link-genomerepresentation">
+                                {result._source.Genome_representation}
+                            </div>
+                            <div className="isolate-link-sequencecount">
+                            {(result._source.contig_stats) && <div>
+                                {result._source.contig_stats.sequence_count}
+                            </div>}
+                            </div>
+                            <div>
+                                { (typeof result._source.sequenceURL === 'string') && <div className="isolate-link-assembly-sequenceURL"><a href={result._source.sequenceURL} rel="noreferrer"> {result._source.sequenceURL.split("/")[result._source.sequenceURL.split("/").length - 1]} </a></div>}
+                                { (Array.isArray(result._source.sequenceURL) === true) && <div className="isolate-link-read-sequenceURL"> {fastSequenceLinks(result._source.sequenceURL)}</div> }
                             </div>
                         </div>
                         </>
@@ -137,6 +165,10 @@ function SearchPage() {
                 <Button onClick={loadResult} variant="outline-primary">Search</Button>
             </Form>
             { (search===true && queryType !== "0") && <Spinner className={spinner_class} animation="border" variant="primary" /> }
+            { (search===false && searched == true && resultsRendered && queryNumber) &&
+                <div className="searchResults-brief" id="sequenceResult-brief-font">
+                    {resultsRendered.length} results
+                </div>}
             { (search===false && searched == true && resultsRendered && queryNumber) && <Paginate resultNumber={queryNumber} resultsRendered={resultsRendered} queryType={queryType}/>}
             { (search===false && searched == true && queryResult && queryResult.length === 0) && <div>No result...</div> }
             </>

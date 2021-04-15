@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Spinner from 'react-bootstrap/Spinner';
 
 import IsolateDisplay from '../displayPages/isolateDisplay'
 
@@ -35,6 +36,11 @@ const IsolatePage = ({ match }) => {
             {searched === true &&
                 <div>
                     <IsolateDisplay isolateInfo={searchResult} />
+                </div>
+            }
+            {searched === false &&
+                <div>
+                    <Spinner animation="border" variant="primary" />
                 </div>
             }
         </div>

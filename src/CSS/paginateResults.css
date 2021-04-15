@@ -12,7 +12,7 @@
     margin: auto;
     border-radius: 15px;
     border: 2px solid;
-    background-color:ivory;
+    background-color:white;
 }
 
 .navbar-collapse.collapse {
@@ -36,17 +36,15 @@
 }
 
 .searchResult-bar-genetext {
-    position: relative;
-    float: left;
+    position: absolute;
+    display: inline-block;
     margin-left: 15%;
-    margin-right: auto;
 }
 
 .searchResult-bar-matchproportion {
-    position: relative;
-    float: right;
-    margin-right: 15%;
-    margin-left: auto;
+    position: absolute;
+    display: inline-block;
+    margin-left: 76%;
 }
 
 .searchResult-bar-paper {
@@ -55,10 +53,31 @@
     text-align: center;
 }
 
-.searchResult-bar-isolate {
+.searchResult-bar-isolatebiosampletext {
+    position: absolute;
+    margin-left: 3%;
+    float: left;
+}
+
+.searchResult-bar-isolatespeciestext {
+    position: absolute;
+    float: left;
+    margin-left: 22%;
+}
+
+.searchResult-bar-isolaterepresentation {
+    position: absolute;
+    margin-left: 35%;
+}
+
+.searchResult-bar-isolatecontigstext {
+    position: absolute;
+    margin-left: 56%;
+}
+
+.searchResult-bar-isolatesequencelinktext {
     position: relative;
-    width: 100%;
-    text-align: center;
+    margin-left: 80%;
 }
 
 .searchResult-bar-genesContained {
@@ -111,4 +130,10 @@
     position: relative;
     width: 100%;
     text-align: center;
+}
+
+.searchResult-bar-allisolatesbiosample {
+    position: relative;
+    width: 100%;
+    justify-content: center;
 }

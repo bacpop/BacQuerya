@@ -10,7 +10,7 @@ function SpeciesDisplay(props) {
         if (result._source!== undefined) {
             return (
                 <p key={index}>
-                    <Link to={"/" + props.genus + "/" + props.species + "/" + result._source.BioSample} target="_blank">
+                    <Link to={"/isolate/" + props.genus + "/" + props.species + "/" + result._source.BioSample}>
                         {result._source.BioSample}
                     </Link>
                 </p>
@@ -21,9 +21,9 @@ function SpeciesDisplay(props) {
       <>
       <div className="speciesDisplay-endpoint">
         <p style={{display: "inline-block"}}> > </p>
-        <Link style={{display: "inline-block"}} to={"/" + props.genus} target="_blank">{props.genus}</Link>
+        <Link style={{display: "inline-block"}} to={"/isolate/" + props.genus}>{props.genus}</Link>
         <p style={{display: "inline-block"}}> > </p>
-        <Link style={{display: "inline-block"}} to={"/" + props.genus + "/" + props.species} target="_blank">{props.species}</Link>
+        <Link style={{display: "inline-block"}} to={"/isolate/" + props.genus + "/" + props.species}>{props.species}</Link>
       </div>
       {(resultsRendered) &&
         <div className="species-pagination">

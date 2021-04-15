@@ -34,11 +34,11 @@ function IsolateDisplay(props) {
             <>
             <div className="geneDisplay-endpoint">
                 <p style={{display: "inline-block"}}> > </p>
-                <Link style={{display: "inline-block"}} to={"/streptococcus"} target="_blank">streptococcus</Link>
+                <Link style={{display: "inline-block"}} to={"/isolate/streptococcus"} target="_blank">streptococcus</Link>
                 <p style={{display: "inline-block"}}> > </p>
-                <Link style={{display: "inline-block"}} to={"/streptococcus/" + "pneumoniae"} target="_blank">pneumoniae</Link>
+                <Link style={{display: "inline-block"}} to={"/isolate/streptococcus/" + "pneumoniae"} target="_blank">pneumoniae</Link>
                 <p style={{display: "inline-block"}}> > </p>
-                <Link style={{display: "inline-block"}} to={"/streptococcus/pneumoniae/" + props.isolateInfo.BioSample} target="_blank"> {props.isolateInfo.BioSample} </Link>
+                <Link style={{display: "inline-block"}} to={"/isolate/streptococcus/pneumoniae/" + props.isolateInfo.BioSample} target="_blank"> {props.isolateInfo.BioSample} </Link>
             </div>
             <h3>Isolate: {props.isolateInfo.isolateName}</h3>
             <div className="isolate-grid">
@@ -55,7 +55,7 @@ function IsolateDisplay(props) {
                     { (props.isolateInfo.GenBank_assembly_accession !== undefined) && <p>GenBank assembly accession: {props.isolateInfo.GenBank_assembly_accession}</p> }
                     { (props.isolateInfo.RefSeq_assembly_accession !== undefined) && <p>RefSeq assembly accession: {props.isolateInfo.RefSeq_assembly_accession}</p> }
                     { (props.isolateInfo.BioProject !== undefined) && <p>BioProject link: {props.isolateInfo.BioProject}</p> }
-                    <p>BioProject sample: <a href={"https://www.ncbi.nlm.nih.gov/biosample/"+props.isolateInfo.BioSample}>{props.isolateInfo.BioSample}</a></p>
+                    <p>BioProject sample: <a href={"https://www.ncbi.nlm.nih.gov/biosample/"+props.isolateInfo.BioSample} target="_blank">{props.isolateInfo.BioSample}</a></p>
                     { (typeof props.isolateInfo.sequenceURL === 'string') && <p>Click to download assembly file: <a href={props.isolateInfo.sequenceURL} rel="noreferrer"> {props.isolateInfo.sequenceURL.split("/")[props.isolateInfo.sequenceURL.split("/").length - 1]} </a></p>}
                     { (Array.isArray(props.isolateInfo.sequenceURL) === true) && <div>Click to download read files: {sequenceLinks(props.isolateInfo.sequenceURL)}</div>}
                 </div>

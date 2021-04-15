@@ -9,7 +9,7 @@ async function isolateQuery(formData) {
         },
         body:
             JSON.stringify({
-                "size" : 100,
+                "size" : 616,
                 "query" : {
                     "multi_match" : {
                         "query" : formData,

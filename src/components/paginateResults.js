@@ -77,25 +77,44 @@ class Paginate extends React.Component {
       return (
         <div className={searchResult_container}>
           <div className="searchResult-box">
-            <>
             <div className="searchResult-bar">
                 {(this.props.queryType === "sequence") &&
-                <>
+                <div>
                     <div className="searchResult-bar-genetext">
                         Gene Name
                     </div>
                     <div className="searchResult-bar-matchproportion">
                         Match proportion
                     </div>
-                </>}
+                </div>}
                 {(this.props.queryType === "paper") &&
                     <div className="searchResult-bar-paper">
                         Paper title
                     </div>}
-                {(this.props.queryType === "isolate" | this.props.queryType === "speciesContained") &&
-                    <div className="searchResult-bar-isolate">
-                        Biosample accession
-                    </div>}
+                {(this.props.queryType === "isolate" | this.props.queryType == 'isolatesContained') &&
+                  <>
+                    <div className="searchResult-bar-isolatebiosampletext">
+                      Biosample accession
+                    </div>
+                    <div className="searchResult-bar-isolatespeciestext">
+                      Species
+                    </div>
+                    <div className="searchResult-bar-isolaterepresentation">
+                      Genome representation
+                    </div>
+                    <div className="searchResult-bar-isolatecontigstext">
+                      Number of contigs
+                    </div>
+                    <div className="searchResult-bar-isolatesequencelinktext">
+                      Download links
+                    </div>
+                  </>}
+                  {(this.props.queryType === "speciesContained") &&
+                  <>
+                    <div className="searchResult-bar-allisolatesbiosample">
+                      Biosample accession
+                    </div>
+                  </>}
                 {(this.props.queryType === "genesContained") &&
                     <div className="searchResult-bar-genesContained">
                         Identified genes
@@ -121,7 +140,6 @@ class Paginate extends React.Component {
                 {divideGenes(renderTodos)}
               </div>
             </div>}
-            </>
           </div>
           <Navbar className="custom-navbar">
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
