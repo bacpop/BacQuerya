@@ -92,8 +92,8 @@ function PaperPage(props) {
                 { (props.paperInfo.ArticleIds.pmc !== undefined) && <p>PMC ID: {props.paperInfo.ArticleIds.pmc}</p> }
                 <p>PubMed ID: {props.paperInfo.ArticleIds.pubmed[0]}</p>
                 <p>RID: {props.paperInfo.ArticleIds.rid}</p>
-                { (openCitaitonsResult.URL !== undefined) && <p>View paper at source: <a href={openCitaitonsResult.URL}>{openCitaitonsResult.URL}</a></p> }
-                { (openCitaitonsResult.link[0].URL !== undefined) && <p>Download paper: <a href={openCitaitonsResult.link[0].URL}>{openCitaitonsResult.link[0].URL}</a></p> }
+                { (openCitaitonsResult.URL !== undefined) && <p>View paper at source: <a href={openCitaitonsResult.URL} target="_blank">{openCitaitonsResult.URL}</a></p> }
+                { (openCitaitonsResult.link[0].URL !== undefined) && <p>Download paper: <a href={openCitaitonsResult.link[0].URL} target="_blank">{openCitaitonsResult.link[0].URL}</a></p> }
                 { (openCitaitonsResult.abstract !== undefined) && <p>{cleanAbsract(openCitaitonsResult.abstract)}</p> }
                 { (props.paperInfo.DOI === "10.1038/sdata.2015.58" && resultsRendered) && <Paginate resultNumber={20} resultsRendered={resultsRendered} queryType="isolatesContained"/>}
                 </> }
@@ -112,8 +112,8 @@ function PaperPage(props) {
                 { (props.paperInfo.ArticleIds.pmc !== undefined) && <p>PMC ID: {props.paperInfo.ArticleIds.pmc}</p> }
                 <p>PubMed ID: {props.paperInfo.ArticleIds.pubmed[0]}</p>
                 <p>RID: {props.paperInfo.ArticleIds.rid}</p>
-                { (openCitaitonsResult.URL !== undefined) && <p>View paper at source: <a href={openCitaitonsResult.URL}>{openCitaitonsResult.URL}</a></p> }
-                { (openCitaitonsResult.link !== undefined) && <p>Download paper: <a href={openCitaitonsResult.link[0].URL}>{openCitaitonsResult.link[0].URL}</a></p> }
+                { (openCitaitonsResult.URL !== undefined) && <p>View paper at source: <a href={openCitaitonsResult.URL} target="_blank">{openCitaitonsResult.URL}</a></p> }
+                { (openCitaitonsResult.link !== undefined) && <p>Download paper: <a href={openCitaitonsResult.link[0].URL} target="_blank">{openCitaitonsResult.link[0].URL}</a></p> }
                 { (openCitaitonsResult.abstract !== undefined) && <p>{cleanAbsract(openCitaitonsResult.abstract)}</p> }
                 </> }
         </div>
