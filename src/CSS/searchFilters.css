@@ -17,3 +17,35 @@
     margin-left: 10%;
     margin-top: 48%;
 }
+
+.filterOptions-options-slider-container {
+    position: absolute;
+    float: left;
+    width: 100%;
+    margin-top: 8%;
+}
+
+.slider {
+    position: absolute;
+    float: left;
+    margin-top: 2%;
+    margin-left: 32%;
+}
+
+#slider-label-font {
+    font-size: 15px;
+}
+
+.slider-label {
+    position: absolute;
+    float: left;
+    margin-left: 4%;
+    margin-top: 1%;
+}
+
+.slider-input {
+    position: absolute;
+    float: left;
+    max-width: 21%;
+    margin-left: 68%;
+}

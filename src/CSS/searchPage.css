@@ -172,3 +172,10 @@ p {
     background-color: #f2f2f2;
     z-index: 3;
 }
+
+.noSearchResults {
+    position: relative;
+    margin-top: 3%;
+    width: 100%;
+    justify-content: center;
+}

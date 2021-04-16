@@ -21,11 +21,12 @@ function SearchPage() {
     const [search, setSearch] = useState(false);
     const [queryResult, setQueryResult] = useState(null);
     const [openFilters, setOpenFilters] = useState(false);
-    const [selectedFilters, setSelectedFilters] = useState({assemblies: true, reads: true});
+    const [selectedFilters, setSelectedFilters] = useState({assemblies: true, reads: true, minN50: 0});
 
     function handleSubmit(e) {
         e.preventDefault()
         setSearch(true);
+        setSelectedFilters({assemblies: true, reads: true})
         updateFormData(e.target.searchTerm.value)
         setQueryType(e.target.searchType.value)
     };
@@ -42,6 +43,7 @@ function SearchPage() {
     //call async function to search for isolates
     if (search === true && queryType === "isolate") {
         isolateQuery(formData).then(result => {
+            setSelectedFilters({assemblies: true, reads: true, minN50: 0});
             setSearch(false);
             setSearched(true);
             setQueryResult(result);
@@ -80,7 +82,7 @@ function SearchPage() {
                 </div>
         )});
 
-    if (queryType === "isolate" && queryResult && queryResult.length !== 0) {
+    if (queryType === "isolate" && queryResult && queryResult.length !== 0 && searched === true) {
         const filteredResults = filterResults(queryResult, queryType, selectedFilters)
         if (filteredResults && filteredResults.length !== 0) {
             var resultsRendered = filteredResults.map((result, index) => {
@@ -94,7 +96,7 @@ function SearchPage() {
                                     <p>Genome representation: {result._source.Genome_representation}</p>
                                     {(result.source !== undefined) && <p>Source: {result._source.source}</p>}
                                     <p>BioProject sample: {result._source.BioSample}</p>
-                                    {(result._source.scaffold_stats !== undefined) && <p>Total sequence length: {result._source.scaffold_stats.total_bps}</p>}
+                                    {(result._source.scaffold_stats !== undefined) && <p>Total sequence length: {result._source.contig_stats.total_bps}</p>}
                                     {(result._source.scaffold_stats !== undefined) && <p>N50: {result._source.contig_stats.N50}</p>}
                                     {(result._source.scaffold_stats !== undefined) && <p>G/C content (%): {result._source.contig_stats.gc_content}</p>}
                                 </div>
@@ -161,28 +163,26 @@ function SearchPage() {
             </Form>
             { (search===true) && <Spinner className={spinner_class} animation="border" variant="primary" /> }
             { (search===false && searched == true && resultsRendered && queryNumber) &&
+                <div className="searchResults-brief" id="sequenceResult-brief-font">
+                    {resultsRendered.length} results
+                </div>}
+            { (queryType === "isolate" && search===false && searched == true) &&
                 <>
-                    <div className="searchResults-brief" id="sequenceResult-brief-font">
-                        {resultsRendered.length} results
+                    <div className="filterOptions-container">
+                        <div className="filterOptions-text" onClick={() => setOpenFilters(true)}>
+                            Click to filter results
+                        </div>
                     </div>
-                    { (queryType === "isolate") &&
-                        <>
-                            <div className="filterOptions-container">
-                                <div className="filterOptions-text" onClick={() => setOpenFilters(true)}>
-                                    Click to filter results
-                                </div>
-                            </div>
-                            <div>
-                            { (openFilters) &&
-                                <div className="filterOptions-options-container">
-                                    <FilterComponent setOpenFilters={setOpenFilters} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
-                                </div>}
-                            </div>
-                        </>}
+                    <div>
+                    { (openFilters) &&
+                        <div className="filterOptions-options-container">
+                            <FilterComponent setOpenFilters={setOpenFilters} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
+                        </div>}
+                    </div>
                 </>}
             { (search===false && searched == true && resultsRendered && queryNumber) &&
                 <Paginate resultNumber={queryNumber} resultsRendered={resultsRendered} queryType={queryType}/>}
-            { (search===false && searched == true && queryResult && queryResult.length === 0) && <div>No result...</div> }
+            { (search===false && searched == true && resultsRendered == undefined) && <div className="noSearchResults">No result...</div> }
             </>
         </div>
     );
