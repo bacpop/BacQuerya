@@ -1,6 +1,5 @@
 import React from "react"
-import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
+import Pagination from 'react-bootstrap/Pagination'
 
 import "../CSS/paginateResults.css"
 
@@ -31,15 +30,24 @@ class Paginate extends React.Component {
         pageNumbers.push(i);
       };
       const renderPageNumbers = pageNumbers.map(number => {
-          return (
-            <Nav.Link
-            key={number}
-            id={number}
-            onClick={this.handleClick}
-          >
-            {number}
-          </Nav.Link>
-        )});
+          if(currentPage === 1 && (number === 1 | number == 2 | number == 3)) {
+            return (
+              <Pagination.Item key={number} id={number} active={number === currentPage} onClick={this.handleClick}>
+                  {number}
+              </Pagination.Item >
+          )};
+          if(currentPage !== 1 && currentPage !== pageNumbers.length && (number == currentPage - 1 | number == currentPage | number == currentPage + 1)) {
+            return (
+              <Pagination.Item key={number} id={number} active={number === currentPage} onClick={this.handleClick}>
+                  {number}
+              </Pagination.Item >
+          )}
+          if(currentPage === pageNumbers.length && (number === pageNumbers.length | number == pageNumbers.length - 1 | number == pageNumbers.length - 2)) {
+            return (
+              <Pagination.Item key={number} id={number} active={number === currentPage} onClick={this.handleClick}>
+                  {number}
+              </Pagination.Item >
+          )}});
 
       function divideGenes(gene_list) {
           return (
@@ -141,14 +149,11 @@ class Paginate extends React.Component {
               </div>
             </div>}
           </div>
-          <Navbar className="custom-navbar">
-                <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav>
-                        {renderPageNumbers}
-                    </Nav>
-                </Navbar.Collapse>
-            </Navbar>
+          <Pagination className="pagination-navigation" size="sm">
+            <Pagination.First onClick={() => this.setState({currentPage: 1})}/>
+              {renderPageNumbers}
+            <Pagination.Last onClick={() => this.setState({currentPage: pageNumbers.length})}/>
+          </Pagination>
         </div>
       );
     }
