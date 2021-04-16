@@ -26,6 +26,8 @@ function SearchPage() {
     function handleSubmit(e) {
         e.preventDefault()
         setSearch(true);
+        setSearched(false);
+        setQueryResult(null)
         setSelectedFilters({assemblies: true, reads: true})
         updateFormData(e.target.searchTerm.value)
         setQueryType(e.target.searchType.value)
@@ -82,7 +84,7 @@ function SearchPage() {
                 </div>
         )});
 
-    if (queryType === "isolate" && queryResult && queryResult.length !== 0 && searched === true) {
+    if (queryType === "isolate" && queryResult && queryResult.length !== 0 && searched === true && search === false) {
         const filteredResults = filterResults(queryResult, queryType, selectedFilters)
         if (filteredResults && filteredResults.length !== 0) {
             var resultsRendered = filteredResults.map((result, index) => {

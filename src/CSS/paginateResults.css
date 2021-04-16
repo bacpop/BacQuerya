@@ -36,13 +36,13 @@
 }
 
 .searchResult-bar-genetext {
-    position: absolute;
+    position: relative;
     display: inline-block;
     margin-left: 15%;
 }
 
 .searchResult-bar-matchproportion {
-    position: absolute;
+    position: relative;
     display: inline-block;
     margin-left: 76%;
 }
@@ -53,29 +53,29 @@
     text-align: center;
 }
 
-.searchResult-bar-isolatebiosampletext {
+.isolatebiosampletext {
     position: absolute;
     margin-left: 3%;
     float: left;
 }
 
-.searchResult-bar-isolatespeciestext {
+.isolatespeciestext {
     position: absolute;
     float: left;
     margin-left: 22%;
 }
 
-.searchResult-bar-isolaterepresentation {
+.isolaterepresentation {
     position: absolute;
     margin-left: 35%;
 }
 
-.searchResult-bar-isolatecontigstext {
+.isolatecontigstext {
     position: absolute;
     margin-left: 56%;
 }
 
-.searchResult-bar-isolatesequencelinktext {
+.isolatesequencelinktext {
     position: relative;
     margin-left: 80%;
 }

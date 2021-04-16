@@ -30,19 +30,19 @@ class Paginate extends React.Component {
         pageNumbers.push(i);
       };
       const renderPageNumbers = pageNumbers.map(number => {
-          if(currentPage === 1 && (number === 1 | number == 2 | number == 3)) {
+          if(currentPage === 1 && (number === 1 || number == 2 || number == 3)) {
             return (
               <Pagination.Item key={number} id={number} active={number === currentPage} onClick={this.handleClick}>
                   {number}
               </Pagination.Item >
           )};
-          if(currentPage !== 1 && currentPage !== pageNumbers.length && (number == currentPage - 1 | number == currentPage | number == currentPage + 1)) {
+          if(currentPage !== 1 && currentPage !== pageNumbers.length && (number == currentPage - 1 || number == currentPage || number == currentPage + 1)) {
             return (
               <Pagination.Item key={number} id={number} active={number === currentPage} onClick={this.handleClick}>
                   {number}
               </Pagination.Item >
           )}
-          if(currentPage === pageNumbers.length && (number === pageNumbers.length | number == pageNumbers.length - 1 | number == pageNumbers.length - 2)) {
+          if(currentPage === pageNumbers.length && (number === pageNumbers.length || number == pageNumbers.length - 1 || number == pageNumbers.length - 2)) {
             return (
               <Pagination.Item key={number} id={number} active={number === currentPage} onClick={this.handleClick}>
                   {number}
@@ -81,48 +81,46 @@ class Paginate extends React.Component {
 
     //conditional CSS
     const searchResult_container = (this.props.queryType === "genesContained") ? "searchResult-container-compressed" : "searchResult-container";
-    const searchResult_items = (this.props.queryType === "genesContained" |  this.props.queryType === "sequencesContained") ? "searchResult-items-compressed" : "searchResult-items";
+    const searchResult_items = (this.props.queryType === "genesContained" || this.props.queryType === "sequencesContained") ? "searchResult-items-compressed" : "searchResult-items";
       return (
         <div className={searchResult_container}>
           <div className="searchResult-box">
             <div className="searchResult-bar">
                 {(this.props.queryType === "sequence") &&
-                <div>
+                <>
                     <div className="searchResult-bar-genetext">
                         Gene Name
                     </div>
                     <div className="searchResult-bar-matchproportion">
                         Match proportion
                     </div>
-                </div>}
+                </>}
                 {(this.props.queryType === "paper") &&
                     <div className="searchResult-bar-paper">
                         Paper title
                     </div>}
-                {(this.props.queryType === "isolate" | this.props.queryType == 'isolatesContained') &&
+                {(this.props.queryType === "isolate" || this.props.queryType == 'isolatesContained') &&
                   <>
-                    <div className="searchResult-bar-isolatebiosampletext">
+                    <div className="isolatebiosampletext">
                       Biosample accession
                     </div>
-                    <div className="searchResult-bar-isolatespeciestext">
+                    <div className="isolatespeciestext">
                       Species
                     </div>
-                    <div className="searchResult-bar-isolaterepresentation">
+                    <div className="isolaterepresentation">
                       Genome representation
                     </div>
-                    <div className="searchResult-bar-isolatecontigstext">
+                    <div className="isolatecontigstext">
                       Number of contigs
                     </div>
-                    <div className="searchResult-bar-isolatesequencelinktext">
+                    <div className="isolatesequencelinktext">
                       Download links
                     </div>
                   </>}
                   {(this.props.queryType === "speciesContained") &&
-                  <>
                     <div className="searchResult-bar-allisolatesbiosample">
                       Biosample accession
-                    </div>
-                  </>}
+                    </div>}
                 {(this.props.queryType === "genesContained") &&
                     <div className="searchResult-bar-genesContained">
                         Identified genes
@@ -137,7 +135,8 @@ class Paginate extends React.Component {
                     </div>
                 </>}
                 {(this.props.queryType === "genusContained") &&
-                  <div className="searchResult-bar-genustext">Species found
+                  <div className="searchResult-bar-genustext">
+                    Species found
                 </div>}
             </div>
             {(this.props.queryType !== "genesContained") && <div className={searchResult_items}>
