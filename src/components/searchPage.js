@@ -9,7 +9,7 @@ import isolateQuery from './indexQuerying/isolateQuery'
 import paperQuery from './indexQuerying/paperQuery'
 import geneQuery from './indexQuerying/geneQuery'
 import Paginate from './paginateResults'
-import { FilterComponent } from './searchFilters'
+import { FilterComponent, filterResults } from './searchFilters'
 import "../CSS/searchPage.css"
 
 function SearchPage() {
@@ -29,7 +29,6 @@ function SearchPage() {
         updateFormData(e.target.searchTerm.value)
         setQueryType(e.target.searchType.value)
     };
-    console.log(selectedFilters)
 
     //call async function to search for papers
     if (search === true && queryType === "paper") {
@@ -59,7 +58,7 @@ function SearchPage() {
         });
     };
     //map array of search results to an intepretable output
-    if (queryType === "paper" && queryResult) {
+    if (queryType === "paper" && queryResult && queryResult.length !== 0) {
         var resultsRendered = queryResult.map((result, index) => {
             if (result.encodedDOI !== undefined) {
                 return (
@@ -81,44 +80,46 @@ function SearchPage() {
                 </div>
         )});
 
-    if (queryType === "isolate" && queryResult) {
-        var resultsRendered = queryResult.map((result, index) => {
-            if (result._source !== undefined) {
-                return (
-                    <div className="isolate-returned">
-                        <>
-                        <div className="isolate-link">
-                            <div className="isolate-summary">
-                                <p>Organism: {result._source.Organism_name}</p>
-                                <p>Genome representation: {result._source.Genome_representation}</p>
-                                {(result.source !== undefined) && <p>Source: {result._source.source}</p>}
-                                <p>BioProject sample: {result._source.BioSample}</p>
-                                {(result._source.scaffold_stats !== undefined) && <p>Total sequence length: {result._source.scaffold_stats.total_bps}</p>}
-                                {(result._source.scaffold_stats !== undefined) && <p>N50: {result._source.contig_stats.N50}</p>}
-                                {(result._source.scaffold_stats !== undefined) && <p>G/C content (%): {result._source.contig_stats.gc_content}</p>}
+    if (queryType === "isolate" && queryResult && queryResult.length !== 0) {
+        const filteredResults = filterResults(queryResult, queryType, selectedFilters)
+        if (filteredResults && filteredResults.length !== 0) {
+            var resultsRendered = filteredResults.map((result, index) => {
+                if (result._source !== undefined) {
+                    return (
+                        <div className="isolate-returned">
+                            <>
+                            <div className="isolate-link">
+                                <div className="isolate-summary">
+                                    <p>Organism: {result._source.Organism_name}</p>
+                                    <p>Genome representation: {result._source.Genome_representation}</p>
+                                    {(result.source !== undefined) && <p>Source: {result._source.source}</p>}
+                                    <p>BioProject sample: {result._source.BioSample}</p>
+                                    {(result._source.scaffold_stats !== undefined) && <p>Total sequence length: {result._source.scaffold_stats.total_bps}</p>}
+                                    {(result._source.scaffold_stats !== undefined) && <p>N50: {result._source.contig_stats.N50}</p>}
+                                    {(result._source.scaffold_stats !== undefined) && <p>G/C content (%): {result._source.contig_stats.gc_content}</p>}
+                                </div>
+                                <Link className="isolate-link-biosample" to={"/isolate/streptococcus/pneumoniae/" + result._source.BioSample} target="_blank">{result._source.BioSample}</Link>
+                                <div className="isolate-link-organismname">
+                                    {result._source.Organism_name}
+                                </div>
+                                <div className="isolate-link-genomerepresentation">
+                                    {result._source.Genome_representation}
+                                </div>
+                                <div className="isolate-link-sequencecount">
+                                {(result._source.contig_stats) && <div>
+                                    {result._source.contig_stats.sequence_count}
+                                </div>}
+                                </div>
+                                <div>
+                                    { (typeof result._source.sequenceURL === 'string') && <div className="isolate-link-assembly-sequenceURL"><a href={result._source.sequenceURL} rel="noreferrer"> {result._source.sequenceURL.split("/")[result._source.sequenceURL.split("/").length - 1]} </a></div>}
+                                    { (Array.isArray(result._source.sequenceURL) === true) && <div className="isolate-link-read-sequenceURL"> {fastSequenceLinks(result._source.sequenceURL)}</div> }
+                                </div>
                             </div>
-                            <Link className="isolate-link-biosample" to={"/isolate/streptococcus/pneumoniae/" + result._source.BioSample} target="_blank">{result._source.BioSample}</Link>
-                            <div className="isolate-link-organismname">
-                                {result._source.Organism_name}
-                            </div>
-                            <div className="isolate-link-genomerepresentation">
-                                {result._source.Genome_representation}
-                            </div>
-                            <div className="isolate-link-sequencecount">
-                            {(result._source.contig_stats) && <div>
-                                {result._source.contig_stats.sequence_count}
-                            </div>}
-                            </div>
-                            <div>
-                                { (typeof result._source.sequenceURL === 'string') && <div className="isolate-link-assembly-sequenceURL"><a href={result._source.sequenceURL} rel="noreferrer"> {result._source.sequenceURL.split("/")[result._source.sequenceURL.split("/").length - 1]} </a></div>}
-                                { (Array.isArray(result._source.sequenceURL) === true) && <div className="isolate-link-read-sequenceURL"> {fastSequenceLinks(result._source.sequenceURL)}</div> }
-                            </div>
+                            </>
                         </div>
-                        </>
-                    </div>
-        )}});
+        )}})};
     };
-        if (queryType === "sequence" && queryResult) {
+        if (queryType === "sequence" && queryResult && queryResult.length !== 0) {
             var resultsRendered = queryResult.map((result, index)=> {
                 if (result.geneName !== undefined) {
                     return (
@@ -164,17 +165,23 @@ function SearchPage() {
                     <div className="searchResults-brief" id="sequenceResult-brief-font">
                         {resultsRendered.length} results
                     </div>
-                    <div className="filterOptions-container">
-                        <div className="filterOptions-text" onClick={() => setOpenFilters(true)}>
-                            Click to filter results
-                        </div>
-                    </div>
-                    { (openFilters) &&
-                        <div className="filterOptions-options-container">
-                            <FilterComponent setOpenFilters={setOpenFilters} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
-                        </div>}
+                    { (queryType === "isolate") &&
+                        <>
+                            <div className="filterOptions-container">
+                                <div className="filterOptions-text" onClick={() => setOpenFilters(true)}>
+                                    Click to filter results
+                                </div>
+                            </div>
+                            <div>
+                            { (openFilters) &&
+                                <div className="filterOptions-options-container">
+                                    <FilterComponent setOpenFilters={setOpenFilters} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
+                                </div>}
+                            </div>
+                        </>}
                 </>}
-            { (search===false && searched == true && resultsRendered && queryNumber) && <Paginate resultNumber={queryNumber} resultsRendered={resultsRendered} queryType={queryType}/>}
+            { (search===false && searched == true && resultsRendered && queryNumber) &&
+                <Paginate resultNumber={queryNumber} resultsRendered={resultsRendered} queryType={queryType}/>}
             { (search===false && searched == true && queryResult && queryResult.length === 0) && <div>No result...</div> }
             </>
         </div>

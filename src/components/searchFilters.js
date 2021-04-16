@@ -3,8 +3,33 @@ import Button from 'react-bootstrap/Button';
 
 import "../CSS/searchFilters.css"
 
-function filterResults(searchResults, queryType, filters) {
+const applyFilters = (searchResults, filters) => {
+    const assemblies = filters.assemblies
+    const reads = filters.reads
+    if (assemblies === true && reads === false) {
+        return searchResults.filter(function( obj ) {
+            return obj._source.Genome_representation !== 'reads';
+        });
+    };
+    if (assemblies === false && reads === true) {
+        return searchResults.filter(function( obj ) {
+            return obj._source.Genome_representation !== 'full';
+        });
+    };
+    if (assemblies === true && reads === true) {
+        return searchResults
+    };
+};
 
+export function filterResults(searchResults, queryType, filters) {
+    if (queryType === "isolate") {
+        const filteredResults = applyFilters(searchResults, filters)
+        return filteredResults
+    }
+    if (queryType !== "isolate") {
+        const filteredResults = searchResults;
+        return filteredResults
+    }
 }
 
 
