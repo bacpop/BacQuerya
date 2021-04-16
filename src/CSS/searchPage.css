@@ -44,6 +44,11 @@ p {
     position: relative;
 }
 
+.isolate-returned:hover {
+    background-color: #f2f2f2;
+    border: 1px ridge gainsboro;
+}
+
 .isolate-link {
     position: relative;
 }
@@ -52,7 +57,7 @@ p {
     visibility: visible;
     position: absolute;
     margin-left: 13%;
-    background-color: ivory;
+    background-color: #f2f2f2;
     border-radius: 15px;
     border: 2px solid;
     z-index: 2;
@@ -138,9 +143,32 @@ p {
 
 .filterOptions-container {
     position: absolute;
-    margin-left: 82%;
-    margin-top: 2.4%;
-    width: 8%;
-    height: 2%;
-    background-color: darkgrey;
+    margin-left: 81%;
+    margin-top: 0.8%;
+    width: 9%;
+    height: 3%;
+    background-color: gainsboro;
+    border-radius: 8px;
+    border: 2px solid;
+}
+
+.filterOptions-container:hover {
+    background-color: white;
+}
+
+.filterOptions-text {
+    position: relative;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.filterOptions-options-container {
+    position: absolute;
+    border-radius: 15px;
+    border: 1px solid;
+    margin-left: 70%;
+    height: 25%;
+    width: 20%;
+    background-color: #f2f2f2;
+    z-index: 3;
 }

@@ -9,7 +9,7 @@ import isolateQuery from './indexQuerying/isolateQuery'
 import paperQuery from './indexQuerying/paperQuery'
 import geneQuery from './indexQuerying/geneQuery'
 import Paginate from './paginateResults'
-
+import { FilterComponent } from './searchFilters'
 import "../CSS/searchPage.css"
 
 function SearchPage() {
@@ -20,6 +20,8 @@ function SearchPage() {
     const [queryNumber, setQueryNumber] = useState(null);
     const [search, setSearch] = useState(false);
     const [queryResult, setQueryResult] = useState(null);
+    const [openFilters, setOpenFilters] = useState(false);
+    const [selectedFilters, setSelectedFilters] = useState({assemblies: true, reads: true});
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -27,6 +29,7 @@ function SearchPage() {
         updateFormData(e.target.searchTerm.value)
         setQueryType(e.target.searchType.value)
     };
+    console.log(selectedFilters)
 
     //call async function to search for papers
     if (search === true && queryType === "paper") {
@@ -162,8 +165,14 @@ function SearchPage() {
                         {resultsRendered.length} results
                     </div>
                     <div className="filterOptions-container">
-                        Click to filter results
+                        <div className="filterOptions-text" onClick={() => setOpenFilters(true)}>
+                            Click to filter results
+                        </div>
                     </div>
+                    { (openFilters) &&
+                        <div className="filterOptions-options-container">
+                            <FilterComponent setOpenFilters={setOpenFilters} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
+                        </div>}
                 </>}
             { (search===false && searched == true && resultsRendered && queryNumber) && <Paginate resultNumber={queryNumber} resultsRendered={resultsRendered} queryType={queryType}/>}
             { (search===false && searched == true && queryResult && queryResult.length === 0) && <div>No result...</div> }
