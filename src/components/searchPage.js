@@ -21,18 +21,11 @@ function SearchPage() {
     const [search, setSearch] = useState(false);
     const [queryResult, setQueryResult] = useState(null);
 
-    const getTerm = (e) => {
-        setSearch(false);
-        updateFormData(e.target.value);
-    };
-
-    const getType = (e) => {
-        setSearch(false);
-        setQueryType(e.target.value);
-    };
-
-    const loadResult = () => {
+    function handleSubmit(e) {
+        e.preventDefault()
         setSearch(true);
+        updateFormData(e.target.searchTerm.value)
+        setQueryType(e.target.searchType.value)
     };
 
     //call async function to search for papers
@@ -144,31 +137,34 @@ function SearchPage() {
     return(
         <div className="search-container">
             <>
-            <Form inline className={searchBar_class}>
+            <Form inline className={searchBar_class} onSubmit={handleSubmit}>
                 <FormControl
                     name="searchTerm"
                     placeholder="Search term"
                     aria-label="Search term"
-                    aria-describedby="basic-addon2"
-                    onChange={getTerm} />
+                    aria-describedby="basic-addon2"/>
                 <FormControl
                     as="select"
+                    name="searchType"
                     className="my-1 mr-sm-2"
                     id="type"
-                    custom
-                    onChange={getType}>
-                    <option value='0'>choose...</option>
+                    custom>
                     <option value="isolate">isolate</option>
                     <option value="paper">paper</option>
                     <option value="sequence">sequence</option>
                 </FormControl>
-                <Button onClick={loadResult} variant="outline-primary">Search</Button>
+                <Button type="submit" variant="outline-primary">Search</Button>
             </Form>
-            { (search===true && queryType !== "0") && <Spinner className={spinner_class} animation="border" variant="primary" /> }
+            { (search===true) && <Spinner className={spinner_class} animation="border" variant="primary" /> }
             { (search===false && searched == true && resultsRendered && queryNumber) &&
-                <div className="searchResults-brief" id="sequenceResult-brief-font">
-                    {resultsRendered.length} results
-                </div>}
+                <>
+                    <div className="searchResults-brief" id="sequenceResult-brief-font">
+                        {resultsRendered.length} results
+                    </div>
+                    <div className="filterOptions-container">
+                        Click to filter results
+                    </div>
+                </>}
             { (search===false && searched == true && resultsRendered && queryNumber) && <Paginate resultNumber={queryNumber} resultsRendered={resultsRendered} queryType={queryType}/>}
             { (search===false && searched == true && queryResult && queryResult.length === 0) && <div>No result...</div> }
             </>

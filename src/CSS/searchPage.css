@@ -135,3 +135,12 @@ p {
     margin-left: 2.5%;
     margin-right: 2.5%;
 }
+
+.filterOptions-container {
+    position: absolute;
+    margin-left: 82%;
+    margin-top: 2.4%;
+    width: 8%;
+    height: 2%;
+    background-color: darkgrey;
+}
