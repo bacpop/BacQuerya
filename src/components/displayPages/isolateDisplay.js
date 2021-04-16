@@ -43,7 +43,7 @@ function IsolateDisplay(props) {
             <h3>Isolate: {props.isolateInfo.isolateName}</h3>
             <div className="isolate-grid">
                 <div className="assembly-stats">
-                    <h5>Isolate overview</h5>
+                    <h5 style={{marginLeft:"15%"}}>Isolate overview</h5>
                     <p>Organism: {props.isolateInfo.Organism_name}</p>
                     { (props.isolateInfo.Infraspecific_name !== undefined) && <p>Strain: {props.isolateInfo.Infraspecific_name}</p> }
                     { (props.isolateInfo.Assembly_name !== undefined) &&<p>Assembly name: {props.isolateInfo.Assembly_name}</p> }
@@ -59,28 +59,32 @@ function IsolateDisplay(props) {
                     { (typeof props.isolateInfo.sequenceURL === 'string') && <p>Click to download assembly file: <a href={props.isolateInfo.sequenceURL} rel="noreferrer"> {props.isolateInfo.sequenceURL.split("/")[props.isolateInfo.sequenceURL.split("/").length - 1]} </a></p>}
                     { (Array.isArray(props.isolateInfo.sequenceURL) === true) && <div>Click to download read files: {sequenceLinks(props.isolateInfo.sequenceURL)}</div>}
                 </div>
-                    { (props.isolateInfo.scaffold_stats !== undefined) &&
-                        <div className="sequence-stats">
-                            <h5>Scaffold stats</h5>
-                                <p>Total sequence length: {props.isolateInfo.scaffold_stats.total_bps}</p>
-                                <p>L50: {props.isolateInfo.scaffold_stats.L50}</p>
-                                <p>N50: {props.isolateInfo.scaffold_stats.N50}</p>
-                                <p>G/C content (%): {props.isolateInfo.scaffold_stats.gc_content}</p>
-                                <p>Number of scaffolds: {props.isolateInfo.scaffold_stats.sequence_count}</p>
-                                <p>Longest scaffold length: {props.isolateInfo.scaffold_stats.longest}</p>
-                                <p>Shortest scaffold length: {props.isolateInfo.scaffold_stats.shortest}</p>
-                                <p>Mean scaffold length: {props.isolateInfo.scaffold_stats.mean}</p>
-                            <h5>Contig stats</h5>
-                                <p>Total sequence length: {props.isolateInfo.contig_stats.total_bps}</p>
-                                <p>L50: {props.isolateInfo.contig_stats.L50}</p>
-                                <p>N50: {props.isolateInfo.contig_stats.N50}</p>
-                                <p>G/C content (%): {props.isolateInfo.contig_stats.gc_content}</p>
-                                <p>Number of contigs: {props.isolateInfo.contig_stats.sequence_count}</p>
-                                <p>Longest contig length: {props.isolateInfo.contig_stats.longest}</p>
-                                <p>Shortest contig length: {props.isolateInfo.contig_stats.shortest}</p>
-                                <p>Mean contig length: {props.isolateInfo.contig_stats.mean}</p>
-                        </div>
-                    }
+                <div className="biosample-stats">
+                    <h5 style={{marginLeft:"15%"}}>BioSample stats</h5>
+                        { (props.isolateInfo.BioSample_SubmissionDate !== undefined) && <p>Submission date: {props.isolateInfo.BioSample_SubmissionDate}</p>}
+                        { (props.isolateInfo.BioSample_LastUpdate !== undefined) && <p>Last updated: {props.isolateInfo.BioSample_LastUpdate}</p>}
+                        { (props.isolateInfo.BioSample_SpecificHost !== undefined) && <p>Specific host: {props.isolateInfo.BioSample_SpecificHost}</p>}
+                        { (props.isolateInfo.BioSample_IsolationSource !== undefined) && <p>Isolation source: {props.isolateInfo.BioSample_IsolationSource}</p>}
+                        { (props.isolateInfo.BioSample_HostHealthState !== undefined) && <p>Host health status: {props.isolateInfo.BioSample_HostHealthState}</p>}
+                        { (props.isolateInfo.BioSample_SeroVar !== undefined) && <p>Serotype: {props.isolateInfo.BioSample_SeroVar}</p>}
+                        { (props.isolateInfo.BioSample_CollectionLocation !== undefined) && <p>Collection location: {props.isolateInfo.BioSample_CollectionLocation}</p>}
+                        { (props.isolateInfo.BioSample_Owner !== undefined) && <p>Owner: {props.isolateInfo.BioSample_Owner}</p>}
+                        { (props.isolateInfo.BioSample_INSDCCenterName !== undefined) && <p>INSDC center name: {props.isolateInfo.BioSample_INSDCCenterName}</p>}
+                        { (props.isolateInfo.BioSample_Status !== undefined) && <p>Status: {props.isolateInfo.BioSample_Status}</p>}
+                </div>
+                { (props.isolateInfo.contig_stats !== undefined) &&
+                    <div className="contig-stats">
+                        <h5 style={{marginLeft:"15%"}}>Contig stats</h5>
+                            <p>Total sequence length: {props.isolateInfo.contig_stats.total_bps}</p>
+                            <p>L50: {props.isolateInfo.contig_stats.L50}</p>
+                            <p>N50: {props.isolateInfo.contig_stats.N50}</p>
+                            <p>G/C content (%): {props.isolateInfo.contig_stats.gc_content}</p>
+                            <p>Number of contigs: {props.isolateInfo.contig_stats.sequence_count}</p>
+                            <p>Longest contig length: {props.isolateInfo.contig_stats.longest}</p>
+                            <p>Shortest contig length: {props.isolateInfo.contig_stats.shortest}</p>
+                            <p>Mean contig length: {props.isolateInfo.contig_stats.mean}</p>
+                    </div>
+                }
             </div>
             {(props.isolateInfo.panarooNames) && <div>
                 <Paginate resultNumber={80} resultsRendered={resultsRendered} queryType="genesContained"/>

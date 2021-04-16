@@ -1,6 +1,6 @@
 .isolate-grid {
     display: inline-grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 33% 33% 33%;
     padding: 2% 5% 0.5% 5%;
     height: 100%;
     width: 100%
@@ -8,10 +8,9 @@
 
 .assembly-stats {
     position: relative;
+    text-align: left;
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row:1;
@@ -19,14 +18,25 @@
     margin-bottom: auto;
 }
 
-.sequence-stats {
+.biosample-stats {
     position: relative;
+    text-align: left;
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
     grid-column-start: 2;
     grid-column-end: 3;
+    grid-row:1;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.contig-stats {
+    position: relative;
+    text-align: left;
+    width: 100%;
+    height: 100%;
+    grid-column-start: 3;
+    grid-column-end: 4;
     grid-row:1;
     margin-top: auto;
     margin-bottom: auto;
