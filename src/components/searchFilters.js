@@ -33,6 +33,7 @@ const applyFilters = (searchResults, filters) => {
 export function filterResults(searchResults, queryType, filters) {
     if (queryType === "isolate") {
         const filteredResults = applyFilters(searchResults, filters)
+        const sequenceURLs = filteredResults.map(result => result._source.sequenceURL)
         return filteredResults
     }
     if (queryType !== "isolate") {
