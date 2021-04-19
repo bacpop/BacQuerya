@@ -34,7 +34,7 @@ export function filterResults(searchResults, queryType, filters) {
     if (queryType === "isolate") {
         const filteredResults = applyFilters(searchResults, filters)
         const sequenceURLs = filteredResults.map(result => result._source.sequenceURL)
-        return filteredResults
+        return [filteredResults, sequenceURLs]
     }
     if (queryType !== "isolate") {
         const filteredResults = searchResults;

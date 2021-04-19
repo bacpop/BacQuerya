@@ -10,6 +10,7 @@ import paperQuery from './indexQuerying/paperQuery'
 import geneQuery from './indexQuerying/geneQuery'
 import Paginate from './paginateResults'
 import { FilterComponent, filterResults } from './searchFilters'
+import { SequenceDownload } from './sequenceDownload'
 import "../CSS/searchPage.css"
 
 function SearchPage() {
@@ -22,13 +23,17 @@ function SearchPage() {
     const [queryResult, setQueryResult] = useState(null);
     const [openFilters, setOpenFilters] = useState(false);
     const [selectedFilters, setSelectedFilters] = useState({assemblies: true, reads: true, minN50: 0});
+    const [showDownloadOptions, setOpenDownloads] = useState(false);
+    const [emailValue, setEmailValue] = useState("Enter email");
 
     function handleSubmit(e) {
         e.preventDefault()
         setSearch(true);
         setSearched(false);
         setQueryResult(null)
-        setSelectedFilters({assemblies: true, reads: true})
+        setSelectedFilters({assemblies: true, reads: true, minN50: 0})
+        setOpenDownloads(false)
+        setEmailValue("Enter email")
         updateFormData(e.target.searchTerm.value)
         setQueryType(e.target.searchType.value)
     };
@@ -46,6 +51,8 @@ function SearchPage() {
     if (search === true && queryType === "isolate") {
         isolateQuery(formData).then(result => {
             setSelectedFilters({assemblies: true, reads: true, minN50: 0});
+            setOpenDownloads(false)
+            setEmailValue("Enter email")
             setSearch(false);
             setSearched(true);
             setQueryResult(result);
@@ -85,7 +92,9 @@ function SearchPage() {
         )});
 
     if (queryType === "isolate" && queryResult && queryResult.length !== 0 && searched === true && search === false) {
-        const filteredResults = filterResults(queryResult, queryType, selectedFilters)
+        const filtersApplied = filterResults(queryResult, queryType, selectedFilters)
+        const filteredResults = filtersApplied[0]
+        var sequenceURLs = filtersApplied[1]
         if (filteredResults && filteredResults.length !== 0) {
             var resultsRendered = filteredResults.map((result, index) => {
                 if (result._source !== undefined) {
@@ -141,6 +150,7 @@ function SearchPage() {
     //conditional CSS
     const searchBar_class = searched ? "mb-3-used" : "mb-3";
     const spinner_class = searched ? "search-spinner-used" : "search-spinner";
+    const downloadOptions_container = showDownloadOptions ? "downloadOptions-options-container" : "downloadOptions-options-container-hidden";
 
     return(
         <div className="search-container">
@@ -179,6 +189,17 @@ function SearchPage() {
                     { (openFilters) &&
                         <div className="filterOptions-options-container">
                             <FilterComponent setOpenFilters={setOpenFilters} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
+                        </div>}
+                    </div>
+                    <div className="downloadOptions-container">
+                        <div className="downloadOptions-text" onClick={() => setOpenDownloads(true)}>
+                            Click to download all sequences
+                        </div>
+                    </div>
+                    <div>
+                    { (showDownloadOptions) &&
+                        <div className={downloadOptions_container}>
+                            <SequenceDownload setOpenDownloads={setOpenDownloads} sequenceURLs={sequenceURLs} emailValue={emailValue} setEmailValue={setEmailValue}/>
                         </div>}
                     </div>
                 </>}

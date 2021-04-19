@@ -179,3 +179,47 @@ p {
     width: 100%;
     justify-content: center;
 }
+
+.downloadOptions-container {
+    position: absolute;
+    margin-left: 77%;
+    margin-top: 2.45%;
+    width: 13%;
+    height: 3%;
+    background-color: gainsboro;
+    border-radius: 8px;
+    border: 2px solid;
+}
+
+.downloadOptions-container:hover {
+    background-color: white;
+}
+
+.downloadOptions-text {
+    position: relative;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.downloadOptions-options-container {
+    position: absolute;
+    border-radius: 15px;
+    border: 1px solid;
+    margin-left: 70%;
+    height: 22%;
+    width: 20%;
+    background-color: #f2f2f2;
+    z-index: 3;
+}
+
+.downloadOptions-options-container-hidden {
+    position: absolute;
+    display: none;
+    border-radius: 15px;
+    border: 1px solid;
+    margin-left: 70%;
+    height: 22%;
+    width: 20%;
+    background-color: #f2f2f2;
+    z-index: 3;
+}
