@@ -13,7 +13,7 @@ async function postSequenceUrls(sequenceURLs, email) {
       },
       body: JSON.stringify({'sequenceURLs': sequenceURLs, 'email': email}),
     };
-    const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/bulk_download", fetchData);
+    const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/bulkdownloads", fetchData);
     const resolvedResponse = await fetchResponse.json();
     return resolvedResponse
   };
@@ -35,8 +35,8 @@ export function SequenceDownload(props) {
                 </div>
                 <Form className="downloadOptions-contents" onSubmit={submitDownload}>
                     <Form.Label className="download-container-text">For large numbers of sequences, we recommend sharing your email so you can be contacted when your sequences are available for download (your email will not be used for any other purpose).</Form.Label>
-                    <Form.Control className="download-container-email" name="enteredEmail" type="email" value={props.emailValue} onChange={e => props.setEmailValue(e.target.value)}/>
-                    <Button className="download-container-button" variant="outline-primary" type="submit">Download sequences</Button>
+                    <Form.Control className="download-container-email" name="enteredEmail" value={props.emailValue} onChange={e => props.setEmailValue(e.target.value)}/>
+                    <Button className="download-container-button" variant="outline-primary" type="submit">Request sequences</Button>
                 </Form>
             </>
         </div>

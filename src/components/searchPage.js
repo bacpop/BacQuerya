@@ -99,7 +99,7 @@ function SearchPage() {
             var resultsRendered = filteredResults.map((result, index) => {
                 if (result._source !== undefined) {
                     return (
-                        <div className="isolate-returned">
+                        <div key={index} className="isolate-returned">
                             <>
                             <div className="isolate-link">
                                 <div className="isolate-summary">
