@@ -1,0 +1,39 @@
+.downloadOptions-contents {
+    position: relative;
+    margin-top: 3%;
+    width: 100%;
+    height: 100%;
+}
+
+.download-container-text {
+    position: relative;
+    float: left;
+    width: 100%;
+    margin-left: 0%;
+}
+
+.download-container-email {
+    position: absolute;
+    display: flex;
+    margin-top: 27%;
+    margin-left: 5%;
+    width: 90%;
+}
+
+.download-container-button {
+    position: absolute;
+    display: flex;
+    margin-top: 40%;
+    margin-left: 27%;
+}
+
+.downLoadOptions-close {
+    position: absolute;
+    margin-left: 95%;
+    margin-top: 45%;
+}
+
+#downloadOptions-close-font {
+    color: black;
+    font-size: 14px;
+}
