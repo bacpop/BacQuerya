@@ -39,7 +39,7 @@ function GeneDisplay(props) {
           <>
             <div>
               <h3>Gene overview</h3>
-              <p>Names/Aliases: {props.geneInfo.panarooNames.split("~~~").join(" ,")}</p>
+              <p>Names/Aliases: {props.geneInfo.panarooNames.split("~~~").join(", ")}</p>
               <p>Gene frequency: {props.geneInfo.panarooFrequency}%</p>
               <p>Description(s): {renderDescriptions(props.geneInfo.panarooDescriptions)}</p>
               <p>Found in isolates:</p>

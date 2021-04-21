@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import isolateQuery from './indexQuerying/isolateQuery'
 import paperQuery from './indexQuerying/paperQuery'
 import geneQuery from './indexQuerying/geneQuery'
+import sequenceQuery from './indexQuerying/sequenceQuery'
 import Paginate from './paginateResults'
 import { FilterComponent, filterResults } from './searchFilters'
 import { SequenceDownload } from './sequenceDownload'
@@ -60,8 +61,17 @@ function SearchPage() {
         });
     };
     //call async function to search for genes
-    if (search === true && queryType === "sequence") {
+    if (search === true && queryType === "gene") {
         geneQuery(formData).then(result => {
+            setQueryNumber(31)
+            setSearch(false);
+            setSearched(true);
+            setQueryResult(result);
+        });
+    };
+    //call async function to search for sequences
+    if (search === true && queryType === "sequence") {
+        sequenceQuery(formData).then(result => {
             setQueryNumber(28)
             setSearch(false);
             setSearched(true);
@@ -73,7 +83,7 @@ function SearchPage() {
         var resultsRendered = queryResult.map((result, index) => {
             if (result.encodedDOI !== undefined) {
                 return (
-                    <li key={index}>
+                    <li key={index} className="paper-returned">
                         <Link to={"/paper/" + result.encodedDOI} target="_blank">{result.Title}</Link>
                     </li>
         )}});
@@ -90,6 +100,9 @@ function SearchPage() {
                     {(links.length === 3 && index === 2) && <a href={link} rel="noreferrer">reverse</a>}
                 </div>
         )});
+
+    const splitGeneNames = geneName =>
+        geneName.split("~~~").map(name => {return(<Link className="gene-returned-aliases-item" to={"/gene/" + geneName} target="_blank">{name}</Link>)})
 
     if (queryType === "isolate" && queryResult && queryResult.length !== 0 && searched === true && search === false) {
         const filtersApplied = filterResults(queryResult, queryType, selectedFilters)
@@ -136,7 +149,7 @@ function SearchPage() {
             var resultsRendered = queryResult.map((result, index)=> {
                 if (result.geneName !== undefined) {
                     return (
-                        <p key={index}>
+                        <p key={index} className="sequence-returned">
                             <Link className="geneResult-align" to={"/gene/" + result.geneName} target="_blank">
                                 {result.geneName}
                             </Link>
@@ -145,6 +158,25 @@ function SearchPage() {
                             </p>
                         </p>
             )}});
+    };
+
+    if (queryType === "gene" && queryResult && queryResult.length !== 0) {
+        var resultsRendered = queryResult.map((result, index)=> {
+            if (result._source.panarooNames !== undefined) {
+                var geneNames = splitGeneNames(result._source.panarooNames)
+                return (
+                    <div key={index} className="gene-returned">
+                        <Link className="gene-returned-name" to={"/gene/" + result._source.panarooNames} target="_blank">
+                            {geneNames[0]}
+                        </Link>
+                        <div className="gene-returned-aliases">
+                            {geneNames.slice(1)}
+                        </div>
+                        <div className="gene-returned-description">
+                            {result._source.panarooDescriptions[0]}
+                        </div>
+                    </div>
+        )}});
     };
 
     //conditional CSS
@@ -169,6 +201,7 @@ function SearchPage() {
                     custom>
                     <option value="isolate">isolate</option>
                     <option value="paper">paper</option>
+                    <option value="gene">gene</option>
                     <option value="sequence">sequence</option>
                 </FormControl>
                 <Button type="submit" variant="outline-primary">Search</Button>

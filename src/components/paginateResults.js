@@ -95,6 +95,18 @@ class Paginate extends React.Component {
                         Match proportion
                     </div>
                 </>}
+                {(this.props.queryType === "gene") &&
+                <>
+                    <div className="geneResult-name">
+                      Gene Name
+                    </div>
+                    <div className="geneResult-aliases">
+                      Aliases
+                    </div>
+                    <div className="geneResult-description">
+                      Description
+                    </div>
+                </>}
                 {(this.props.queryType === "paper") &&
                     <div className="searchResult-bar-paper">
                         Paper title
