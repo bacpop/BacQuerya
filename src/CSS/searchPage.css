@@ -85,6 +85,7 @@ p {
 .gene-returned-aliases-item{
     position: relative;
     display: inline;
+    text-align: center;
     padding-left: 3%;
     padding-right: 3%;
 }
