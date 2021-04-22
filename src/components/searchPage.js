@@ -23,7 +23,7 @@ function SearchPage() {
     const [search, setSearch] = useState(false);
     const [queryResult, setQueryResult] = useState(null);
     const [openFilters, setOpenFilters] = useState(false);
-    const [selectedFilters, setSelectedFilters] = useState({assemblies: true, reads: true, minN50: 0});
+    const [selectedFilters, setSelectedFilters] = useState({assemblies: true, reads: true, minN50: 0, noContigs: "All"});
     const [showDownloadOptions, setOpenDownloads] = useState(false);
     const [emailValue, setEmailValue] = useState("Enter email");
 
@@ -32,7 +32,7 @@ function SearchPage() {
         setSearch(true);
         setSearched(false);
         setQueryResult(null)
-        setSelectedFilters({assemblies: true, reads: true, minN50: 0})
+        setSelectedFilters({assemblies: true, reads: true, minN50: 0, noContigs: "All"})
         setOpenDownloads(false)
         setEmailValue("Enter email")
         updateFormData(e.target.searchTerm.value)
@@ -51,7 +51,7 @@ function SearchPage() {
     //call async function to search for isolates
     if (search === true && queryType === "isolate") {
         isolateQuery(formData).then(result => {
-            setSelectedFilters({assemblies: true, reads: true, minN50: 0});
+            setSelectedFilters({assemblies: true, reads: true, minN50: 0, noContigs: "All"});
             setOpenDownloads(false)
             setEmailValue("Enter email")
             setSearch(false);

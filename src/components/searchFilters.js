@@ -8,9 +8,13 @@ const applyFilters = (searchResults, filters) => {
     const assemblies = filters.assemblies
     const reads = filters.reads
     const minN50 = filters.minN50
+    var noContigs = filters.noContigs
+    if (noContigs == "All") {
+        noContigs = 1000000
+    };
     if (assemblies === true && reads === false) {
         return searchResults.filter(function( obj ) {
-            return obj._source.Genome_representation !== 'reads' && obj._source.contig_stats.N50 >= minN50;
+            return obj._source.Genome_representation !== 'reads' && obj._source.contig_stats.N50 >= minN50 && obj._source.contig_stats.sequence_count <= noContigs;
         });
     };
     if (assemblies === false && reads === true) {
@@ -21,7 +25,7 @@ const applyFilters = (searchResults, filters) => {
     if (assemblies === true && reads === true) {
         return searchResults.filter(function( obj ) {
             if (obj._source.contig_stats) {
-                return obj._source.contig_stats.N50 >= minN50;
+                return obj._source.contig_stats.N50 >= minN50 && obj._source.contig_stats.sequence_count <= noContigs;
             };
             if (obj._source.contig_stats == undefined) {
                 return obj
@@ -47,10 +51,15 @@ export function filterResults(searchResults, queryType, filters) {
 export function FilterComponent(props) {
 
     const [sliderValue, setSliderValue] = useState(props.selectedFilters.minN50);
+    const [contigValue, setContigValue] = useState(props.selectedFilters.noContigs);
 
     function getFilters(e) {
         e.preventDefault()
-        props.setSelectedFilters({assemblies: e.target.assemblies.checked, reads: e.target.reads.checked, minN50: sliderValue})
+        props.setSelectedFilters(
+            {assemblies: e.target.assemblies.checked,
+            reads: e.target.reads.checked,
+            minN50: sliderValue,
+            noContigs: contigValue})
         props.setOpenFilters(false)
     }
 
@@ -73,6 +82,10 @@ export function FilterComponent(props) {
                         <div className="slider-input">
                             <Form.Control size="sm" name="N50Input" value={sliderValue} onChange={e => setSliderValue(e.target.value)}/>
                         </div>
+                    </div>
+                    <div className="filterOptions-options-contigs-container">
+                        <Form.Label className="contig-label" id="contig-label-font"> Maximum number of contigs </Form.Label>
+                        <Form.Control className="contig-input" size="sm" name="noContigs" value={contigValue} onChange={e => setContigValue(e.target.value)}/>
                     </div>
                     <Button className="filterOptions-options-button" variant="outline-primary" type="submit">Apply filters</Button>
                 </Form>
