@@ -79,42 +79,42 @@ function PaperPage(props) {
             {(searched == false && props.paperInfo.DOI === "10.1038/sdata.2015.58"| resultsRendered === undefined && props.paperInfo.DOI === "10.1038/sdata.2015.58") && <Spinner animation="border" variant="primary" />}
             {(openCitaitonsResult !== undefined && searched == true && props.paperInfo.DOI === "10.1038/sdata.2015.58") &&
                 <>
-                <h3>{props.paperInfo.Title}</h3>
-                <p>Authors: {props.paperInfo.AuthorList.join(", ")}</p>
-                <p>Journal name: {props.paperInfo.FullJournalName}</p>
-                { (props.paperInfo.Volume !== "") && <p>Volume: {props.paperInfo.Volume}</p> }
-                { (props.paperInfo.Issue !== "") && <p>Issue: {props.paperInfo.Issue}</p> }
-                { (props.paperInfo.Pages !== "") && <p>Page(s): {props.paperInfo.Pages}</p> }
-                { (props.paperInfo.History.received !== undefined) && <p>Received: {props.paperInfo.History.received}</p> }
-                { (props.paperInfo.History.accepted !== undefined) && <p>Accepted: {props.paperInfo.History.accepted}</p> }
-                { (props.paperInfo.EPubDate !== "") && <p>ePub Date: {props.paperInfo.EPubDate}</p> }
-                <p>DOI: {props.paperInfo.DOI}</p>
-                { (props.paperInfo.ArticleIds.pmc !== undefined) && <p>PMC ID: {props.paperInfo.ArticleIds.pmc}</p> }
-                <p>PubMed ID: {props.paperInfo.ArticleIds.pubmed[0]}</p>
-                <p>RID: {props.paperInfo.ArticleIds.rid}</p>
-                { (openCitaitonsResult.URL !== undefined) && <p>View paper at source: <a href={openCitaitonsResult.URL} target="_blank">{openCitaitonsResult.URL}</a></p> }
-                { (openCitaitonsResult.link[0].URL !== undefined) && <p>Download paper: <a href={openCitaitonsResult.link[0].URL} target="_blank">{openCitaitonsResult.link[0].URL}</a></p> }
-                { (openCitaitonsResult.abstract !== undefined) && <p>{cleanAbsract(openCitaitonsResult.abstract)}</p> }
+                <h3 id="header-font">{props.paperInfo.Title}</h3>
+                <p id="mediumLarge-font">Authors: {props.paperInfo.AuthorList.join(", ")}</p>
+                <p id="mediumLarge-font">Journal name: {props.paperInfo.FullJournalName}</p>
+                { (props.paperInfo.Volume !== "") && <p id="mediumLarge-font">Volume: {props.paperInfo.Volume}</p> }
+                { (props.paperInfo.Issue !== "") && <p id="mediumLarge-font">Issue: {props.paperInfo.Issue}</p> }
+                { (props.paperInfo.Pages !== "") && <p id="mediumLarge-font">Page(s): {props.paperInfo.Pages}</p> }
+                { (props.paperInfo.History.received !== undefined) && <p id="mediumLarge-font">Received: {props.paperInfo.History.received}</p> }
+                { (props.paperInfo.History.accepted !== undefined) && <p id="mediumLarge-font">Accepted: {props.paperInfo.History.accepted}</p> }
+                { (props.paperInfo.EPubDate !== "") && <p id="mediumLarge-font">ePub Date: {props.paperInfo.EPubDate}</p> }
+                <p id="mediumLarge-font">DOI: {props.paperInfo.DOI}</p>
+                { (props.paperInfo.ArticleIds.pmc !== undefined) && <p id="mediumLarge-font">PMC ID: {props.paperInfo.ArticleIds.pmc}</p> }
+                <p id="mediumLarge-font">PubMed ID: {props.paperInfo.ArticleIds.pubmed[0]}</p>
+                <p id="mediumLarge-font">RID: {props.paperInfo.ArticleIds.rid}</p>
+                { (openCitaitonsResult.URL !== undefined) && <p id="mediumLarge-font">View paper at source: <a href={openCitaitonsResult.URL} target="_blank">{openCitaitonsResult.URL}</a></p> }
+                { (openCitaitonsResult.link[0].URL !== undefined) && <p id="mediumLarge-font">Download paper: <a href={openCitaitonsResult.link[0].URL} target="_blank">{openCitaitonsResult.link[0].URL}</a></p> }
+                { (openCitaitonsResult.abstract !== undefined) && <p id="mediumLarge-font">{cleanAbsract(openCitaitonsResult.abstract)}</p> }
                 { (props.paperInfo.DOI === "10.1038/sdata.2015.58" && resultsRendered) && <Paginate resultNumber={20} resultsRendered={resultsRendered} queryType="isolatesContained"/>}
                 </> }
             {(openCitaitonsResult !== undefined && props.paperInfo.DOI !== "10.1038/sdata.2015.58") &&
                 <>
-                <h3>{props.paperInfo.Title}</h3>
-                <p>Authors: {props.paperInfo.AuthorList.join(", ")}</p>
-                <p>Journal name: {props.paperInfo.FullJournalName}</p>
-                { (props.paperInfo.Volume !== "") && <p>Volume: {props.paperInfo.Volume}</p> }
-                { (props.paperInfo.Issue !== "") && <p>Issue: {props.paperInfo.Issue}</p> }
-                { (props.paperInfo.Pages !== "") && <p>Page(s): {props.paperInfo.Pages}</p> }
-                { (props.paperInfo.History.received !== undefined) && <p>Received: {props.paperInfo.History.received}</p> }
-                { (props.paperInfo.History.accepted !== undefined) && <p>Accepted: {props.paperInfo.History.accepted}</p> }
-                { (props.paperInfo.EPubDate !== "") && <p>ePub Date: {props.paperInfo.EPubDate}</p> }
-                <p>DOI: {props.paperInfo.DOI}</p>
-                { (props.paperInfo.ArticleIds.pmc !== undefined) && <p>PMC ID: {props.paperInfo.ArticleIds.pmc}</p> }
-                <p>PubMed ID: {props.paperInfo.ArticleIds.pubmed[0]}</p>
-                <p>RID: {props.paperInfo.ArticleIds.rid}</p>
-                { (openCitaitonsResult.URL !== undefined) && <p>View paper at source: <a href={openCitaitonsResult.URL} target="_blank">{openCitaitonsResult.URL}</a></p> }
-                { (openCitaitonsResult.link !== undefined) && <p>Download paper: <a href={openCitaitonsResult.link[0].URL} target="_blank">{openCitaitonsResult.link[0].URL}</a></p> }
-                { (openCitaitonsResult.abstract !== undefined) && <p>{cleanAbsract(openCitaitonsResult.abstract)}</p> }
+                <h3 id="header-font">{props.paperInfo.Title}</h3>
+                <p id="mediumLarge-font">Authors: {props.paperInfo.AuthorList.join(", ")}</p>
+                <p id="mediumLarge-font">Journal name: {props.paperInfo.FullJournalName}</p>
+                { (props.paperInfo.Volume !== "") && <p id="mediumLarge-font">Volume: {props.paperInfo.Volume}</p> }
+                { (props.paperInfo.Issue !== "") && <p id="mediumLarge-font">Issue: {props.paperInfo.Issue}</p> }
+                { (props.paperInfo.Pages !== "") && <p id="mediumLarge-font">Page(s): {props.paperInfo.Pages}</p> }
+                { (props.paperInfo.History.received !== undefined) && <p id="mediumLarge-font">Received: {props.paperInfo.History.received}</p> }
+                { (props.paperInfo.History.accepted !== undefined) && <p id="mediumLarge-font">Accepted: {props.paperInfo.History.accepted}</p> }
+                { (props.paperInfo.EPubDate !== "") && <p id="mediumLarge-font">ePub Date: {props.paperInfo.EPubDate}</p> }
+                <p id="mediumLarge-font">DOI: {props.paperInfo.DOI}</p>
+                { (props.paperInfo.ArticleIds.pmc !== undefined) && <p id="mediumLarge-font">PMC ID: {props.paperInfo.ArticleIds.pmc}</p> }
+                <p id="mediumLarge-font">PubMed ID: {props.paperInfo.ArticleIds.pubmed[0]}</p>
+                <p id="mediumLarge-font">RID: {props.paperInfo.ArticleIds.rid}</p>
+                { (openCitaitonsResult.URL !== undefined) && <p id="mediumLarge-font">View paper at source: <a href={openCitaitonsResult.URL} target="_blank">{openCitaitonsResult.URL}</a></p> }
+                { (openCitaitonsResult.link !== undefined) && <p id="mediumLarge-font">Download paper: <a href={openCitaitonsResult.link[0].URL} target="_blank">{openCitaitonsResult.link[0].URL}</a></p> }
+                { (openCitaitonsResult.abstract !== undefined) && <p id="mediumLarge-font">{cleanAbsract(openCitaitonsResult.abstract)}</p> }
                 </> }
         </div>
     );

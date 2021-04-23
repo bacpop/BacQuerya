@@ -5,3 +5,7 @@
     height: 100%;
     width: 100%;
 }
+
+#homepage-text {
+    font-size: 3vh;
+}

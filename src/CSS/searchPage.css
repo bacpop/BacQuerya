@@ -49,6 +49,60 @@ p {
     border: 1px ridge gainsboro;
 }
 
+.paper-returned {
+    background-color: white;
+}
+
+.paper-returned:hover {
+    background-color: #f2f2f2;
+    border: 1px ridge gainsboro;
+}
+
+.gene-returned {
+    background-color: white;
+    position: relative;
+    display: flex;
+}
+
+.gene-returned:hover {
+    background-color: #f2f2f2;
+    border: 1px ridge gainsboro;
+}
+
+.gene-returned-name{
+    position: relative;
+    float: left;
+    margin-left: 1% !important;
+    width: 33%;
+}
+
+.gene-returned-aliases {
+    position: relative;
+    float: left;
+    width: 33%;
+}
+
+.gene-returned-aliases-item{
+    position: relative;
+    display: inline;
+    text-align: center;
+    padding-left: 3%;
+    padding-right: 3%;
+}
+
+.gene-returned-description {
+    position: relative;
+    width: 33%;
+}
+.sequence-returned {
+    background-color: white;
+}
+
+.sequence-returned:hover {
+    background-color: #f2f2f2;
+    border: 1px ridge gainsboro;
+}
+
 .isolate-link {
     position: relative;
 }
@@ -123,7 +177,7 @@ p {
 }
 
 #sequenceResult-brief-font {
-    font-size: 14px;
+    font-size: 1.43vh;
     color: black;
     font-weight: normal;
 }

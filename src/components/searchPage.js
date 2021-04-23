@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import isolateQuery from './indexQuerying/isolateQuery'
 import paperQuery from './indexQuerying/paperQuery'
 import geneQuery from './indexQuerying/geneQuery'
+import sequenceQuery from './indexQuerying/sequenceQuery'
 import Paginate from './paginateResults'
 import { FilterComponent, filterResults } from './searchFilters'
 import { SequenceDownload } from './sequenceDownload'
@@ -22,7 +23,7 @@ function SearchPage() {
     const [search, setSearch] = useState(false);
     const [queryResult, setQueryResult] = useState(null);
     const [openFilters, setOpenFilters] = useState(false);
-    const [selectedFilters, setSelectedFilters] = useState({assemblies: true, reads: true, minN50: 0});
+    const [selectedFilters, setSelectedFilters] = useState({assemblies: true, reads: true, minN50: 0, noContigs: "All"});
     const [showDownloadOptions, setOpenDownloads] = useState(false);
     const [emailValue, setEmailValue] = useState("Enter email");
 
@@ -31,7 +32,7 @@ function SearchPage() {
         setSearch(true);
         setSearched(false);
         setQueryResult(null)
-        setSelectedFilters({assemblies: true, reads: true, minN50: 0})
+        setSelectedFilters({assemblies: true, reads: true, minN50: 0, noContigs: "All"})
         setOpenDownloads(false)
         setEmailValue("Enter email")
         updateFormData(e.target.searchTerm.value)
@@ -50,7 +51,7 @@ function SearchPage() {
     //call async function to search for isolates
     if (search === true && queryType === "isolate") {
         isolateQuery(formData).then(result => {
-            setSelectedFilters({assemblies: true, reads: true, minN50: 0});
+            setSelectedFilters({assemblies: true, reads: true, minN50: 0, noContigs: "All"});
             setOpenDownloads(false)
             setEmailValue("Enter email")
             setSearch(false);
@@ -60,8 +61,17 @@ function SearchPage() {
         });
     };
     //call async function to search for genes
-    if (search === true && queryType === "sequence") {
+    if (search === true && queryType === "gene") {
         geneQuery(formData).then(result => {
+            setQueryNumber(31)
+            setSearch(false);
+            setSearched(true);
+            setQueryResult(result);
+        });
+    };
+    //call async function to search for sequences
+    if (search === true && queryType === "sequence") {
+        sequenceQuery(formData).then(result => {
             setQueryNumber(28)
             setSearch(false);
             setSearched(true);
@@ -73,7 +83,7 @@ function SearchPage() {
         var resultsRendered = queryResult.map((result, index) => {
             if (result.encodedDOI !== undefined) {
                 return (
-                    <li key={index}>
+                    <li key={index} className="paper-returned" id="mediumLarge-font">
                         <Link to={"/paper/" + result.encodedDOI} target="_blank">{result.Title}</Link>
                     </li>
         )}});
@@ -91,6 +101,9 @@ function SearchPage() {
                 </div>
         )});
 
+    const splitGeneNames = geneName =>
+        geneName.split("~~~").map(name => {return(<Link className="gene-returned-aliases-item" to={"/gene/" + geneName} target="_blank">{name}</Link>)})
+
     if (queryType === "isolate" && queryResult && queryResult.length !== 0 && searched === true && search === false) {
         const filtersApplied = filterResults(queryResult, queryType, selectedFilters)
         const filteredResults = filtersApplied[0]
@@ -99,7 +112,7 @@ function SearchPage() {
             var resultsRendered = filteredResults.map((result, index) => {
                 if (result._source !== undefined) {
                     return (
-                        <div key={index} className="isolate-returned">
+                        <div key={index} className="isolate-returned" id="mediumLarge-font">
                             <>
                             <div className="isolate-link">
                                 <div className="isolate-summary">
@@ -136,7 +149,7 @@ function SearchPage() {
             var resultsRendered = queryResult.map((result, index)=> {
                 if (result.geneName !== undefined) {
                     return (
-                        <p key={index}>
+                        <p key={index} className="sequence-returned" id="mediumLarge-font">
                             <Link className="geneResult-align" to={"/gene/" + result.geneName} target="_blank">
                                 {result.geneName}
                             </Link>
@@ -145,6 +158,25 @@ function SearchPage() {
                             </p>
                         </p>
             )}});
+    };
+
+    if (queryType === "gene" && queryResult && queryResult.length !== 0) {
+        var resultsRendered = queryResult.map((result, index)=> {
+            if (result._source.panarooNames !== undefined) {
+                var geneNames = splitGeneNames(result._source.panarooNames)
+                return (
+                    <div key={index} className="gene-returned" id="mediumLarge-font">
+                        <Link className="gene-returned-name" to={"/gene/" + result._source.panarooNames} target="_blank">
+                            {geneNames[0]}
+                        </Link>
+                        <div className="gene-returned-aliases">
+                            {geneNames.slice(1)}
+                        </div>
+                        <div className="gene-returned-description">
+                            {result._source.panarooDescriptions[0]}
+                        </div>
+                    </div>
+        )}});
     };
 
     //conditional CSS
@@ -169,6 +201,7 @@ function SearchPage() {
                     custom>
                     <option value="isolate">isolate</option>
                     <option value="paper">paper</option>
+                    <option value="gene">gene</option>
                     <option value="sequence">sequence</option>
                 </FormControl>
                 <Button type="submit" variant="outline-primary">Search</Button>
@@ -180,18 +213,18 @@ function SearchPage() {
                 </div>}
             { (queryType === "isolate" && search===false && searched == true) &&
                 <>
-                    <div className="filterOptions-container">
+                    <div className="filterOptions-container" id="mediumLarge-font">
                         <div className="filterOptions-text" onClick={() => setOpenFilters(true)}>
                             Click to filter results
                         </div>
                     </div>
                     <div>
                     { (openFilters) &&
-                        <div className="filterOptions-options-container">
+                        <div className="filterOptions-options-container" id="mediumLarge-font">
                             <FilterComponent setOpenFilters={setOpenFilters} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
                         </div>}
                     </div>
-                    <div className="downloadOptions-container">
+                    <div className="downloadOptions-container" id="mediumLarge-font">
                         <div className="downloadOptions-text" onClick={() => setOpenDownloads(true)}>
                             Click to download all sequences
                         </div>
