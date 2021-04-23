@@ -36,21 +36,21 @@ export function SequenceDownload(props) {
     return (
         <div>
             <>
-            <div className="downLoadOptions-close" id="downloadOptions-close-font" onClick={() => props.setOpenDownloads(false)}>
+            <div className="downLoadOptions-close" id="mediumLarge-font" onClick={() => props.setOpenDownloads(false)}>
                     X
             </div>
             {(downlinkLoading === false && downloadlink === null) &&
                 <Form className="downloadOptions-contents" onSubmit={submitDownload}>
-                    <Form.Label className="download-container-text">For large numbers of sequences, we recommend sharing your email so you can be contacted when your sequences are available for download (your email will not be used for any other purpose).</Form.Label>
-                    <Form.Control className="download-container-email" name="enteredEmail" value={props.emailValue} onChange={e => props.setEmailValue(e.target.value)}/>
-                    <Button className="download-container-button" variant="outline-primary" type="submit">Request sequences</Button>
+                    <Form.Label className="download-container-text" id="mediumLarge-font">For large numbers of sequences, we recommend sharing your email so you can be contacted when your sequences are available for download (your email will not be used for any other purpose).</Form.Label>
+                    <Form.Control className="download-container-email" name="enteredEmail" value={props.emailValue} onChange={e => props.setEmailValue(e.target.value)} id="mediumLarge-font"/>
+                    <Button className="download-container-button" variant="outline-primary" type="submit" id="mediumLarge-font">Request sequences</Button>
                 </Form>
             }
             {(downlinkLoading && downloadlink === null) &&
                <Spinner animation="border" variant="primary" />
             }
             {(downlinkLoading === false && downloadlink) &&
-                <a href={downloadlink} target="_blank">
+                <a href={downloadlink} target="_blank" id="mediumLarge-font">
                     Your sequences have successfully been retrieved. Click here to go to the download page.
                 </a>
             }

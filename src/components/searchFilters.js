@@ -73,21 +73,21 @@ export function FilterComponent(props) {
                         <Form.Check type="checkbox" name="reads" label="Reads" defaultChecked={props.selectedFilters.reads}/>
                     </div>
                     <div className="filterOptions-options-slider-container">
-                        <div className="slider-label" id="slider-label-font">
+                        <div className="slider-label" id="mediumLarge-font">
                             <Form.Label> Minimum N50 </Form.Label>
                         </div>
                         <div className="slider">
-                            <Form.Control type="range" name="N50Slider" min={0} max={100000} value={sliderValue} onChange={e => setSliderValue(e.target.value)}/>
+                            <Form.Control style={{width: (window.innerWidth*0.0656) + "px", height: (1.64 + "vh")}} type="range" name="N50Slider" min={0} max={100000} value={sliderValue} onChange={e => setSliderValue(e.target.value)}/>
                         </div>
                         <div className="slider-input">
-                            <Form.Control size="sm" name="N50Input" value={sliderValue} onChange={e => setSliderValue(e.target.value)}/>
+                            <Form.Control size="sm" name="N50Input" value={sliderValue} onChange={e => setSliderValue(e.target.value)} id="mediumLarge-font"/>
                         </div>
                     </div>
                     <div className="filterOptions-options-contigs-container">
-                        <Form.Label className="contig-label" id="contig-label-font"> Maximum number of contigs </Form.Label>
-                        <Form.Control className="contig-input" size="sm" name="noContigs" value={contigValue} onChange={e => setContigValue(e.target.value)}/>
+                        <Form.Label className="contig-label" id="mediumLarge-font"> Maximum number of contigs </Form.Label>
+                        <Form.Control className="contig-input" size="sm" name="noContigs" value={contigValue} onChange={e => setContigValue(e.target.value)} id="mediumLarge-font"/>
                     </div>
-                    <Button className="filterOptions-options-button" variant="outline-primary" type="submit">Apply filters</Button>
+                    <Button className="filterOptions-options-button" variant="outline-primary" type="submit" id="mediumLarge-font">Apply filters</Button>
                 </Form>
             </div>
     )

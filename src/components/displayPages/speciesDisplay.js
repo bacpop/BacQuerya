@@ -19,7 +19,7 @@ function SpeciesDisplay(props) {
   return (
     <div>
       <>
-      <div className="speciesDisplay-endpoint">
+      <div className="speciesDisplay-endpoint" id="large-font">
         <p style={{display: "inline-block"}}> > </p>
         <Link style={{display: "inline-block"}} to={"/isolate/" + props.genus}>{props.genus}</Link>
         <p style={{display: "inline-block"}}> > </p>

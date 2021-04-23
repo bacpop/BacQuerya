@@ -83,7 +83,7 @@ function SearchPage() {
         var resultsRendered = queryResult.map((result, index) => {
             if (result.encodedDOI !== undefined) {
                 return (
-                    <li key={index} className="paper-returned">
+                    <li key={index} className="paper-returned" id="mediumLarge-font">
                         <Link to={"/paper/" + result.encodedDOI} target="_blank">{result.Title}</Link>
                     </li>
         )}});
@@ -112,7 +112,7 @@ function SearchPage() {
             var resultsRendered = filteredResults.map((result, index) => {
                 if (result._source !== undefined) {
                     return (
-                        <div key={index} className="isolate-returned">
+                        <div key={index} className="isolate-returned" id="mediumLarge-font">
                             <>
                             <div className="isolate-link">
                                 <div className="isolate-summary">
@@ -149,7 +149,7 @@ function SearchPage() {
             var resultsRendered = queryResult.map((result, index)=> {
                 if (result.geneName !== undefined) {
                     return (
-                        <p key={index} className="sequence-returned">
+                        <p key={index} className="sequence-returned" id="mediumLarge-font">
                             <Link className="geneResult-align" to={"/gene/" + result.geneName} target="_blank">
                                 {result.geneName}
                             </Link>
@@ -165,7 +165,7 @@ function SearchPage() {
             if (result._source.panarooNames !== undefined) {
                 var geneNames = splitGeneNames(result._source.panarooNames)
                 return (
-                    <div key={index} className="gene-returned">
+                    <div key={index} className="gene-returned" id="mediumLarge-font">
                         <Link className="gene-returned-name" to={"/gene/" + result._source.panarooNames} target="_blank">
                             {geneNames[0]}
                         </Link>
@@ -213,18 +213,18 @@ function SearchPage() {
                 </div>}
             { (queryType === "isolate" && search===false && searched == true) &&
                 <>
-                    <div className="filterOptions-container">
+                    <div className="filterOptions-container" id="mediumLarge-font">
                         <div className="filterOptions-text" onClick={() => setOpenFilters(true)}>
                             Click to filter results
                         </div>
                     </div>
                     <div>
                     { (openFilters) &&
-                        <div className="filterOptions-options-container">
+                        <div className="filterOptions-options-container" id="mediumLarge-font">
                             <FilterComponent setOpenFilters={setOpenFilters} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
                         </div>}
                     </div>
-                    <div className="downloadOptions-container">
+                    <div className="downloadOptions-container" id="mediumLarge-font">
                         <div className="downloadOptions-text" onClick={() => setOpenDownloads(true)}>
                             Click to download all sequences
                         </div>

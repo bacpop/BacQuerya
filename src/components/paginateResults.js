@@ -88,19 +88,19 @@ class Paginate extends React.Component {
             <div className="searchResult-bar">
                 {(this.props.queryType === "sequence") &&
                 <>
-                    <div className="searchResult-bar-genetext">
+                    <div id="mediumLarge-font" className="searchResult-bar-genetext">
                         Gene Name
                     </div>
-                    <div className="searchResult-bar-matchproportion">
+                    <div id="mediumLarge-font" className="searchResult-bar-matchproportion">
                         Match proportion
                     </div>
                 </>}
                 {(this.props.queryType === "gene") &&
                 <>
-                    <div className="geneResult-name">
+                    <div id="mediumLarge-font" className="geneResult-name">
                       Gene Name
                     </div>
-                    <div className="geneResult-aliases">
+                    <div id="mediumLarge-font" className="geneResult-aliases">
                       Aliases
                     </div>
                     <div className="geneResult-description">
@@ -108,46 +108,46 @@ class Paginate extends React.Component {
                     </div>
                 </>}
                 {(this.props.queryType === "paper") &&
-                    <div className="searchResult-bar-paper">
+                    <div id="mediumLarge-font" className="searchResult-bar-paper">
                         Paper title
                     </div>}
                 {(this.props.queryType === "isolate" || this.props.queryType == 'isolatesContained') &&
                   <>
-                    <div className="isolatebiosampletext">
+                    <div id="mediumLarge-font" className="isolatebiosampletext">
                       Biosample accession
                     </div>
-                    <div className="isolatespeciestext">
+                    <div id="mediumLarge-font" className="isolatespeciestext">
                       Species
                     </div>
-                    <div className="isolaterepresentation">
+                    <div id="mediumLarge-font" className="isolaterepresentation">
                       Genome representation
                     </div>
-                    <div className="isolatecontigstext">
+                    <div id="mediumLarge-font" className="isolatecontigstext">
                       Number of contigs
                     </div>
-                    <div className="isolatesequencelinktext">
+                    <div id="mediumLarge-font" className="isolatesequencelinktext">
                       Download links
                     </div>
                   </>}
                   {(this.props.queryType === "speciesContained") &&
-                    <div className="searchResult-bar-allisolatesbiosample">
+                    <div id="mediumLarge-font" className="searchResult-bar-allisolatesbiosample">
                       Biosample accession
                     </div>}
                 {(this.props.queryType === "genesContained") &&
-                    <div className="searchResult-bar-genesContained">
+                    <div id="mediumLarge-font" className="searchResult-bar-genesContained">
                         Identified genes
                     </div>}
                 {(this.props.queryType === "sequencesContained") &&
                 <>
-                    <div className="searchResult-bar-isolatetext">
+                    <div id="mediumLarge-font" className="searchResult-bar-isolatetext">
                         Isolate
                     </div>
-                    <div className="searchResult-bar-sequencetext">
+                    <div id="mediumLarge-font" className="searchResult-bar-sequencetext">
                         Sequence
                     </div>
                 </>}
                 {(this.props.queryType === "genusContained") &&
-                  <div className="searchResult-bar-genustext">
+                  <div id="mediumLarge-font" className="searchResult-bar-genustext">
                     Species found
                 </div>}
             </div>
@@ -155,7 +155,7 @@ class Paginate extends React.Component {
                 {renderTodos}
             </div>}
             {(this.props.queryType === "genesContained") && <div className={searchResult_items}>
-              <div className="searchResult-items-columned">
+              <div id="mediumLarge-font" className="searchResult-items-columned">
                 {divideGenes(renderTodos)}
               </div>
             </div>}

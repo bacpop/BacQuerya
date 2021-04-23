@@ -25,10 +25,10 @@ function GeneDisplay(props) {
           if (result !== undefined) {
               return (
                 <div className="isolateItem">
-                    <Link className="isolateResult-align" to={"/isolate/streptococcus/pneumoniae/" + props.geneInfo.foundIn_biosamples[index]} target="_blank">
+                    <Link className="isolateResult-align" id="medium-font" to={"/isolate/streptococcus/pneumoniae/" + props.geneInfo.foundIn_biosamples[index]} target="_blank">
                       {props.geneInfo.foundIn_labels[index]}
                     </Link>
-                    <p className="sequenceResult-align" id="sequenceResult-align-font">
+                    <p className="sequenceResult-align" id="medium-font">
                       {divideSequence(props.geneInfo.foundIn_sequences[index])}
                     </p>
                 </div>
@@ -38,11 +38,11 @@ function GeneDisplay(props) {
         <div>
           <>
             <div>
-              <h3>Gene overview</h3>
-              <p>Names/Aliases: {props.geneInfo.panarooNames.split("~~~").join(", ")}</p>
-              <p>Gene frequency: {props.geneInfo.panarooFrequency}%</p>
-              <p>Description(s): {renderDescriptions(props.geneInfo.panarooDescriptions)}</p>
-              <p>Found in isolates:</p>
+              <h3 id="header-font">Gene overview</h3>
+              <p id="mediumLarge-font">Names/Aliases: {props.geneInfo.panarooNames.split("~~~").join(", ")}</p>
+              <p id="mediumLarge-font">Gene frequency: {props.geneInfo.panarooFrequency}%</p>
+              <p id="mediumLarge-font">Description(s): {renderDescriptions(props.geneInfo.panarooDescriptions)}</p>
+              <p id="mediumLarge-font">Found in isolates:</p>
             </div>
             {(resultsRendered) && <div>
                 <Paginate resultNumber={20} resultsRendered={resultsRendered} queryType="sequencesContained"/>

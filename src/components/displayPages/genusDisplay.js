@@ -19,7 +19,7 @@ function GenusDisplay(props) {
   return (
     <div>
         <>
-        <div className="genusDisplay-endpoint">
+        <div className="genusDisplay-endpoint" id="large-font">
             <p style={{display: "inline-block"}}> > </p>
             <Link style={{display: "inline-block"}} to={"/isolate/" + props.genus}>{props.genus}</Link>
         </div>
