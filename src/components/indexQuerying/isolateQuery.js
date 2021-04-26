@@ -34,4 +34,45 @@ async function isolateQuery(formData) {
     return resolvedResponse.hits.hits
 };
 
-  export default isolateQuery;
+export async function specificIsolateQuery(accessionList) {
+    const searchURL = process.env.REACT_APP_API_URL + "/sparc_isolate_index/_search";
+    const apiKey = process.env.REACT_APP_API_KEY;
+    var responseList = await Promise.all(accessionList.map(biosampleAccession => {
+        const fetchData =  {
+            method: 'POST',
+            headers : {
+                'Authorization': 'ApiKey ' + apiKey,
+                'Content-Type': 'application/json'
+            },
+            body:
+                JSON.stringify({
+                    "query": {
+                        "bool": {
+                            "must": [{
+                                "match": {
+                                    "BioSample": biosampleAccession
+                                }
+                            }
+                        ]
+                    }
+                }
+            })
+        };
+        return fetch(searchURL, fetchData).then(
+            (response) => response.json()).then(
+                (responseJson) => {
+                    return responseJson.hits.hits[0]
+                }
+            );
+    }));
+    const filteredResults = await responseList.filter(function( obj ) {
+        if (obj === undefined) {
+            return false; // skip
+        };
+        return true;
+    });
+    console.log(filteredResults)
+    return filteredResults;
+};
+
+export default isolateQuery;
