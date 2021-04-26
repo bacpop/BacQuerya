@@ -74,7 +74,7 @@ function GeneDisplay(props) {
                     Gene was found in {resultsRendered.length} isolates
                   </div>
                   <div className="msa-button" id="mediumLarge-font">
-                    Click to download multiple sequence alignment
+                    <a href={"https://bacquerya.azurewebsites.net:443/alignement/" + props.geneInfo.panarooNames} rel="noreferrer">Click to download multiple sequence alignment</a>
                   </div>
                 </div>
               </div>
