@@ -2,7 +2,8 @@ import {useState, useEffect} from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { Link } from "react-router-dom";
 
-import isolateQuery from '../indexQuerying/isolateQuery'
+import { queryPaperIsolates } from '../indexQuerying/paperQuery'
+import { specificIsolateQuery } from '../indexQuerying/isolateQuery'
 import Paginate from '../paginateResults'
 import '../../CSS/paperDisplay.css'
 
@@ -17,12 +18,21 @@ function PaperPage(props) {
             setOpenCitations(responseJson.message)
         });
         //call async function to search for isolates
-        if (props.paperInfo.DOI === "10.1038/sdata.2015.58") {
-            isolateQuery("GCF").then(result => {
-                setSearched(true);
-                setQueryResult(result);
-            });
-        };
+        queryPaperIsolates(props.paperInfo.DOI).then(result => {
+            setSearched(true);
+            if (result[0] !== undefined) {
+                const values = Object.values(result[0]._source).filter(function( obj ) {
+                    if (obj === props.paperInfo.DOI) {
+                        return false;
+                    };
+                    return true;
+                });
+                specificIsolateQuery(values).then(information => {
+                    setQueryResult(information);
+                    console.log(information)
+                });
+            };
+        });
     }, [setOpenCitations, setSearched, setQueryResult]);
 
     function cleanAbsract(string) {
@@ -76,29 +86,8 @@ function PaperPage(props) {
     console.log(props.paperInfo)
     return(
         <div>
-            {(openCitaitonsResult === undefined && props.paperInfo.DOI !== "10.1038/sdata.2015.58") && <Spinner animation="border" variant="primary" />}
-            {(searched == false && props.paperInfo.DOI === "10.1038/sdata.2015.58"| resultsRendered === undefined && props.paperInfo.DOI === "10.1038/sdata.2015.58") && <Spinner animation="border" variant="primary" />}
-            {(openCitaitonsResult !== undefined && searched == true && props.paperInfo.DOI === "10.1038/sdata.2015.58") &&
-                <>
-                <h3 id="header-font">{props.paperInfo.Title}</h3>
-                <p id="mediumLarge-font">Authors: {props.paperInfo.AuthorList.join(", ")}</p>
-                <p id="mediumLarge-font">Journal name: {props.paperInfo.FullJournalName}</p>
-                { (props.paperInfo.Volume !== "") && <p id="mediumLarge-font">Volume: {props.paperInfo.Volume}</p> }
-                { (props.paperInfo.Issue !== "") && <p id="mediumLarge-font">Issue: {props.paperInfo.Issue}</p> }
-                { (props.paperInfo.Pages !== "") && <p id="mediumLarge-font">Page(s): {props.paperInfo.Pages}</p> }
-                { (props.paperInfo.History.received !== undefined) && <p id="mediumLarge-font">Received: {props.paperInfo.History.received}</p> }
-                { (props.paperInfo.History.accepted !== undefined) && <p id="mediumLarge-font">Accepted: {props.paperInfo.History.accepted}</p> }
-                { (props.paperInfo.EPubDate !== "") && <p id="mediumLarge-font">ePub Date: {props.paperInfo.EPubDate}</p> }
-                <p id="mediumLarge-font">DOI: {props.paperInfo.DOI}</p>
-                { (props.paperInfo.ArticleIds.pmc !== undefined) && <p id="mediumLarge-font">PMC ID: {props.paperInfo.ArticleIds.pmc}</p> }
-                <p id="mediumLarge-font">PubMed ID: {props.paperInfo.ArticleIds.pubmed[0]}</p>
-                <p id="mediumLarge-font">RID: {props.paperInfo.ArticleIds.rid}</p>
-                { (openCitaitonsResult.URL !== undefined) && <p id="mediumLarge-font">View paper at source: <a href={openCitaitonsResult.URL} target="_blank">{openCitaitonsResult.URL}</a></p> }
-                { (openCitaitonsResult.link[0].URL !== undefined) && <p id="mediumLarge-font">Download paper: <a href={openCitaitonsResult.link[0].URL} target="_blank">{openCitaitonsResult.link[0].URL}</a></p> }
-                { (openCitaitonsResult.abstract !== undefined) && <p id="mediumLarge-font">{cleanAbsract(openCitaitonsResult.abstract)}</p> }
-                { (props.paperInfo.DOI === "10.1038/sdata.2015.58" && resultsRendered) && <Paginate resultNumber={20} resultsRendered={resultsRendered} queryType="isolatesContained"/>}
-                </> }
-            {(openCitaitonsResult !== undefined && props.paperInfo.DOI !== "10.1038/sdata.2015.58") &&
+            {(searched == false || openCitaitonsResult === undefined) && <Spinner animation="border" variant="primary" />}
+            {(openCitaitonsResult !== undefined) &&
                 <>
                 <div className="paperInfo-container">
                     <h3 id="header-font">{props.paperInfo.Title}</h3>
@@ -117,6 +106,7 @@ function PaperPage(props) {
                     { (openCitaitonsResult.URL !== undefined) && <p id="mediumLarge-font">View paper at source: <a href={openCitaitonsResult.URL} target="_blank">{openCitaitonsResult.URL}</a></p> }
                     { (openCitaitonsResult.link !== undefined) && <p id="mediumLarge-font">Download paper: <a href={openCitaitonsResult.link[0].URL} target="_blank">{openCitaitonsResult.link[0].URL}</a></p> }
                     { (openCitaitonsResult.abstract !== undefined) && <p className="abstract-container" id="mediumLarge-font">{cleanAbsract(openCitaitonsResult.abstract)}</p> }
+                    { (resultsRendered) && <Paginate resultNumber={20} resultsRendered={resultsRendered} queryType="isolatesContained"/>}
                 </div>
                 <div className="supplementary-container">
                     <div className="supplementary-button" id="mediumLarge-font">
