@@ -10,6 +10,7 @@ import GenePage from './components/loadURLs/genePage'
 import SpeciesPage from './components/loadURLs/speciesPage'
 import GenusPage from './components/loadURLs/genusPage'
 import IsolatePage from './components/loadURLs/isolatePage'
+import submissionPage from './components/displayPages/submissionDisplay'
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
         <Route exact path="/isolate/:Genus/:Species/:BioSample" component={IsolatePage} />
         <Route exact path="/isolate/:Genus/:Species" component={SpeciesPage} />
         <Route exact path="/isolate/:Genus/" component={GenusPage} />
+        <Route exact path="/submit/:encodedDOI/" component={submissionPage} />
       </Router>
     </main>
   );
