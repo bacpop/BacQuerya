@@ -63,7 +63,7 @@ function SearchPage() {
     //call async function to search for genes
     if (search === true && queryType === "gene") {
         geneQuery(formData).then(result => {
-            setQueryNumber(31)
+            setQueryNumber(30)
             setSearch(false);
             setSearched(true);
             setQueryResult(result);
@@ -101,10 +101,14 @@ function SearchPage() {
                 </div>
         )});
 
-    const splitGeneNames = geneName =>
-        geneName.split("~~~").map(name => {return(<Link className="gene-returned-aliases-item" to={"/gene/" + geneName} target="_blank">{name}</Link>)})
+    const splitGeneNames = (geneName, consistentName) =>
+        geneName.map(name => {
+            if (name.indexOf("UNNAMED_") === -1 && name.indexOf("PRED_") === -1) {
+                return(<Link className="gene-returned-aliases-item" to={"/gene/" + consistentName} target="_blank">{name}</Link>);
+        }});
 
     if (queryType === "isolate" && queryResult && queryResult.length !== 0 && searched === true && search === false) {
+        console.log(queryResult)
         const filtersApplied = filterResults(queryResult, queryType, selectedFilters)
         const filteredResults = filtersApplied[0]
         var sequenceURLs = filtersApplied[1]
@@ -162,18 +166,26 @@ function SearchPage() {
 
     if (queryType === "gene" && queryResult && queryResult.length !== 0) {
         var resultsRendered = queryResult.map((result, index)=> {
-            if (result._source.panarooNames !== undefined) {
-                var geneNames = splitGeneNames(result._source.panarooNames)
+            console.log(result)
+            if (result._source.consistentNames !== undefined) {
+                if (result._source.pfam_names) {
+                    var geneNames = splitGeneNames(result._source.panarooNames.split("~~~").concat([result._source.pfam_names]), result._source.consistentNames)
+                };
+                if (result._source.pfam_names === undefined) {
+                    var geneNames = splitGeneNames(result._source.panarooNames.split("~~~"), result._source.consistentNames)
+                };
                 return (
                     <div key={index} className="gene-returned" id="mediumLarge-font">
-                        <Link className="gene-returned-name" to={"/gene/" + result._source.panarooNames} target="_blank">
-                            {geneNames[0]}
+                        <Link className="gene-returned-name" to={"/gene/" + result._source.consistentNames} target="_blank">
+                            {result._source.consistentNames}
                         </Link>
                         <div className="gene-returned-aliases">
-                            {geneNames.slice(1)}
+                            {(geneNames.length !== 1) && geneNames}
+                            {(geneNames.length === 1) && geneNames.slice(1)}
                         </div>
                         <div className="gene-returned-description">
-                            {result._source.panarooDescriptions[0]}
+                            {(result._source.pfam_descriptions) && ([result._source.panarooDescriptions[0]].concat(result._source.pfam_descriptions)).join("; ")}
+                            {(result._source. pfam_descriptions === undefined) && result._source.panarooDescriptions[0]}
                         </div>
                     </div>
         )}});

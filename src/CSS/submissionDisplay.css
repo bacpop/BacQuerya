@@ -1,0 +1,57 @@
+.submission-line {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 1%;
+}
+
+.submisson-label-container {
+    position: relative;
+    width: 100%;
+    justify-content: center;
+}
+
+.submisson-input-container {
+    position: relative;
+    width: 100%;
+    justify-content: center;
+}
+
+.submission-label {
+    position: relative;
+    width: 15%;
+    margin-left: 8%;
+    float: left;
+    display: inline;
+}
+
+.submission-input {
+    position: relative;
+    width: 15%;
+    margin-left: 8%;
+    float: left;
+}
+
+.addSubmission-row {
+    width: 100%;
+    position: relative;
+    text-align: left;
+    margin-top: 1%;
+    margin-left: 85.2%;
+}
+
+.subtractSubmission-row {
+    width: 100%;
+    position: relative;
+    text-align: left;
+    margin-top: 0.3%;
+    margin-left: 85.2%;
+}
+
+.submitAccession-button {
+    position: relative;
+    margin-top: 1%;
+    margin-left: 80%;
+}

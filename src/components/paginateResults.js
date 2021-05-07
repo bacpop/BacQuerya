@@ -81,7 +81,7 @@ class Paginate extends React.Component {
 
     //conditional CSS
     const searchResult_container = (this.props.queryType === "genesContained") ? "searchResult-container-compressed" : "searchResult-container";
-    const searchResult_items = (this.props.queryType === "genesContained" || this.props.queryType === "sequencesContained") ? "searchResult-items-compressed" : "searchResult-items";
+    const searchResult_items = (this.props.queryType === "genesContained") ? "searchResult-items-compressed" : "searchResult-items";
       return (
         <div className={searchResult_container}>
           <div className="searchResult-box">
@@ -137,15 +137,6 @@ class Paginate extends React.Component {
                     <div id="mediumLarge-font" className="searchResult-bar-genesContained">
                         Identified genes
                     </div>}
-                {(this.props.queryType === "sequencesContained") &&
-                <>
-                    <div id="mediumLarge-font" className="searchResult-bar-isolatetext">
-                        Isolate
-                    </div>
-                    <div id="mediumLarge-font" className="searchResult-bar-sequencetext">
-                        Sequence
-                    </div>
-                </>}
                 {(this.props.queryType === "genusContained") &&
                   <div id="mediumLarge-font" className="searchResult-bar-genustext">
                     Species found
