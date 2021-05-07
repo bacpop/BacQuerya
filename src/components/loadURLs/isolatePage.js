@@ -11,7 +11,7 @@ const IsolatePage = ({ match }) => {
     const [searched, setSearched] = useState(false)
     const [searchResult, updateResult] = useState();
 
-    const searchURL = process.env.REACT_APP_API_URL + "/sparc_isolate_index/_search"
+    const searchURL = process.env.REACT_APP_API_URL + "/isolate_index_3/_search"
     const apiKey = process.env.REACT_APP_API_KEY
 
     const obj =  {

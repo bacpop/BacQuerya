@@ -1,5 +1,5 @@
 async function geneQuery(formData) {
-    const searchURL = process.env.REACT_APP_API_URL + "/sparc_gene_index/_search";
+    const searchURL = process.env.REACT_APP_API_URL + "/gene_index_3/_search";
     const apiKey = process.env.REACT_APP_API_KEY;
     const fetchData =  {
         method: 'POST',
@@ -14,8 +14,9 @@ async function geneQuery(formData) {
                     "multi_match" : {
                         "query" : formData,
                         "fields" : [
-                            "panarooNames",
-                            "panarooDescriptions"
+                            "consistentNames",
+                            "panarooDescriptions",
+                            "pfam_descriptions"
                         ],
                         "operator": "or",
                         "fuzziness": "AUTO",

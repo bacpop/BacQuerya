@@ -17,8 +17,8 @@ function IsolateDisplay(props) {
         links.map(link => <p><a href={link} rel="noreferrer">{link.split("/")[link.split("/").length - 1]}</a></p>);
 
     //map array of search results to an intepretable output
-    if (props.isolateInfo.panarooNames) {
-        var resultsRendered = props.isolateInfo.panarooNames.map((result, index)=> {
+    if (props.isolateInfo.consistentNames) {
+        var resultsRendered = props.isolateInfo.consistentNames.map((result, index)=> {
             if (result !== undefined) {
                 return (
                     <p key={index}>
@@ -86,7 +86,7 @@ function IsolateDisplay(props) {
                     </div>
                 }
             </div>
-            {(props.isolateInfo.panarooNames) && <div>
+            {(props.isolateInfo.consistentNames) && <div>
                 <Paginate resultNumber={80} resultsRendered={resultsRendered} queryType="genesContained"/>
             </div>}
             </>

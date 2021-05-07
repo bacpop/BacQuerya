@@ -1,5 +1,5 @@
 async function isolateQuery(formData) {
-    const searchURL = process.env.REACT_APP_API_URL + "/sparc_isolate_index/_search";
+    const searchURL = process.env.REACT_APP_API_URL + "/isolate_index_3/_search";
     const apiKey = process.env.REACT_APP_API_KEY;
     const fetchData =  {
         method: 'POST',
@@ -35,7 +35,7 @@ async function isolateQuery(formData) {
 };
 
 export async function specificIsolateQuery(accessionList) {
-    const searchURL = process.env.REACT_APP_API_URL + "/sparc_isolate_index/_search";
+    const searchURL = process.env.REACT_APP_API_URL + "/isolate_index_3/_search";
     const apiKey = process.env.REACT_APP_API_KEY;
     var responseList = await Promise.all(accessionList.map(biosampleAccession => {
         const fetchData =  {
