@@ -60,11 +60,11 @@ function GeneDisplay(props) {
       )});
     };
 
-    var splitGeneNames= [props.geneInfo.consistentNames];
+    var displayNames = [];
     var splitNames = props.geneInfo.panarooNames.split("~~~");
     for (var i = 0; i < splitNames.length; i++) {
         if (splitNames[i].indexOf("UNNAMED_") === -1 && splitNames[i].indexOf("PRED_") === -1) {
-          splitGeneNames.push(splitNames[i])
+          displayNames.push(splitNames[i])
         };
     };
 
@@ -76,7 +76,7 @@ function GeneDisplay(props) {
                 <h3 id="header-font">Gene overview</h3>
                   <>
                   <h4>Annotation assigned by Panaroo</h4>
-                  <p id="mediumLarge-font">Names/Aliases: {splitGeneNames.join(", ")}</p>
+                  <p id="mediumLarge-font">Names/Aliases: {displayNames.join(", ")}</p>
                   <p id="mediumLarge-font">Gene frequency: {props.geneInfo.panarooFrequency}%</p>
                   <p id="mediumLarge-font">Description(s): {renderDescriptions(props.geneInfo.panarooDescriptions)}</p>
                   {(props.geneInfo.pfam_names) &&
