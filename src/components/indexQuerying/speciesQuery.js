@@ -1,25 +1,16 @@
 async function speciesQuery(genusSpecies) {
-    const searchURL = process.env.REACT_APP_API_URL + "/isolate_index_3/_search";
-    const apiKey = process.env.REACT_APP_API_KEY;
     const fetchData =  {
         method: 'POST',
+        mode: 'cors',
         headers : {
-            'Authorization': 'ApiKey ' + apiKey,
-            'Content-Type': 'application/json'
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
         },
-        body:
-            JSON.stringify({
-                "size" : 1000,
-                "query" : {
-                    "match" : {
-                        "Organism_name" : genusSpecies
-                        }
-                }
-        })
-    };
-    const fetchResponse = await fetch(searchURL, fetchData);
+        body: JSON.stringify({'searchTerm': genusSpecies, "searchType": "species"}),
+      };
+    const fetchResponse = await fetch("http://127.0.0.1:5000/isolateQuery", fetchData);
     const resolvedResponse = await fetchResponse.json();
-    return resolvedResponse.hits.hits
+    return resolvedResponse.searchResult;
 };
 
-  export default speciesQuery;
+export default speciesQuery;

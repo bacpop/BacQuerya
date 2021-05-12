@@ -1,32 +1,38 @@
 async function geneQuery(formData) {
-    const searchURL = process.env.REACT_APP_API_URL + "/gene_index_3/_search";
-    const apiKey = process.env.REACT_APP_API_KEY;
     const fetchData =  {
         method: 'POST',
+        mode: 'cors',
         headers : {
-            'Authorization': 'ApiKey ' + apiKey,
-            'Content-Type': 'application/json'
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
         },
-        body:
-            JSON.stringify({
-                "size" : 5433,
-                "query" : {
-                    "multi_match" : {
-                        "query" : formData,
-                        "fields" : [
-                            "consistentNames",
-                            "panarooDescriptions",
-                            "pfam_descriptions"
-                        ],
-                        "operator": "or",
-                        "fuzziness": "AUTO",
-                        },
-                }
-        })
-    };
-    const fetchResponse = await fetch(searchURL, fetchData);
+        body: JSON.stringify({'searchTerm': formData, "searchType": "gene"}),
+      };
+    const fetchResponse = await fetch("http://127.0.0.1:5000/geneQuery", fetchData);
     const resolvedResponse = await fetchResponse.json();
-    return resolvedResponse.hits.hits
+    return resolvedResponse.searchResult;
 };
 
-  export default geneQuery;
+export async function specificGeneQuery(accessionList) {
+    const fetchData =  {
+        method: 'POST',
+        mode: 'cors',
+        headers : {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({'searchTerm': accessionList, "searchType": "consistentNameList"}),
+      };
+    const fetchResponse = await fetch("http://127.0.0.1:5000/geneQuery", fetchData);
+    const resolvedResponse = await fetchResponse.json();
+    const filteredResults = await resolvedResponse.searchResult.filter(function( obj ) {
+        if (obj === null) {
+            return false; // skip
+        };
+        return true;
+    });
+    console.log(filteredResults)
+    return filteredResults;
+};
+
+export default geneQuery;
