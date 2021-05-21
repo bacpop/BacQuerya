@@ -77,7 +77,7 @@ function GeneDisplay(props) {
                   <>
                   <h4>Annotation assigned by Panaroo</h4>
                   <p id="mediumLarge-font">Names/Aliases: {displayNames.join(", ")}</p>
-                  <p id="mediumLarge-font">Gene frequency: {props.geneInfo.panarooFrequency}%</p>
+                  <p id="mediumLarge-font">Gene frequency: {((resultsRendered.length/26616)*100).toFixed(2)}%</p>
                   <p id="mediumLarge-font">Description(s): {renderDescriptions(props.geneInfo.panarooDescriptions)}</p>
                   {(props.geneInfo.pfam_names) &&
                     <>
