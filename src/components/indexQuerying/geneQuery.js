@@ -8,7 +8,7 @@ async function geneQuery(formData) {
         },
         body: JSON.stringify({'searchTerm': formData, "searchType": "gene"}),
       };
-    const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/geneQuery", fetchData);
+    const fetchResponse = await fetch("http://127.0.0.1:5000/geneQuery", fetchData);
     const resolvedResponse = await fetchResponse.json();
     return resolvedResponse.searchResult;
 };
@@ -23,7 +23,7 @@ export async function specificGeneQuery(accessionList) {
         },
         body: JSON.stringify({'searchTerm': accessionList, "searchType": "consistentNameList"}),
       };
-    const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/geneQuery", fetchData);
+    const fetchResponse = await fetch("http://127.0.0.1:5000/geneQuery", fetchData);
     const resolvedResponse = await fetchResponse.json();
     const filteredResults = await resolvedResponse.searchResult.filter(function( obj ) {
         if (obj === null) {

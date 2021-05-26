@@ -13,6 +13,7 @@ const GenePage = ({ match }) => {
 
     useEffect(() => {
         specificGeneQuery([].concat(geneName)).then((responseJson) => {
+            console.log(responseJson)
             updateResult(responseJson[0]._source)
             setSearched(true)
             },

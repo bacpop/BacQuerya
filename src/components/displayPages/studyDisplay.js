@@ -2,27 +2,27 @@ import {useState, useEffect} from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { Link } from "react-router-dom";
 
-import { queryPaperIsolates } from '../indexQuerying/paperQuery'
+import { queryStudyIsolates } from '../indexQuerying/studyQuery'
 import { specificIsolateQuery } from '../indexQuerying/isolateQuery'
 import Paginate from '../paginateResults'
-import '../../CSS/paperDisplay.css'
+import '../../CSS/studyDisplay.css'
 
-function PaperPage(props) {
+function StudyDisplay(props) {
 
     const [openCitaitonsResult, setOpenCitations] = useState(undefined)
     const [searched, setSearched] = useState(false)
     const [queryResult, setQueryResult] = useState(null);
 
     useEffect(() => {
-        fetch("https://api.crossref.org/works/" + props.paperInfo.DOI).then((response) => response.json()).then((responseJson) => {
+        fetch("https://api.crossref.org/works/" + props.studyInfo.DOI).then((response) => response.json()).then((responseJson) => {
             setOpenCitations(responseJson.message)
         });
         //call async function to search for isolates
-        queryPaperIsolates(props.paperInfo.DOI).then(result => {
+        queryStudyIsolates(props.studyInfo.DOI).then(result => {
             setSearched(true);
             if (result[0] !== undefined) {
                 const values = Object.values(result[0]._source).filter(function( obj ) {
-                    if (obj === props.paperInfo.DOI) {
+                    if (obj === props.studyInfo.DOI) {
                         return false;
                     };
                     return true;
@@ -83,34 +83,34 @@ function PaperPage(props) {
                     </div>
         )}});
     };
-    console.log(props.paperInfo)
+    console.log(props.studyInfo)
     return(
         <div>
             {(searched == false || openCitaitonsResult === undefined) && <Spinner animation="border" variant="primary" />}
             {(openCitaitonsResult !== undefined) &&
                 <>
-                <div className="paperInfo-container">
-                    <h3 id="header-font">{props.paperInfo.Title}</h3>
-                    <p id="mediumLarge-font">Authors: {props.paperInfo.AuthorList.join(", ")}</p>
-                    <p id="mediumLarge-font">Journal name: {props.paperInfo.FullJournalName}</p>
-                    { (props.paperInfo.Volume !== "") && <p id="mediumLarge-font">Volume: {props.paperInfo.Volume}</p> }
-                    { (props.paperInfo.Issue !== "") && <p id="mediumLarge-font">Issue: {props.paperInfo.Issue}</p> }
-                    { (props.paperInfo.Pages !== "") && <p id="mediumLarge-font">Page(s): {props.paperInfo.Pages}</p> }
-                    { (props.paperInfo.History.received !== undefined) && <p id="mediumLarge-font">Received: {props.paperInfo.History.received}</p> }
-                    { (props.paperInfo.History.accepted !== undefined) && <p id="mediumLarge-font">Accepted: {props.paperInfo.History.accepted}</p> }
-                    { (props.paperInfo.EPubDate !== "") && <p id="mediumLarge-font">ePub Date: {props.paperInfo.EPubDate}</p> }
-                    <p id="mediumLarge-font">DOI: {props.paperInfo.DOI}</p>
-                    { (props.paperInfo.ArticleIds.pmc !== undefined) && <p id="mediumLarge-font">PMC ID: {props.paperInfo.ArticleIds.pmc}</p> }
-                    <p id="mediumLarge-font">PubMed ID: {props.paperInfo.ArticleIds.pubmed[0]}</p>
-                    <p id="mediumLarge-font">RID: {props.paperInfo.ArticleIds.rid}</p>
-                    { (openCitaitonsResult.URL !== undefined) && <p id="mediumLarge-font">View paper at source: <a href={openCitaitonsResult.URL} target="_blank">{openCitaitonsResult.URL}</a></p> }
-                    { (openCitaitonsResult.link !== undefined) && <p id="mediumLarge-font">Download paper: <a href={openCitaitonsResult.link[0].URL} target="_blank">{openCitaitonsResult.link[0].URL}</a></p> }
+                <div className="studyInfo-container">
+                    <h3 id="header-font">{props.studyInfo.Title}</h3>
+                    <p id="mediumLarge-font">Authors: {props.studyInfo.AuthorList.join(", ")}</p>
+                    <p id="mediumLarge-font">Journal name: {props.studyInfo.FullJournalName}</p>
+                    { (props.studyInfo.Volume !== "") && <p id="mediumLarge-font">Volume: {props.studyInfo.Volume}</p> }
+                    { (props.studyInfo.Issue !== "") && <p id="mediumLarge-font">Issue: {props.studyInfo.Issue}</p> }
+                    { (props.studyInfo.Pages !== "") && <p id="mediumLarge-font">Page(s): {props.studyInfo.Pages}</p> }
+                    { (props.studyInfo.History.received !== undefined) && <p id="mediumLarge-font">Received: {props.studyInfo.History.received}</p> }
+                    { (props.studyInfo.History.accepted !== undefined) && <p id="mediumLarge-font">Accepted: {props.studyInfo.History.accepted}</p> }
+                    { (props.studyInfo.EPubDate !== "") && <p id="mediumLarge-font">ePub Date: {props.studyInfo.EPubDate}</p> }
+                    <p id="mediumLarge-font">DOI: {props.studyInfo.DOI}</p>
+                    { (props.studyInfo.ArticleIds.pmc !== undefined) && <p id="mediumLarge-font">PMC ID: {props.studyInfo.ArticleIds.pmc}</p> }
+                    <p id="mediumLarge-font">PubMed ID: {props.studyInfo.ArticleIds.pubmed[0]}</p>
+                    <p id="mediumLarge-font">RID: {props.studyInfo.ArticleIds.rid}</p>
+                    { (openCitaitonsResult.URL !== undefined) && <p id="mediumLarge-font">View study at source: <a href={openCitaitonsResult.URL} target="_blank">{openCitaitonsResult.URL}</a></p> }
+                    { (openCitaitonsResult.link !== undefined) && <p id="mediumLarge-font">Download study: <a href={openCitaitonsResult.link[0].URL} target="_blank">{openCitaitonsResult.link[0].URL}</a></p> }
                     { (openCitaitonsResult.abstract !== undefined) && <p className="abstract-container" id="mediumLarge-font">{cleanAbsract(openCitaitonsResult.abstract)}</p> }
                     { (resultsRendered) && <Paginate resultNumber={20} resultsRendered={resultsRendered} queryType="isolatesContained"/>}
                 </div>
                 <div className="supplementary-container">
                     <div className="supplementary-button" id="mediumLarge-font">
-                        <Link to={"/submit/" + props.paperInfo.encodedDOI} target="_blank">
+                        <Link to={"/submit/" + props.studyInfo.encodedDOI} target="_blank">
                             Click to submit the accession IDs of isolates used in this study
                         </Link>
                     </div>
@@ -120,4 +120,4 @@ function PaperPage(props) {
     );
 };
 
-export default PaperPage;
+export default StudyDisplay;

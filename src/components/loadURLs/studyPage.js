@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
-import PaperDisplay from '../displayPages/paperDisplay'
+import StudyDisplay from '../displayPages/studyDisplay'
 
-const PaperPage = ({ match }) => {
+const StudyPage = ({ match }) => {
     const {
         params: { encodedDOI },
     } = match;
@@ -11,7 +11,7 @@ const PaperPage = ({ match }) => {
     const [searchResult, updateResult] = useState();
 
     useEffect(() => {
-        fetch('https://bacquerya.azurewebsites.net:443/paper', {
+        fetch('http://127.0.0.1:5000/study', {
             method: 'POST',
             mode: 'cors',
             headers : {
@@ -29,11 +29,11 @@ const PaperPage = ({ match }) => {
         <div className="">
             {searched === true &&
                 <div>
-                    <PaperDisplay paperInfo={searchResult} />
+                    <StudyDisplay studyInfo={searchResult} />
                 </div>
             }
         </div>
     );
   };
 
-export default PaperPage;
+export default StudyPage;

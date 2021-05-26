@@ -6,7 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { Link } from "react-router-dom";
 
 import isolateQuery from './indexQuerying/isolateQuery'
-import paperQuery from './indexQuerying/paperQuery'
+import studyQuery from './indexQuerying/studyQuery'
 import geneQuery from './indexQuerying/geneQuery'
 import sequenceQuery from './indexQuerying/sequenceQuery'
 import Paginate from './paginateResults'
@@ -39,9 +39,9 @@ function SearchPage() {
         setQueryType(e.target.searchType.value)
     };
 
-    //call async function to search for papers
-    if (search === true && queryType === "paper") {
-        paperQuery(formData).then(result => {
+    //call async function to search for studys
+    if (search === true && queryType === "study") {
+        studyQuery(formData).then(result => {
             setSearch(false);
             setSearched(true);
             setQueryResult(result);
@@ -79,12 +79,12 @@ function SearchPage() {
         });
     };
     //map array of search results to an intepretable output
-    if (queryType === "paper" && queryResult && queryResult.length !== 0) {
+    if (queryType === "study" && queryResult && queryResult.length !== 0) {
         var resultsRendered = queryResult.map((result, index) => {
             if (result.encodedDOI !== undefined) {
                 return (
-                    <li key={index} className="paper-returned" id="mediumLarge-font">
-                        <Link to={"/paper/" + result.encodedDOI} target="_blank">{result.Title}</Link>
+                    <li key={index} className="study-returned" id="mediumLarge-font">
+                        <Link to={"/study/" + result.encodedDOI} target="_blank">{result.Title}</Link>
                     </li>
         )}});
     };
@@ -199,6 +199,9 @@ function SearchPage() {
     return(
         <div className="search-container">
             <>
+            <Link className="about-link" to={"/about"}>
+                About
+            </Link>
             <Form inline className={searchBar_class} onSubmit={handleSubmit}>
                 <FormControl
                     name="searchTerm"
@@ -212,7 +215,7 @@ function SearchPage() {
                     id="type"
                     custom>
                     <option value="isolate">isolate</option>
-                    <option value="paper">paper</option>
+                    <option value="study">study</option>
                     <option value="gene">gene</option>
                     <option value="sequence">sequence</option>
                 </FormControl>

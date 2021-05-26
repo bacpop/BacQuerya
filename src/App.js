@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-import HomePage from './components/homePage'
+import AboutPage from './components/aboutPage'
 import SearchPage from './components/searchPage'
-import PaperPage from './components/loadURLs/paperPage'
+import StudyPage from './components/loadURLs/studyPage'
 import GenePage from './components/loadURLs/genePage'
 import SpeciesPage from './components/loadURLs/speciesPage'
 import GenusPage from './components/loadURLs/genusPage'
@@ -29,9 +29,9 @@ function App() {
   return (
     <main className="App" style={{height: windowHeight + "px", width: windowWidth + " px"}}>
       <Router>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/search" component={SearchPage} />
-        <Route exact path="/paper/:encodedDOI" component={PaperPage} />
+        <Route exact path="/" component={SearchPage} />
+        <Route exact path="/about" component={AboutPage} />
+        <Route exact path="/study/:encodedDOI" component={StudyPage} />
         <Route exact path="/gene/:geneName" component={GenePage} />
         <Route exact path="/isolate/:Genus/:Species/:BioSample" component={IsolatePage} />
         <Route exact path="/isolate/:Genus/:Species" component={SpeciesPage} />
