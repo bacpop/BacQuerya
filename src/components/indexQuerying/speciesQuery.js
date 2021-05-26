@@ -8,7 +8,7 @@ async function speciesQuery(genusSpecies) {
         },
         body: JSON.stringify({'searchTerm': genusSpecies, "searchType": "species"}),
       };
-    const fetchResponse = await fetch("http://127.0.0.1:5000/isolateQuery", fetchData);
+    const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/isolateQuery", fetchData);
     const resolvedResponse = await fetchResponse.json();
     return resolvedResponse.searchResult;
 };

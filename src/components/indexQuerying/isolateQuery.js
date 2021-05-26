@@ -8,7 +8,7 @@ async function isolateQuery(formData) {
         },
         body: JSON.stringify({'searchTerm': formData, "searchType": "isolate"}),
       };
-    const fetchResponse = await fetch("http://127.0.0.1:5000/isolateQuery", fetchData);
+    const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/isolateQuery", fetchData);
     const resolvedResponse = await fetchResponse.json();
     return resolvedResponse.searchResult;
 };
@@ -23,7 +23,7 @@ export async function specificIsolateQuery(accessionList) {
         },
         body: JSON.stringify({'searchTerm': accessionList, "searchType": "biosampleList"}),
       };
-    const fetchResponse = await fetch("http://127.0.0.1:5000/isolateQuery", fetchData);
+    const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/isolateQuery", fetchData);
     const resolvedResponse = await fetchResponse.json();
     const filteredResults = await resolvedResponse.searchResult.filter(function( obj ) {
         if (obj === null) {

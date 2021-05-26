@@ -11,7 +11,7 @@ const StudyPage = ({ match }) => {
     const [searchResult, updateResult] = useState();
 
     useEffect(() => {
-        fetch('http://127.0.0.1:5000/study', {
+        fetch('https://bacquerya.azurewebsites.net:443/study', {
             method: 'POST',
             mode: 'cors',
             headers : {
