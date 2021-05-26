@@ -1,72 +1,32 @@
 async function isolateQuery(formData) {
-    const searchURL = process.env.REACT_APP_API_URL + "/isolate_index_3/_search";
-    const apiKey = process.env.REACT_APP_API_KEY;
     const fetchData =  {
         method: 'POST',
+        mode: 'cors',
         headers : {
-            'Authorization': 'ApiKey ' + apiKey,
-            'Content-Type': 'application/json'
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
         },
-        body:
-            JSON.stringify({
-                "size" : 616,
-                "query" : {
-                    "multi_match" : {
-                        "query" : formData,
-                        "fields" : [
-                            "isolateName",
-                            "isolateNameUnderscore",
-                            "Assembly_name",
-                            "Infraspecific_name",
-                            "GenBank_assembly_accession",
-                            "RefSeq_assembly_and_GenBank_assemblies_identical",
-                            "BioSample",
-                            "Organism_name"
-                        ],
-                        "operator": "or",
-                        "fuzziness": "AUTO",
-                        },
-                }
-        })
-    };
-    const fetchResponse = await fetch(searchURL, fetchData);
+        body: JSON.stringify({'searchTerm': formData, "searchType": "isolate"}),
+      };
+    const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/isolateQuery", fetchData);
     const resolvedResponse = await fetchResponse.json();
-    return resolvedResponse.hits.hits
+    return resolvedResponse.searchResult;
 };
 
 export async function specificIsolateQuery(accessionList) {
-    const searchURL = process.env.REACT_APP_API_URL + "/isolate_index_3/_search";
-    const apiKey = process.env.REACT_APP_API_KEY;
-    var responseList = await Promise.all(accessionList.map(biosampleAccession => {
-        const fetchData =  {
-            method: 'POST',
-            headers : {
-                'Authorization': 'ApiKey ' + apiKey,
-                'Content-Type': 'application/json'
-            },
-            body:
-                JSON.stringify({
-                    "query": {
-                        "bool": {
-                            "must": [{
-                                "match": {
-                                    "BioSample": biosampleAccession
-                                }
-                            }
-                        ]
-                    }
-                }
-            })
-        };
-        return fetch(searchURL, fetchData).then(
-            (response) => response.json()).then(
-                (responseJson) => {
-                    return responseJson.hits.hits[0]
-                }
-            );
-    }));
-    const filteredResults = await responseList.filter(function( obj ) {
-        if (obj === undefined) {
+    const fetchData =  {
+        method: 'POST',
+        mode: 'cors',
+        headers : {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({'searchTerm': accessionList, "searchType": "biosampleList"}),
+      };
+    const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/isolateQuery", fetchData);
+    const resolvedResponse = await fetchResponse.json();
+    const filteredResults = await resolvedResponse.searchResult.filter(function( obj ) {
+        if (obj === null) {
             return false; // skip
         };
         return true;

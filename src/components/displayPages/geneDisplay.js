@@ -60,11 +60,11 @@ function GeneDisplay(props) {
       )});
     };
 
-    var splitGeneNames= [props.geneInfo.consistentNames];
+    var displayNames = [];
     var splitNames = props.geneInfo.panarooNames.split("~~~");
     for (var i = 0; i < splitNames.length; i++) {
         if (splitNames[i].indexOf("UNNAMED_") === -1 && splitNames[i].indexOf("PRED_") === -1) {
-          splitGeneNames.push(splitNames[i])
+          displayNames.push(splitNames[i])
         };
     };
 
@@ -76,8 +76,8 @@ function GeneDisplay(props) {
                 <h3 id="header-font">Gene overview</h3>
                   <>
                   <h4>Annotation assigned by Panaroo</h4>
-                  <p id="mediumLarge-font">Names/Aliases: {splitGeneNames.join(", ")}</p>
-                  <p id="mediumLarge-font">Gene frequency: {props.geneInfo.panarooFrequency}%</p>
+                  <p id="mediumLarge-font">Names/Aliases: {displayNames.join(", ")}</p>
+                  <p id="mediumLarge-font">Gene frequency: {((resultsRendered.length/26616)*100).toFixed(2)}%</p>
                   <p id="mediumLarge-font">Description(s): {renderDescriptions(props.geneInfo.panarooDescriptions)}</p>
                   {(props.geneInfo.pfam_names) &&
                     <>
@@ -93,7 +93,7 @@ function GeneDisplay(props) {
                     Gene was found in {resultsRendered.length} isolates
                   </div>
                   <div className="msa-button" id="mediumLarge-font">
-                    <a href={"https://bacquerya.azurewebsites.net:443/alignement/" + props.geneInfo.consistentNames} rel="noreferrer">Click to download multiple sequence alignment</a>
+                    <a href={"https://bacquerya.azurewebsites.net:443/alignment/" + props.geneInfo.consistentNames} rel="noreferrer">Click to download multiple sequence alignment</a>
                   </div>
                 </div>
               </div>

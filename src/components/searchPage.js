@@ -103,7 +103,7 @@ function SearchPage() {
 
     const splitGeneNames = (geneName, consistentName) =>
         geneName.map(name => {
-            if (name.indexOf("UNNAMED_") === -1 && name.indexOf("PRED_") === -1) {
+            if (name.indexOf("UNNAMED_") === -1 && name.indexOf("PRED_") === -1 && name.indexOf(consistentName) === -1) {
                 return(<Link className="gene-returned-aliases-item" to={"/gene/" + consistentName} target="_blank">{name}</Link>);
         }});
 
@@ -184,8 +184,8 @@ function SearchPage() {
                             {(geneNames.length === 1) && geneNames.slice(1)}
                         </div>
                         <div className="gene-returned-description">
-                            {(result._source.pfam_descriptions) && ([result._source.panarooDescriptions[0]].concat(result._source.pfam_descriptions)).join("; ")}
-                            {(result._source. pfam_descriptions === undefined) && result._source.panarooDescriptions[0]}
+                            {(result._source.pfam_descriptions) && ([result._source.panarooDescriptions].concat(result._source.pfam_descriptions)).join("; ")}
+                            {(result._source. pfam_descriptions === undefined) && result._source.panarooDescriptions.join("; ")}
                         </div>
                     </div>
         )}});
