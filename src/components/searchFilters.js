@@ -4,63 +4,31 @@ import { useState } from 'react';
 
 import "../CSS/searchFilters.css"
 
-const applyFilters = (searchResults, filters) => {
-    const assemblies = filters.assemblies
-    const reads = filters.reads
-    const minN50 = filters.minN50
-    var noContigs = filters.noContigs
-    if (noContigs == "All") {
-        noContigs = 1000000
+const intConverter = value =>{
+    if (value === "All") {
+        return value;
     };
-    if (assemblies === true && reads === false) {
-        return searchResults.filter(function( obj ) {
-            return obj._source.Genome_representation !== 'reads' && obj._source.contig_stats.N50 >= minN50 && obj._source.contig_stats.sequence_count <= noContigs;
-        });
-    };
-    if (assemblies === false && reads === true) {
-        return searchResults.filter(function( obj ) {
-            return obj._source.Genome_representation !== 'full';
-        });
-    };
-    if (assemblies === true && reads === true) {
-        return searchResults.filter(function( obj ) {
-            if (obj._source.contig_stats) {
-                return obj._source.contig_stats.N50 >= minN50 && obj._source.contig_stats.sequence_count <= noContigs;
-            };
-            if (obj._source.contig_stats == undefined) {
-                return obj
-            };
-        });
-    };
+    return Number(value);
 };
-
-export function filterResults(searchResults, queryType, filters) {
-    if (queryType === "isolate") {
-        const filteredResults = applyFilters(searchResults, filters)
-        const sequenceURLs = filteredResults.map(result => result._source.sequenceURL)
-        var flattenedSequenceURLs = [].concat.apply([], sequenceURLs);
-        return [filteredResults, flattenedSequenceURLs]
-    }
-    if (queryType !== "isolate") {
-        const filteredResults = searchResults;
-        return filteredResults
-    }
-}
-
 
 export function FilterComponent(props) {
 
     const [sliderValue, setSliderValue] = useState(props.selectedFilters.minN50);
     const [contigValue, setContigValue] = useState(props.selectedFilters.noContigs);
+    const [countryValue, setCountryValue] = useState(props.selectedFilters.Country);
+    const [yearValue, setYearValue] = useState(props.selectedFilters.Year);
 
     function getFilters(e) {
         e.preventDefault()
         props.setSelectedFilters(
             {assemblies: e.target.assemblies.checked,
             reads: e.target.reads.checked,
-            minN50: sliderValue,
-            noContigs: contigValue})
+            minN50: Number(sliderValue),
+            noContigs: intConverter(contigValue),
+            Country: countryValue,
+            Year: yearValue})
         props.setOpenFilters(false)
+        props.setSearch(true)
     }
 
     return (
@@ -86,6 +54,14 @@ export function FilterComponent(props) {
                     <div className="filterOptions-options-contigs-container">
                         <Form.Label className="contig-label" id="mediumLarge-font"> Maximum number of contigs </Form.Label>
                         <Form.Control className="contig-input" size="sm" name="noContigs" value={contigValue} onChange={e => setContigValue(e.target.value)} id="mediumLarge-font"/>
+                    </div>
+                    <div className="filterOptions-options-year-container">
+                        <Form.Label className="year-label" id="mediumLarge-font">Sample years</Form.Label>
+                        <Form.Control className="year-input" size="sm" name="Year" value={yearValue.join("-")} onChange={e => setYearValue(e.target.value.replace(" ", "").split("-"))} id="mediumLarge-font"/>
+                    </div>
+                    <div className="filterOptions-options-country-container">
+                        <Form.Label className="country-label" id="mediumLarge-font">Sample country</Form.Label>
+                        <Form.Control className="country-input" size="sm" name="Country" value={countryValue} onChange={e => setCountryValue(e.target.value)} id="mediumLarge-font"/>
                     </div>
                     <Button className="filterOptions-options-button" variant="outline-primary" type="submit" id="mediumLarge-font">Apply filters</Button>
                 </Form>

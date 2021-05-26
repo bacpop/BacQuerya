@@ -10,7 +10,7 @@ import studyQuery from './indexQuerying/studyQuery'
 import geneQuery from './indexQuerying/geneQuery'
 import sequenceQuery from './indexQuerying/sequenceQuery'
 import Paginate from './paginateResults'
-import { FilterComponent, filterResults } from './searchFilters'
+import { FilterComponent } from './searchFilters'
 import { SequenceDownload } from './sequenceDownload'
 import "../CSS/searchPage.css"
 
@@ -23,7 +23,7 @@ function SearchPage() {
     const [search, setSearch] = useState(false);
     const [queryResult, setQueryResult] = useState(null);
     const [openFilters, setOpenFilters] = useState(false);
-    const [selectedFilters, setSelectedFilters] = useState({assemblies: true, reads: true, minN50: 0, noContigs: "All"});
+    const [selectedFilters, setSelectedFilters] = useState({assemblies: true, reads: true, minN50: 0, noContigs: "All", Country: "All", Year: ["Start", "End"]});
     const [showDownloadOptions, setOpenDownloads] = useState(false);
     const [emailValue, setEmailValue] = useState("Enter email");
 
@@ -32,7 +32,7 @@ function SearchPage() {
         setSearch(true);
         setSearched(false);
         setQueryResult(null)
-        setSelectedFilters({assemblies: true, reads: true, minN50: 0, noContigs: "All"})
+        setSelectedFilters({assemblies: true, reads: true, minN50: 0, noContigs: "All", Country: "All", Year: ["Start", "End"]})
         setOpenDownloads(false)
         setEmailValue("Enter email")
         updateFormData(e.target.searchTerm.value)
@@ -49,9 +49,9 @@ function SearchPage() {
         });
     };
     //call async function to search for isolates
+    // force query if the filters change
     if (search === true && queryType === "isolate") {
-        isolateQuery(formData).then(result => {
-            setSelectedFilters({assemblies: true, reads: true, minN50: 0, noContigs: "All"});
+        isolateQuery(formData, selectedFilters).then(result => {
             setOpenDownloads(false)
             setEmailValue("Enter email")
             setSearch(false);
@@ -108,12 +108,9 @@ function SearchPage() {
         }});
 
     if (queryType === "isolate" && queryResult && queryResult.length !== 0 && searched === true && search === false) {
-        console.log(queryResult)
-        const filtersApplied = filterResults(queryResult, queryType, selectedFilters)
-        const filteredResults = filtersApplied[0]
-        var sequenceURLs = filtersApplied[1]
-        if (filteredResults && filteredResults.length !== 0) {
-            var resultsRendered = filteredResults.map((result, index) => {
+        var sequenceURLs = queryResult.map(result => result._source.sequenceURL)
+        if (queryResult && queryResult.length !== 0) {
+            var resultsRendered = queryResult.map((result, index) => {
                 if (result._source !== undefined) {
                     return (
                         <div key={index} className="isolate-returned" id="mediumLarge-font">
@@ -121,12 +118,13 @@ function SearchPage() {
                             <div className="isolate-link">
                                 <div className="isolate-summary">
                                     <p>Organism: {result._source.Organism_name}</p>
+                                    <p>Isolate name: {result._source.isolateName}</p>
                                     <p>Genome representation: {result._source.Genome_representation}</p>
                                     {(result.source !== undefined) && <p>Source: {result._source.source}</p>}
-                                    <p>BioProject sample: {result._source.BioSample}</p>
+                                    <p>BioSample accession: {result._source.BioSample}</p>
                                     {(result._source.scaffold_stats !== undefined) && <p>Total sequence length: {result._source.contig_stats.total_bps}</p>}
                                     {(result._source.scaffold_stats !== undefined) && <p>N50: {result._source.contig_stats.N50}</p>}
-                                    {(result._source.scaffold_stats !== undefined) && <p>G/C content (%): {result._source.contig_stats.gc_content}</p>}
+                                    {(result._source.scaffold_stats !== undefined) && <p>G/C content: {result._source.contig_stats.gc_content.toFixed()}%</p>}
                                 </div>
                                 <Link className="isolate-link-biosample" to={"/isolate/streptococcus/pneumoniae/" + result._source.BioSample} target="_blank">{result._source.BioSample}</Link>
                                 <div className="isolate-link-organismname">
@@ -166,7 +164,6 @@ function SearchPage() {
 
     if (queryType === "gene" && queryResult && queryResult.length !== 0) {
         var resultsRendered = queryResult.map((result, index)=> {
-            console.log(result)
             if (result._source.consistentNames !== undefined) {
                 if (result._source.pfam_names) {
                     var geneNames = splitGeneNames(result._source.panarooNames.split("~~~").concat([result._source.pfam_names]), result._source.consistentNames)
@@ -236,7 +233,7 @@ function SearchPage() {
                     <div>
                     { (openFilters) &&
                         <div className="filterOptions-options-container" id="mediumLarge-font">
-                            <FilterComponent setOpenFilters={setOpenFilters} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
+                            <FilterComponent setOpenFilters={setOpenFilters} setSelectedFilters={setSelectedFilters} setSearch={setSearch} selectedFilters={selectedFilters}/>
                         </div>}
                     </div>
                     <div className="downloadOptions-container" id="mediumLarge-font">

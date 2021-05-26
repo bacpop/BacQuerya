@@ -14,8 +14,8 @@
 
 .filterOptions-options-button {
     position: relative;
-    margin-left: 10%;
-    margin-top: 48%;
+    margin-left: 1%;
+    margin-top: 50%;
 }
 
 .filterOptions-options-slider-container {
@@ -29,11 +29,7 @@
     position: absolute;
     float: left;
     margin-top: 2%;
-    margin-left: 32%;
-}
-
-#slider-label-font {
-    font-size: 15px;
+    margin-left: 34%;
 }
 
 .slider-label {
@@ -47,7 +43,7 @@
     position: absolute;
     float: left;
     max-width: 21%;
-    margin-left: 68%;
+    margin-left: 71%;
 }
 
 .filterOptions-options-contigs-container {
@@ -63,11 +59,45 @@
     margin-right: 2%;
 }
 
-#contig-label-font {
-    font-size: 15px;
-}
-
 .contig-input {
     position: relative;
     width: 30.5%;
+}
+
+.filterOptions-options-year-container {
+    position: absolute;
+    width: 100%;
+    margin-top: 28%;
+    margin-left: 29.2%;
+}
+
+.year-label {
+    position: relative;
+    float: left;
+    margin-left: 4%;
+    margin-right: 2%;
+}
+
+.year-input {
+    position: relative;
+    width: 30.5%;
+}
+
+.filterOptions-options-country-container {
+    position: absolute;
+    width: 100%;
+    margin-top: 38%;
+    margin-left: 25%;
+}
+
+.country-input {
+    position: relative;
+    width: 30.5%;
+}
+
+.country-label {
+    position: relative;
+    float: left;
+    margin-left: 4%;
+    margin-right: 2%;
 }

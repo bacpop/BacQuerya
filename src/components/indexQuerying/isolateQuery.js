@@ -1,4 +1,4 @@
-async function isolateQuery(formData) {
+async function isolateQuery(formData, filters) {
     const fetchData =  {
         method: 'POST',
         mode: 'cors',
@@ -6,7 +6,7 @@ async function isolateQuery(formData) {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({'searchTerm': formData, "searchType": "isolate"}),
+        body: JSON.stringify({'searchTerm': formData, "searchType": "isolate", "searchFilters": filters}),
       };
     const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/isolateQuery", fetchData);
     const resolvedResponse = await fetchResponse.json();
