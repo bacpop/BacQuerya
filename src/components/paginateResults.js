@@ -107,9 +107,9 @@ class Paginate extends React.Component {
                       Description
                     </div>
                 </>}
-                {(this.props.queryType === "paper") &&
-                    <div id="mediumLarge-font" className="searchResult-bar-paper">
-                        Paper title
+                {(this.props.queryType === "study") &&
+                    <div id="mediumLarge-font" className="searchResult-bar-study">
+                        Study title
                     </div>}
                 {(this.props.queryType === "isolate" || this.props.queryType == 'isolatesContained') &&
                   <>

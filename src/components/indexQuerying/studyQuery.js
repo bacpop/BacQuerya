@@ -1,4 +1,4 @@
-async function paperQuery(formData) {
+async function studyQuery(formData) {
   const fetchData =  {
     method: 'POST',
     mode: 'cors',
@@ -8,17 +8,17 @@ async function paperQuery(formData) {
     },
     body: JSON.stringify({'searchTerm': formData, 'source': 'searchBar'}),
   };
-  const fetchResponse = await fetch('https://bacquerya.azurewebsites.net:443/paper', fetchData);
+  const fetchResponse = await fetch('http://127.0.0.1:5000/study', fetchData);
   const resolvedResponse = await fetchResponse.json();
   return resolvedResponse.result
 }
 
-export default paperQuery;
+export default studyQuery;
 
-export function assignPaperAccessions(fieldValues, encodedDOI, decodedDOI) {
-  fieldValues.paperDOI = decodedDOI
-  const searchURL = process.env.REACT_APP_API_URL + "/sparc_paper_index/_doc/" + encodedDOI;
-  const apiKey = process.env.REACT_APP_PAPER_API_KEY;
+export function assignStudyAccessions(fieldValues, encodedDOI, decodedDOI) {
+  fieldValues.studyDOI = decodedDOI
+  const searchURL = process.env.REACT_APP_API_URL + "/sparc_study_index/_doc/" + encodedDOI;
+  const apiKey = process.env.REACT_APP_study_API_KEY;
 
   const postData =  {
       method: 'POST',
@@ -32,9 +32,9 @@ export function assignPaperAccessions(fieldValues, encodedDOI, decodedDOI) {
 fetch(searchURL, postData);
 };
 
-export async function queryPaperIsolates(paperDOI) {
-  const searchURL = process.env.REACT_APP_API_URL + "/sparc_paper_index/_search";
-  const apiKey = process.env.REACT_APP_PAPER_API_KEY;
+export async function queryStudyIsolates(studyDOI) {
+  const searchURL = process.env.REACT_APP_API_URL + "/sparc_study_index/_search";
+  const apiKey = process.env.REACT_APP_study_API_KEY;
   const fetchData =  {
       method: 'POST',
       headers : {
@@ -47,7 +47,7 @@ export async function queryPaperIsolates(paperDOI) {
                   "bool": {
                       "must": [{
                           "match": {
-                              "paperDOI": paperDOI
+                              "studyDOI": studyDOI
                           }
                       }
                   ]

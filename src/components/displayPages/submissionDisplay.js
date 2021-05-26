@@ -2,7 +2,7 @@ import {useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-import { assignPaperAccessions } from '../indexQuerying/paperQuery'
+import { assignStudyAccessions } from '../indexQuerying/studyQuery'
 import '../../CSS/submissionDisplay.css'
 
 const SubmissionPage = ({ match }) => {
@@ -33,7 +33,7 @@ const SubmissionPage = ({ match }) => {
     function handleSubmit(e){
         e.preventDefault()
         setSubmitted(true)
-        assignPaperAccessions(fieldValues, encodedDOI, decodedDOI)
+        assignStudyAccessions(fieldValues, encodedDOI, decodedDOI)
     };
 
     var renderedRows = []
@@ -67,13 +67,13 @@ const SubmissionPage = ({ match }) => {
             {(submitted === false) &&
                 <>
                 <h3 id="header-font" style={{marginTop: "1%"}}>
-                    Submit accession IDs for paper: {decodedDOI}
+                    Submit accession IDs for study: {decodedDOI}
                 </h3>
                 <p style={{textAlign: "left", marginTop: "1%", marginLeft: "3%", marginRight: "3%"}}>
-                    It is difficult to standardise supplementary information for studies and as a result, there is currently no way to programatically access this information. BacQuerya wants to make this easier by linking papers to the genomic information of isolates used in the investigation. Therefore, this page allows users to upload the accession IDs of isolates specified in the supplementary information for the paper with DOI: {decodeURIComponent(encodedDOI)}.
+                    It is difficult to standardise supplementary information for studies and as a result, there is currently no way to programatically access this information. BacQuerya wants to make this easier by linking studys to the genomic information of isolates used in the investigation. Therefore, this page allows users to upload the accession IDs of isolates specified in the supplementary information for the study with DOI: {decodeURIComponent(encodedDOI)}.
                 </p>
                 <p style={{textAlign: "left", marginTop: "1%", marginLeft: "3%", marginRight: "3%"}}>
-                    To submit an accession, please complete the template below, choosing ONE field per row, with ONE row per isolate. Additional rows can be added by clicking "Add row". When you are ready to submit, click "Submit accession IDs". This information will automatically be indexed and linked to the relevant paper so please ensure all information is correct prior to submission.
+                    To submit an accession, please complete the template below, choosing ONE field per row, with ONE row per isolate. Additional rows can be added by clicking "Add row". When you are ready to submit, click "Submit accession IDs". This information will automatically be indexed and linked to the relevant study so please ensure all information is correct prior to submission.
                 </p>
                 <Form onSubmit={handleSubmit}>
                     {renderedRows}

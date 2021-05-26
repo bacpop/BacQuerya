@@ -14,7 +14,7 @@ async function postSequenceUrls(sequenceURLs, email) {
       },
       body: JSON.stringify({'sequenceURLs': sequenceURLs, 'email': email}),
     };
-    const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/bulkdownloads", fetchData);
+    const fetchResponse = await fetch("http://127.0.0.1:5000/bulkdownloads", fetchData);
     const resolvedResponse = await fetchResponse.json();
     return resolvedResponse.downloadURL
   };
