@@ -8,7 +8,7 @@ async function studyQuery(formData) {
     },
     body: JSON.stringify({'searchTerm': formData, 'source': 'searchBar'}),
   };
-  const fetchResponse = await fetch('http://127.0.0.1:5000/study', fetchData);
+  const fetchResponse = await fetch('https://bacquerya.azurewebsites.net:443/study', fetchData);
   const resolvedResponse = await fetchResponse.json();
   return resolvedResponse.result
 }
