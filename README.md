@@ -1,21 +1,14 @@
-# Getting Started with Create React App
+# BacQuerya
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+BacQuerya is a search engine that aims to consolidate and present all publicly available genomic metadata for bacterial pathogens. BacQuerya is built using React.js and is currently in beta and as such, is unstable in some circumstances and only houses *S. pneumoniae* genomic metadata at this time. 
 
-## Running elasticsearch
+## Methods
 
-To query locally hosted elasticsearch indices, it is necessary to download elasticsearch (https://www.elastic.co/downloads/elasticsearch), uncompress the directory and add the following to ```config/elasticsearch.yml```:
-```
-http.cors:
-  enabled: true
-  allow-origin: /https?:\/\/localhost(:[0-9]+)?/
-```
+The BacQuerya-processing pipeline [https://github.com/bacpop/BacQuerya-processing](https://github.com/bacpop/BacQuerya-processing) sources genomic metadata from several public repositories that include: NCBI GenBank, BioSample, the European Nucleotide Archive and the Sequence Read Archive. Metadata from each of these sources is extracted and combined into a JSON document, that is then indexed using Elastic cloud [https://www.elastic.co](https://www.elastic.co) and is searchable from the BacQuerya website. 
 
-Then to start the index at [http://localhost:9200](http://localhost:9200), run:
-```
-cd elasticsearch-7.11.0-windows-x86_64/elasticsearch-7.11.0
-bin\elasticsearch.bat
-```
+We also conduct a number of pre-processing steps and include the outputs of these in the indexed metadata when appropriate. These include: evaluation of assembly quality, gene annotation (using population reference graphs and Pfam searches) and multiple sequence alignment (using the Partree algorithm in the MAFFT package).
+
+The BacQuerya-API [https://github.com/bacpop/BacQuerya-api](https://github.com/bacpop/BacQuerya-api) is the backend server for the website, and used to conduct all index querying and additional user requests.
 
 ## Available Scripts
 
@@ -29,57 +22,3 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
