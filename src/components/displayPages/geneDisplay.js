@@ -90,9 +90,9 @@ function GeneDisplay(props) {
                 { (resultsRendered) && <div className="isolateGeneCount" id="medium-font">
                     Gene was found in {resultsRendered.length} isolates
                   </div>}
-                  <div className="msa-button" id="mediumLarge-font">
+                  {/* <div className="msa-button" id="mediumLarge-font">
                     <a href={"https://bacquerya.azurewebsites.net:443/alignment/" + props.geneInfo.consistentNames} rel="noreferrer">Click to download multiple sequence alignment</a>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               { (resultsRendered) && <Paginate resultNumber={25} resultsRendered={resultsRendered} queryType="isolatesContained"/>}
