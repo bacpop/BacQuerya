@@ -13,8 +13,6 @@ function GeneDisplay(props) {
   const renderDescriptions = results =>
     results.map(result => <li>{result}</li>)
 
-  console.log(props.geneInfo)
-
   const fastSequenceLinks = links =>
   links.map((link, index) => {
       return (
@@ -70,14 +68,14 @@ function GeneDisplay(props) {
 
     return(
         <div>
-          { (resultsRendered) &&
+          {(props.geneInfo) &&
             <>
               <div>
                 <h3 id="header-font">Gene overview</h3>
                   <>
                   <h4>Annotation assigned by Panaroo</h4>
                   <p id="mediumLarge-font">Names/Aliases: {displayNames.join(", ")}</p>
-                  <p id="mediumLarge-font">Gene frequency: {((resultsRendered.length/26616)*100).toFixed(2)}%</p>
+                  { (resultsRendered) &&<p id="mediumLarge-font">Gene frequency: {((resultsRendered.length/26616)*100).toFixed(2)}%</p>}
                   <p id="mediumLarge-font">Description(s): {renderDescriptions(props.geneInfo.panarooDescriptions)}</p>
                   {(props.geneInfo.pfam_names) &&
                     <>
@@ -89,17 +87,21 @@ function GeneDisplay(props) {
                     </>}
                   </>
                 <div className="isolateGenes-info">
-                  <div className="isolateGeneCount" id="medium-font">
+                { (resultsRendered) && <div className="isolateGeneCount" id="medium-font">
                     Gene was found in {resultsRendered.length} isolates
-                  </div>
+                  </div>}
                   <div className="msa-button" id="mediumLarge-font">
                     <a href={"https://bacquerya.azurewebsites.net:443/alignment/" + props.geneInfo.consistentNames} rel="noreferrer">Click to download multiple sequence alignment</a>
                   </div>
                 </div>
               </div>
-              <Paginate resultNumber={25} resultsRendered={resultsRendered} queryType="isolatesContained"/>
+              { (resultsRendered) && <Paginate resultNumber={25} resultsRendered={resultsRendered} queryType="isolatesContained"/>}
             </>}
-          {(resultsRendered === undefined) && <Spinner animation="border" variant="primary" />}
+          {(resultsRendered === undefined) &&
+            <>
+            <Spinner animation="border" variant="primary" />
+            <p id="small-font">Loading isolates containing the gene...</p>
+            </>}
         </div>
     )
 };

@@ -86,7 +86,7 @@ function StudyDisplay(props) {
     console.log(props.studyInfo)
     return(
         <div>
-            {(searched == false || openCitaitonsResult === undefined) && <Spinner animation="border" variant="primary" />}
+            {(openCitaitonsResult === undefined) && <Spinner animation="border" variant="primary" />}
             {(openCitaitonsResult !== undefined) &&
                 <>
                 <div className="studyInfo-container">

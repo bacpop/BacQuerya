@@ -181,8 +181,8 @@ function SearchPage() {
                             {(geneNames.length === 1) && geneNames.slice(1)}
                         </div>
                         <div className="gene-returned-description">
-                            {(result._source.pfam_descriptions) && ([result._source.panarooDescriptions].concat(result._source.pfam_descriptions)).join("; ")}
-                            {(result._source. pfam_descriptions === undefined) && result._source.panarooDescriptions.join("; ")}
+                            {(result._source.pfam_descriptions) && ([result._source.panarooDescriptions].concat(result._source.pfam_descriptions)).slice(0,1).join("; ")}
+                            {(result._source.pfam_descriptions === undefined) && result._source.panarooDescriptions.slice(0,1).join("; ")}
                         </div>
                     </div>
         )}});

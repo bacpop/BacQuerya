@@ -39,6 +39,10 @@
   }
 }
 
+#small-font {
+  font-size: 1.3vh;
+}
+
 #medium-font {
   font-size: 1.43vh;
 }
