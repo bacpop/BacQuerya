@@ -221,7 +221,8 @@ function SearchPage() {
             { (search===true) && <Spinner className={spinner_class} animation="border" variant="primary" /> }
             { (search===false && searched == true && resultsRendered && queryNumber) &&
                 <div className="searchResults-brief" id="sequenceResult-brief-font">
-                    {resultsRendered.length} results
+                    {(resultsRendered.length === 1000) && <div>1000+ results</div>}
+                    {(resultsRendered.length !== 1000) && <div>{resultsRendered.length} results</div>}
                 </div>}
             { (queryType === "isolate" && search===false && searched == true) &&
                 <>

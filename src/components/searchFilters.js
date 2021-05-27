@@ -45,10 +45,10 @@ export function FilterComponent(props) {
                             <Form.Label> Minimum N50 </Form.Label>
                         </div>
                         <div className="slider">
-                            <Form.Control style={{width: (window.innerWidth*0.0656) + "px", height: (1.64 + "vh")}} type="range" name="N50Slider" min={0} max={100000} value={sliderValue} onChange={e => setSliderValue(e.target.value)}/>
+                            <Form.Control disabled style={{width: (window.innerWidth*0.0656) + "px", height: (1.64 + "vh")}} type="range" name="N50Slider" min={0} max={100000} value={sliderValue} onChange={e => setSliderValue(e.target.value)}/>
                         </div>
                         <div className="slider-input">
-                            <Form.Control size="sm" name="N50Input" value={sliderValue} onChange={e => setSliderValue(e.target.value)} id="mediumLarge-font"/>
+                            <Form.Control disabled size="sm" name="N50Input" value={sliderValue} onChange={e => setSliderValue(e.target.value)} id="mediumLarge-font"/>
                         </div>
                     </div>
                     <div className="filterOptions-options-contigs-container">
