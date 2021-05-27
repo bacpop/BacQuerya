@@ -47,7 +47,7 @@ export function SequenceDownload(props) {
                 </Form>
             }
             {(downlinkLoading && downloadlink === null) &&
-               <Spinner animation="border" variant="primary" />
+               <Spinner className="download-spinner" animation="border" variant="primary" />
             }
             {(downlinkLoading === false && downloadlink) &&
                 <a href={downloadlink} target="_blank" id="mediumLarge-font">

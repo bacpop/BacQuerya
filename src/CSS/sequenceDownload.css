@@ -33,7 +33,8 @@
     margin-top: 45%;
 }
 
-#downloadOptions-close-font {
-    color: black;
-    font-size: 14px;
+.download-spinner {
+    position: absolute;
+    margin-left: 50%;
+    margin-top: 24%;
 }
