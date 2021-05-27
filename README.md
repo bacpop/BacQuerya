@@ -4,11 +4,11 @@ BacQuerya is a search engine that aims to consolidate and present all publicly a
 
 ## Methods
 
-The BacQuerya-processing pipeline [https://github.com/bacpop/BacQuerya-processing](https://github.com/bacpop/BacQuerya-processing) sources genomic metadata from several public repositories that include: NCBI GenBank, BioSample, the European Nucleotide Archive and the Sequence Read Archive. Metadata from each of these sources is extracted and combined into a JSON document, that is then indexed using Elastic cloud [https://www.elastic.co](https://www.elastic.co) and is searchable from the BacQuerya website. 
+The BacQuerya-processing pipeline ([https://github.com/bacpop/BacQuerya-processing](https://github.com/bacpop/BacQuerya-processing)) sources genomic metadata from several public repositories that include: NCBI GenBank, BioSample, the European Nucleotide Archive and the Sequence Read Archive. Metadata from each of these sources is extracted and combined into a JSON document, that is then indexed using Elastic cloud ([https://www.elastic.co](https://www.elastic.co)) and is searchable from the BacQuerya website. 
 
 We also conduct a number of pre-processing steps and include the outputs of these in the indexed metadata when appropriate. These include: evaluation of assembly quality, gene annotation (using population reference graphs and Pfam searches) and multiple sequence alignment (using the Partree algorithm in the MAFFT package).
 
-The BacQuerya-API [https://github.com/bacpop/BacQuerya-api](https://github.com/bacpop/BacQuerya-api) is the backend server for the website, and used to conduct all index querying and additional user requests.
+The BacQuerya-API ([https://github.com/bacpop/BacQuerya-api](https://github.com/bacpop/BacQuerya-api)) is the backend server for the website, and used to conduct all index querying and additional user requests.
 
 ## Available Scripts
 
