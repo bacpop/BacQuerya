@@ -266,8 +266,9 @@ p {
     border-radius: 15px;
     border: 1px solid;
     margin-left: 70%;
-    height: 22%;
-    width: 20%;
+    text-align: left;
+    height: 26%;
+    width: 25%;
     background-color: #f2f2f2;
     z-index: 3;
 }

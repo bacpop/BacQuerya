@@ -9,13 +9,13 @@
     position: relative;
     float: left;
     width: 100%;
-    margin-left: 0%;
+    margin-left: 1%;
 }
 
 .download-container-email {
     position: absolute;
     display: flex;
-    margin-top: 27%;
+    margin-top: 31%;
     margin-left: 5%;
     width: 90%;
 }
@@ -24,12 +24,12 @@
     position: absolute;
     display: flex;
     margin-top: 40%;
-    margin-left: 27%;
+    margin-left: 59.5%;
 }
 
 .downLoadOptions-close {
     position: absolute;
-    margin-left: 95%;
+    margin-left: 96%;
     margin-top: 45%;
 }
 

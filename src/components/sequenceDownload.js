@@ -41,7 +41,7 @@ export function SequenceDownload(props) {
             </div>
             {(downlinkLoading === false && downloadlink === null) &&
                 <Form className="downloadOptions-contents" onSubmit={submitDownload}>
-                    <Form.Label className="download-container-text" id="mediumLarge-font">For large numbers of sequences, we recommend sharing your email so you can be contacted when your sequences are available for download (your email will not be used for any other purpose).</Form.Label>
+                    <Form.Label className="download-container-text" id="medium-font">We allow users to request up to 100 genomic sequences for download and return a download link that is live for 24 hours after submitting the request. You may choose to supply your email if you want this link forwarded to you when the sequences are available (your email will be used for no other purpose). Between 100 and 1000 sequences, we provide a .txt file containing download links to the requested sequences. These can be downloaded using tools like wget.</Form.Label>
                     <Form.Control className="download-container-email" name="enteredEmail" value={props.emailValue} onChange={e => props.setEmailValue(e.target.value)} id="mediumLarge-font"/>
                     <Button className="download-container-button" variant="outline-primary" type="submit" id="mediumLarge-font">Request sequences</Button>
                 </Form>
