@@ -1,0 +1,24 @@
+.dropzone {
+    width: 93%;
+    height: 60%;
+    border: 3px dashed #8F8F8F;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    margin-top: 4%;
+    margin-left: 3%;
+}
+
+.dropzone-active {
+    background-color: #f0f5f5;
+    border: 5px solid #344c4c;
+}
+
+.dropzone-content {
+    align-self: center;
+    font-size: 2.05vh;
+}

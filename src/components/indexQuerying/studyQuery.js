@@ -15,21 +15,13 @@ async function studyQuery(formData) {
 
 export default studyQuery;
 
-export function assignStudyAccessions(fieldValues, encodedDOI, decodedDOI) {
-  fieldValues.studyDOI = decodedDOI
-  const searchURL = process.env.REACT_APP_API_URL + "/sparc_study_index/_doc/" + encodedDOI;
-  const apiKey = process.env.REACT_APP_study_API_KEY;
-
-  const postData =  {
+export async function assignStudyAccessions(uploadedFile) {
+  const data = new FormData();
+  data.append('file', uploadedFile);
+  fetch('https://bacquerya.azurewebsites.net:443/upload_accessions', {
       method: 'POST',
-      headers : {
-          'Authorization': 'ApiKey ' + apiKey,
-          'Content-Type': 'application/json'
-      },
-      body:
-          JSON.stringify(fieldValues)
-  };
-fetch(searchURL, postData);
+      body: data,
+      });
 };
 
 export async function queryStudyIsolates(studyDOI) {
