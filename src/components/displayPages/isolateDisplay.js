@@ -1,134 +1,272 @@
-import { Link } from "react-router-dom";
-import Button from 'react-bootstrap/Button';
-
-import Paginate from '../paginateResults';
-import '../../CSS/isolateDisplay.css';
-
-const sequenceLinks = links =>
-    links.map(link => <p><a href={link} rel="noreferrer">{link.split("/")[link.split("/").length - 1]}</a></p>);
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const penicillinSIR = abbreviation => {
-    if (abbreviation == "S") {
-        return "Susceptible"
-    };
-    if (abbreviation == "I") {
-        return "Intermediate"
-    };
-    if (abbreviation == "R") {
-        return "Resistant"
-    };
-};
+  if (!abbreviation) {
+    return null
+  }
+  switch (abbreviation) {
+    case 'S':
+      return 'Susceptible'
+    case 'I':
+      return 'Intermediate'
+    case 'R':
+      return 'Resistant'
+    default:
+      return abbreviation
+  }
+}
 
 // function to download isolate metadata as a JSON
-function handleSaveToPC(jsonData) {
-    const fileData = JSON.stringify(jsonData);
-    const blob = new Blob([fileData], {type: "text/plain"});
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.download = jsonData.BioSample + '.json';
-    link.href = url;
-    link.click();
-};
-
-function IsolateDisplay(props) {
-
-    console.log(props.isolateInfo)
-
-    //map array of search results to an intepretable output
-    if (props.isolateInfo.consistentNames) {
-        var resultsRendered = props.isolateInfo.consistentNames.map((result, index)=> {
-            if (result !== undefined) {
-                return (
-                    <p key={index}>
-                        <Link to={"/gene/" + result} target="_blank">
-                            {result}
-                        </Link>
-                    </p>
-        )}});
-    };
-
-    return(
-        <div>
-            <>
-            <div className="geneDisplay-endpoint" id="large-font">
-                <p style={{display: "inline-block"}}> > </p>
-                <Link style={{display: "inline-block"}} to={"/isolate/streptococcus"} target="_blank">streptococcus</Link>
-                <p style={{display: "inline-block"}}> > </p>
-                <Link style={{display: "inline-block"}} to={"/isolate/streptococcus/" + "pneumoniae"} target="_blank">pneumoniae</Link>
-                <p style={{display: "inline-block"}}> > </p>
-                <Link style={{display: "inline-block"}} to={"/isolate/streptococcus/pneumoniae/" + props.isolateInfo.BioSample} target="_blank"> {props.isolateInfo.BioSample} </Link>
-            </div>
-            <h3 id="header-font">Isolate: {props.isolateInfo.isolateName}</h3>
-            <div className="isolate-grid">
-                <div className="assembly-stats">
-                    <h5 style={{marginLeft:"15%"}} id="large-font">Overview</h5>
-                    <p id="mediumLarge-font">Organism: {props.isolateInfo.Organism_name}</p>
-                    { (props.isolateInfo.Infraspecific_name !== undefined) && <p id="mediumLarge-font">Strain: {props.isolateInfo.Infraspecific_name}</p> }
-                    { (props.isolateInfo.Assembly_name !== undefined) &&<p id="mediumLarge-font">Assembly name: {props.isolateInfo.Assembly_name}</p> }
-                    { (props.isolateInfo.Assembly_level !== undefined) && <p id="mediumLarge-font">Assembly level: {props.isolateInfo.Assembly_level}</p> }
-                    <p id="mediumLarge-font">Genome representation: {props.isolateInfo.Genome_representation}</p>
-                    <p id="mediumLarge-font">Submitter: {props.isolateInfo.Submitter}</p>
-                    <p id="mediumLarge-font">Date submitted: {props.isolateInfo.Date}</p>
-                    <p id="mediumLarge-font">Taxid: {props.isolateInfo.Taxid}</p>
-                    { (props.isolateInfo.GenBank_assembly_accession !== undefined) && <p id="mediumLarge-font">GenBank assembly accession: <a href={"https://www.ncbi.nlm.nih.gov/assembly/" + props.isolateInfo.GenBank_assembly_accession.replace(" ", "_")} target="_blank">{props.isolateInfo.GenBank_assembly_accession}</a></p> }
-                    { (props.isolateInfo.RefSeq_assembly_accession !== undefined) && <p id="mediumLarge-font">RefSeq assembly accession: <a href={"https://www.ncbi.nlm.nih.gov/assembly/" + props.isolateInfo.RefSeq_assembly_accession.replace(" ", "_")} target="_blank">{props.isolateInfo.RefSeq_assembly_accession}</a></p> }
-                    { (props.isolateInfo.BioProject !== undefined) && <p id="mediumLarge-font">BioProject accession: <a href={"https://www.ncbi.nlm.nih.gov/bioproject/?term=" + props.isolateInfo.BioProject} target="_blank">{props.isolateInfo.BioProject}</a></p> }
-                    <p id="mediumLarge-font">BioSample accession: <a href={"https://www.ncbi.nlm.nih.gov/biosample/" + props.isolateInfo.BioSample} target="_blank">{props.isolateInfo.BioSample}</a></p>
-                    { (typeof props.isolateInfo.sequenceURL === 'string') && <p id="mediumLarge-font">Click to download assembly file: <a href={props.isolateInfo.sequenceURL} rel="noreferrer"> {props.isolateInfo.sequenceURL.split("/")[props.isolateInfo.sequenceURL.split("/").length - 1]} </a></p>}
-                    { (Array.isArray(props.isolateInfo.sequenceURL) === true) && <div id="mediumLarge-font">Click to download read files: {sequenceLinks(props.isolateInfo.sequenceURL)}</div>}
-                </div>
-                <div className="biosample-stats">
-                    <h5 style={{marginLeft:"15%"}} id="large-font">BioSample metadata</h5>
-                        { (props.isolateInfo.BioSample_SubmissionDate !== undefined) && <p id="mediumLarge-font">Submission date: {props.isolateInfo.BioSample_SubmissionDate}</p>}
-                        { (props.isolateInfo.BioSample_LastUpdate !== undefined) && <p id="mediumLarge-font">Last updated: {props.isolateInfo.BioSample_LastUpdate}</p>}
-                        { (props.isolateInfo.BioSample_SpecificHost !== undefined) && <p id="mediumLarge-font">Specific host: {props.isolateInfo.BioSample_SpecificHost}</p>}
-                        { (props.isolateInfo.BioSample_IsolationSource !== undefined) && <p id="mediumLarge-font">Isolation source: {props.isolateInfo.BioSample_IsolationSource}</p>}
-                        { (props.isolateInfo.BioSample_HostHealthState !== undefined) && <p id="mediumLarge-font">Host health status: {props.isolateInfo.BioSample_HostHealthState}</p>}
-                        { (props.isolateInfo.BioSample_SeroVar !== undefined) && <p id="mediumLarge-font">Serotype: {props.isolateInfo.BioSample_SeroVar}</p>}
-                        { (props.isolateInfo.BioSample_CollectionLocation !== undefined) && <p id="mediumLarge-font">Collection location: {props.isolateInfo.BioSample_CollectionLocation}</p>}
-                        { (props.isolateInfo.BioSample_Owner !== undefined) && <p id="mediumLarge-font">Owner: {props.isolateInfo.BioSample_Owner}</p>}
-                        { (props.isolateInfo.BioSample_INSDCCenterName !== undefined) && <p id="mediumLarge-font">INSDC center name: {props.isolateInfo.BioSample_INSDCCenterName}</p>}
-                        { (props.isolateInfo.BioSample_Status !== undefined) && <p id="mediumLarge-font">Status: {props.isolateInfo.BioSample_Status}</p>}
-                </div>
-                <div className="additional-stats">
-                    <h5 style={{marginLeft:"15%"}} id="large-font">Additional metadata</h5>
-                        { (props.isolateInfo.ERR !== undefined) && <p id="mediumLarge-font">ERR accession: <a href={"https://www.ebi.ac.uk/ena/browser/view/" + props.isolateInfo.ERR} target="_blank">{props.isolateInfo.ERR}</a></p>}
-                        { (props.isolateInfo.ERS !== undefined) && <p id="mediumLarge-font">ERS accession: <a href={"https://www.ebi.ac.uk/ena/browser/view/" + props.isolateInfo.ERS} target="_blank">{props.isolateInfo.ERS}</a></p>}
-                        { (props.isolateInfo.WGS_project !== undefined) && <p id="mediumLarge-font">WGS project: <a href={"https://www.ebi.ac.uk/ena/browser/view/" + props.isolateInfo.WGS_project}>{props.isolateInfo.WGS_project}</a></p>}
-                        { (props.isolateInfo.Year !== undefined) && <p id="mediumLarge-font">Collection year: {props.isolateInfo.Year}</p>}
-                        { (props.isolateInfo.Country !== undefined) && <p id="mediumLarge-font">Country: {props.isolateInfo.Country}</p>}
-                        { (props.isolateInfo.GPSC !== undefined) && <p id="mediumLarge-font">GPSC: {props.isolateInfo.GPSC}</p>}
-                        { (props.isolateInfo.In_Silico_Serotype !== undefined) && <p id="mediumLarge-font">In silico serotype: {props.isolateInfo.In_Silico_Serotype}</p>}
-                        { (props.isolateInfo.In_Silico_St !== undefined) && <p id="mediumLarge-font">In silico sequence type: {props.isolateInfo.In_Silico_St}</p>}
-                        { (props.isolateInfo.Disease !== undefined) && <p id="mediumLarge-font">Host disease state: {props.isolateInfo.Disease}</p>}
-                        { (props.isolateInfo.Age_group !== undefined) && <p id="mediumLarge-font">Host age group: {props.isolateInfo.Age_group}</p>}
-                        { (props.isolateInfo.Vaccine_Period !== undefined) && <p id="mediumLarge-font">Vaccine period: {props.isolateInfo.Vaccine_Period}</p>}
-                        { (props.isolateInfo.Vaccine_Status !== undefined) && <p id="mediumLarge-font">Vaccine status: {props.isolateInfo.Vaccine_Status}</p>}
-                        { (props.isolateInfo.WGS_PEN_SIR_Nonmeningitis !== undefined) && <p id="mediumLarge-font">Penicillin susceptibility: {penicillinSIR(props.isolateInfo.WGS_PEN_SIR_Nonmeningitis)}</p>}
-                </div>
-                { (props.isolateInfo.scaffold_stats !== undefined) &&
-                    <div className="contig-stats">
-                        <h5 style={{marginLeft:"15%"}} id="large-font">Assembly statistics</h5>
-                            <p id="mediumLarge-font">Total sequence length: {props.isolateInfo.scaffold_stats.total_bps}</p>
-                            <p id="mediumLarge-font">L50: {props.isolateInfo.scaffold_stats.L50}</p>
-                            <p id="mediumLarge-font">N50: {props.isolateInfo.scaffold_stats.N50}</p>
-                            <p id="mediumLarge-font">G/C content: {props.isolateInfo.scaffold_stats.gc_content.toFixed()}%</p>
-                            <p id="mediumLarge-font">Number of contigs: {props.isolateInfo.contig_stats.sequence_count}</p>
-                            <p id="mediumLarge-font">Longest contig length: {props.isolateInfo.contig_stats.longest}bp</p>
-                            <p id="mediumLarge-font">Shortest contig length: {props.isolateInfo.contig_stats.shortest}bp</p>
-                            <p id="mediumLarge-font">Mean contig length: {props.isolateInfo.contig_stats.mean.toFixed(1)}bp</p>
-                    </div>
-                }
-            </div>
-            <Button style={{marginLeft: "71%"}}id="mediumLarge-font" variant="outline-primary" onClick={ handleSaveToPC.bind(null, props.isolateInfo)}>
-                Download metadata
-            </Button>
-            {(props.isolateInfo.consistentNames) && <div>
-                <Paginate resultNumber={80} resultsRendered={resultsRendered} queryType="genesContained"/>
-            </div>}
-            </>
-        </div>
+const getJsonHref = (data) =>
+  URL.createObjectURL(
+    new window.Blob(
+      [JSON.stringify(data)],
+      { type: 'text/plain' }
     )
-};
+  )
 
-export default IsolateDisplay;
+const NavLink = ({ to = '', children }) => (
+  <Link to={`/isolate/streptococcus${to}`} target='_blank'>{children}</Link>
+)
+
+const KeyVals = ({ items }) => (
+  <table className='w-100'>
+    <tbody>
+      {
+        items.filter(([_, value]) => value != null).map(([label, value, options], index) => (
+          <tr
+            key={`${label}-${index}`}
+            className={index % 2 ? '' : 'bg-light'}
+          >
+            <td
+              className='pr-2'
+              style={{
+                width: '1%',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {label}:
+            </td>
+            <td>
+              {
+                options && options.link
+                  ? (
+                    <a
+                      href={options.link}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      {value}
+                    </a>
+                    )
+                  : value
+              }
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+)
+
+const SectionContainer = ({ title, children }) => (
+  <div className='container mb-4'>
+    <h4>{title}</h4>
+    {children}
+  </div>
+)
+
+export default ({
+  isolateInfo
+}) => {
+  const [searchFilter, setSearchFilter] = useState('')
+  const sortedConsistentNames = useMemo(
+    () => isolateInfo.consistentNames
+      .concat()
+      .sort((a, b) => a > b ? 1 : a < b ? -1 : 0),
+    [isolateInfo.consistentNames]
+  )
+
+  const [filteredResults, setFilteredResults] = useState()
+  const [downloadHref] = useState(() => getJsonHref(isolateInfo))
+
+  const updateResults = useCallback(() => {
+    setFilteredResults(
+      sortedConsistentNames
+        .filter(name => searchFilter.includes(name) || name.includes(searchFilter))
+        .map((name, index) => (
+          <Link
+            key={`${name}-${index}`}
+            to={`/gene/${name}`}
+            target='_blank'
+            rel='noreferrer'
+            className={`d-block ${index % 2 ? 'bg-white' : 'bg-light'}`}
+          >
+            {name}
+          </Link>
+        ))
+    )
+  }, [searchFilter, sortedConsistentNames, setFilteredResults])
+
+  useEffect(() => {
+    const timeout = setTimeout(updateResults, 100)
+    return () => clearTimeout(timeout)
+  }, [updateResults])
+
+  return (
+    <div className='d-flex flex-column container text-left text-start h-100 position-absolute'>
+      <header>
+        <div className='container mt-4 mb-2'>
+          <NavLink>streptococcus</NavLink>{' > '}
+          <NavLink to='/pneumoniae'>pneumoniae</NavLink>{' > '}
+          <NavLink to={`/pneumoniae/${isolateInfo.BioSample}`}>{isolateInfo.BioSample}</NavLink>
+        </div>
+        <div className='container'>
+          <h1>Isolate: {isolateInfo.isolateName}</h1>
+        </div>
+      </header>
+      <main
+        className='d-flex flex-fill position-relative overflow-hidden'
+      >
+        <div className='flex-fill p-2 overflow-auto'>
+          <SectionContainer title='Overview'>
+            <KeyVals items={[
+              ['Organism', isolateInfo.Organism_name],
+              ['Strain', isolateInfo.Infraspecific_name],
+              ['Assembly name', isolateInfo.Assembly_name],
+              ['Assembly level', isolateInfo.Assembly_level],
+              ['Genome representation', isolateInfo.Genome_representation],
+              ['Submitter', isolateInfo.Submitter],
+              ['Date submitted', isolateInfo.Date],
+              ['Taxid', isolateInfo.Taxid],
+              [
+                'GenBank assembly accession',
+                isolateInfo.GenBank_assembly_accession,
+                { link: `https://www.ncbi.nlm.nih.gov/biosample/${isolateInfo.BioSample}` }
+              ]
+            ]}
+            />
+            {
+            isolateInfo.sequenceURL && (
+              <>
+                <h5 className='mt-4'>Download assembly files:</h5>
+                <div className='btn-group'>
+                  {
+                    (
+                      isolateInfo.sequenceURL instanceof Array
+                        ? isolateInfo.sequenceURL
+                        : [isolateInfo.sequenceURL]
+                    ).map(link => (
+                      <a
+                        key={link}
+                        className='btn btn-secondary'
+                        href={link}
+                        rel='noreferrer'
+                      >
+                        {link.split('/')[link.split('/').length - 1]}
+                      </a>
+                    ))
+                    }
+                </div>
+              </>
+            )
+            }
+          </SectionContainer>
+          <SectionContainer title='BioSample metadata'>
+            <KeyVals items={[
+              ['Submission date', isolateInfo.BioSample_SubmissionDate],
+              ['Last updated', isolateInfo.BioSample_LastUpdate],
+              ['Specific host', isolateInfo.BioSample_SpecificHost],
+              ['Isolation source', isolateInfo.BioSample_IsolationSource],
+              ['Host health status', isolateInfo.BioSample_HostHealthState],
+              ['Serotype', isolateInfo.BioSample_SeroVar],
+              ['Collection location', isolateInfo.BioSample_CollectionLocation],
+              ['Owner', isolateInfo.BioSample_Owner],
+              ['INSDC center name', isolateInfo.BioSample_INSDCCenterName],
+              ['Status', isolateInfo.BioSample_Status]
+            ]}
+            />
+          </SectionContainer>
+          <SectionContainer title='Additional metadata'>
+            <KeyVals items={[
+              [
+                'ERR accession',
+                isolateInfo.ERR,
+                {
+                  link: `https://www.ebi.ac.uk/ena/browser/view/${isolateInfo.ERR}`
+                }
+              ],
+              [
+                'ERS accession',
+                isolateInfo.ERS,
+                {
+                  link: `https://www.ebi.ac.uk/ena/browser/view/${isolateInfo.ERS}`
+                }
+              ],
+              [
+                'WGS project',
+                isolateInfo.WGS_project,
+                {
+                  link: `https://www.ebi.ac.uk/ena/browser/view/${isolateInfo.WGS_project}`
+                }
+              ],
+              ['Collection year', isolateInfo.Year],
+              ['Country', isolateInfo.Country],
+              ['GPSC', isolateInfo.GPSC],
+              ['In silico serotype', isolateInfo.In_Silico_Serotype],
+              ['In silico sequence type', isolateInfo.In_Silico_St],
+              ['Host disease state', isolateInfo.Disease],
+              ['Host age group', isolateInfo.Age_group],
+              ['Vaccine period', isolateInfo.Vaccine_Period],
+              ['Vaccine status', isolateInfo.Vaccine_Status],
+              ['Penicillin susceptibility', penicillinSIR(isolateInfo.WGS_PEN_SIR_Nonmeningitis)]
+            ]}
+            />
+          </SectionContainer>
+          {
+            isolateInfo.scaffold_stats && (
+              <SectionContainer title='Assembly statistics'>
+                <KeyVals items={[
+                  ['Total sequence length', isolateInfo.scaffold_stats.total_bps],
+                  ['L50', isolateInfo.scaffold_stats.L50],
+                  ['N50', isolateInfo.scaffold_stats.N50],
+                  ['G/C content', `${isolateInfo.scaffold_stats.gc_content.toFixed()}%`],
+                  ['Number of contigs', isolateInfo.contig_stats.sequence_count],
+                  ['Longest contig length', `${isolateInfo.contig_stats.longest}bp`],
+                  ['Shortest contig length', `${isolateInfo.contig_stats.shortest}bp`],
+                  ['Mean contig length', `${isolateInfo.contig_stats.mean.toFixed(1)}bp`]
+
+                ]}
+                />
+              </SectionContainer>
+            )
+          }
+          <div className='btn-group'>
+            <a
+              className='btn btn-secondary'
+              href={downloadHref}
+              download={`${isolateInfo.BioSample}.json`}
+            >
+              Download metadata
+            </a>
+          </div>
+
+        </div>
+        <div className='flex-fill d-flex flex-column p-2 overflow-auto'>
+          <h4>Identified Genes</h4>
+          <input
+            className='w-100'
+            placeholder='Filter'
+            value={searchFilter}
+            onChange={e => setSearchFilter(e.target.value)}
+          />
+          <div className='flex-fill overflow-auto'>
+            {filteredResults}
+          </div>
+        </div>
+      </main>
+
+    </div>
+  )
+}
