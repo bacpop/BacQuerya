@@ -82,7 +82,7 @@ export default ({
 }) => {
   const [searchFilter, setSearchFilter] = useState('')
   const sortedConsistentNames = useMemo(
-    () => isolateInfo.consistentNames
+    () => (isolateInfo.consistentNames || [])
       .concat()
       .sort((a, b) => a > b ? 1 : a < b ? -1 : 0),
     [isolateInfo.consistentNames]
