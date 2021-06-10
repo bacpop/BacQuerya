@@ -13,6 +13,19 @@ async function geneQuery(formData) {
     return resolvedResponse.searchResult;
 };
 
+export function geneAlignment () {
+  return window.fetch(
+    'https://bacquerya.azurewebsites.net:443/alignmentView/example',
+    {
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }
+    }
+  ).then(response => response.json())
+}
+
 export async function specificGeneQuery(accessionList) {
     const fetchData =  {
         method: 'POST',
