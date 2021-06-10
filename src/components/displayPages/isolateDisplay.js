@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import KeyVals from '../common/KeyVals.js'
+
 const penicillinSIR = abbreviation => {
   if (!abbreviation) {
     return null
@@ -28,46 +30,6 @@ const getJsonHref = (data) =>
 
 const NavLink = ({ to = '', children }) => (
   <Link to={`/isolate/streptococcus${to}`} target='_blank'>{children}</Link>
-)
-
-const KeyVals = ({ items }) => (
-  <table className='w-100'>
-    <tbody>
-      {
-        items.filter(([_, value]) => value != null).map(([label, value, options], index) => (
-          <tr
-            key={`${label}-${index}`}
-            className={index % 2 ? '' : 'bg-light'}
-          >
-            <td
-              className='pr-2'
-              style={{
-                width: '1%',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              {label}:
-            </td>
-            <td>
-              {
-                options && options.link
-                  ? (
-                    <a
-                      href={options.link}
-                      target='_blank'
-                      rel='noreferrer'
-                    >
-                      {value}
-                    </a>
-                    )
-                  : value
-              }
-            </td>
-          </tr>
-        ))
-      }
-    </tbody>
-  </table>
 )
 
 const SectionContainer = ({ title, children }) => (
