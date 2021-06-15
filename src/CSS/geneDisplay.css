@@ -1,15 +1,60 @@
-.acid-A {
-  background-color: #faa;
+.gene-table.differences .acid-A {
+  background-color: #ffd8d8;
+  color: rgba(0,0,0,.4);
 }
-.acid-T {
-  background-color: #aaf;
+.gene-table.differences .acid-T {
+  background-color: #d8d8ff;
+  color: rgba(0,0,0,.4);
 }
-.acid-G {
-  background-color: #afa;
+.gene-table.differences .acid-G {
+  background-color: #d8ffd8;
+  color: rgba(0,0,0,.4);
 }
-.acid-C {
-  background-color: #ffa;
+.gene-table.differences .acid-C {
+  background-color: #ffd;
+  color: rgba(0,0,0,.4);
 }
-.acid-N {
-  background-color: #ddd;
+.gene-table.differences .acid-N {
+  background-color: #dedede;
+  color: rgba(0,0,0,.4);
+}
+
+.acid-A,
+.gene-table.differences .acid-A.different {
+  background-color: #f77;
+  color: #000;
+}
+.acid-T,
+.gene-table.differences .acid-T.different {
+  background-color: #77f;
+  color: #000;
+}
+.acid-G,
+.gene-table.differences .acid-G.different {
+  background-color: #7f7;
+  color: #000;
+}
+.acid-C,
+.gene-table.differences .acid-C.different {
+  background-color: #ff7;
+  color: #000;
+}
+.acid-N,
+.gene-table.differences .acid-N.different {
+  background-color: #888888;
+  color: #000;
+}
+
+.acid-A.different,
+.acid-T.different,
+.acid-G.different,
+.acid-C.different,
+.acid-N.different {
+  box-shadow: inset 0 0 0 1px #000;
+  font-weight: bold;
+}
+
+.row-different {
+  background-color: #ccc;
+  font-weight: bold;
 }
