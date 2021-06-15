@@ -1,21 +1,21 @@
 .gene-table.differences .acid-A {
-  background-color: #ffd8d8;
+  background-color: #fff8f8;
   color: rgba(0,0,0,.4);
 }
 .gene-table.differences .acid-T {
-  background-color: #d8d8ff;
+  background-color: #f8f8ff;
   color: rgba(0,0,0,.4);
 }
 .gene-table.differences .acid-G {
-  background-color: #d8ffd8;
+  background-color: #f8fff8;
   color: rgba(0,0,0,.4);
 }
 .gene-table.differences .acid-C {
-  background-color: #ffd;
+  background-color: #fffff8;
   color: rgba(0,0,0,.4);
 }
 .gene-table.differences .acid-N {
-  background-color: #dedede;
+  background-color: #f8f8f8;
   color: rgba(0,0,0,.4);
 }
 

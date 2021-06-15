@@ -167,7 +167,7 @@ const GeneVisualizer = ({ data }) => {
           />
         </label>
         <label className='m-2'>
-          <span className='m-2'>Differences</span>
+          <span className='m-2'>Only show differences</span>
           <input
             type='checkbox'
             value={differences}
