@@ -286,70 +286,73 @@ const GeneDisplay = ({ geneInfo, noResults }) => {
                 </div>
               )
             }
-
-              <table>
-                <thead>
-                  <tr>
-                    <th className='border'>Biosample accession</th>
-                    <th className='border'>Species</th>
-                    <th className='border'>Genome representation</th>
-                    <th className='border'>Number of contigs</th>
-                    <th className='border'>Download links</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                  queryResult.map(({
-                    _source: {
-                      BioSample,
-                      Organism_name: organismName,
-                      Genome_representation: genomeRepresentation,
-                      contig_stats: contigStats,
-                      sequenceURL
-                    }
-                  }, index) => (
-                    <tr
-                      key={BioSample}
-                      className={index % 2 ? '' : 'bg-light'}
-                    >
-                      <td className='border'>
-                        <Link
-                          to={`/isolate/streptococcus/pneumoniae/${BioSample}`}
-                          target='_blank'
-                        >
-                          {BioSample}
-                        </Link>
-                      </td>
-                      <td className='border'>{organismName}</td>
-                      <td className='border'>{genomeRepresentation}</td>
-                      <td className='border'>
-                        {
-                          contigStats && contigStats.sequence_count
-                        }
-                      </td>
-                      <td className='border' style={{ fontSize: '.75rem' }}>
-                        {
-                          (
-                            sequenceURL instanceof Array
-                              ? sequenceURL
-                              : [sequenceURL]
-                          ).map(link => (
-                            <a
-                              key={link}
-                              href={link}
-                              rel='noreferrer'
-                            >
-                              {link.split('/')[link.split('/').length - 1]}
-                            </a>
-                          ))
-                        }
-                      </td>
+              {
+              queryResult.length ? (
+                <table>
+                  <thead>
+                    <tr>
+                      <th className='border'>Biosample accession</th>
+                      <th className='border'>Species</th>
+                      <th className='border'>Genome representation</th>
+                      <th className='border'>Number of contigs</th>
+                      <th className='border'>Download links</th>
                     </tr>
-                  ))
-                }
-                </tbody>
-              </table>
-
+                  </thead>
+                  <tbody>
+                    {
+                    queryResult.map(({
+                      _source: {
+                        BioSample,
+                        Organism_name: organismName,
+                        Genome_representation: genomeRepresentation,
+                        contig_stats: contigStats,
+                        sequenceURL
+                      }
+                    }, index) => (
+                      <tr
+                        key={BioSample}
+                        className={index % 2 ? '' : 'bg-light'}
+                      >
+                        <td className='border'>
+                          <Link
+                            to={`/isolate/streptococcus/pneumoniae/${BioSample}`}
+                            target='_blank'
+                          >
+                            {BioSample}
+                          </Link>
+                        </td>
+                        <td className='border'>{organismName}</td>
+                        <td className='border'>{genomeRepresentation}</td>
+                        <td className='border'>
+                          {
+                            contigStats && contigStats.sequence_count
+                          }
+                        </td>
+                        <td className='border' style={{ fontSize: '.75rem' }}>
+                          {
+                            (
+                              sequenceURL instanceof Array
+                                ? sequenceURL
+                                : [sequenceURL]
+                            ).map(link => (
+                              <a
+                                key={link}
+                                href={link}
+                                rel='noreferrer'
+                              >
+                                {link.split('/')[link.split('/').length - 1]}
+                              </a>
+                            ))
+                          }
+                        </td>
+                      </tr>
+                    ))
+                  }
+                  </tbody>
+                </table>
+              )
+                : null
+            }
               <LoadBox value={geneAlignment} className='mt-4'>
                 {(genes) => (
                   <GeneVisualizer data={genes} />
