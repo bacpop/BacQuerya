@@ -253,8 +253,8 @@ export default ({
     })
 
     return {
-      xAxisLabel: 'Frequency',
-      yAxisLabel: 'Frequency Density',
+      xAxisLabel: 'N50',
+      yAxisLabel: 'Population frequency',
       min: minGroupCount.toLocaleString('en-US'),
       max: Math.round(maxGroupCount / histogramScale).toLocaleString('en-US'),
       scale: histogramScale,
@@ -432,7 +432,7 @@ export default ({
             )
           }
           <SectionContainer>
-            <h4 className='mt-2'>N50 Distribution</h4>
+            <h4 className='mt-2'>Species N50 Distribution</h4>
             <div
               className='d-flex'
               style={{
