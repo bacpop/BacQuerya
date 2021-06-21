@@ -2,7 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   populationAssemblyStatsN50,
-  populationAssemblyStatsGcContent
+  populationAssemblyStatsGcContent,
+  populationAssemblyTotalBps,
+  populationAssemblyContigCount
 } from '../indexQuerying/isolateQuery.js'
 import Spinner from 'react-bootstrap/Spinner'
 
@@ -123,6 +125,9 @@ const Histogram = ({
         isRendering = false
 
         const canvas = canvasRef.current
+        if (!canvas) {
+          return
+        }
         const context = canvas.getContext('2d')
 
         const { width: rawWidth, height } = canvas.parentNode.getBoundingClientRect()
@@ -133,20 +138,24 @@ const Histogram = ({
         canvas.width = ratio * width
         canvas.height = ratio * height
         context.scale(ratio, ratio)
-        update({ context, width, height })
+        if (dimensions.width && dimensions.height) {
+          update({ context, width, height })
+        }
 
         // Recalc the width AFTER render
         const { width: widthAfter, height: heightAfter } = canvas.parentNode.getBoundingClientRect()
-        setDimensions({
-          width: widthAfter,
-          height: heightAfter
-        })
+        if (dimensions.width !== widthAfter || dimensions.height !== heightAfter) {
+          setDimensions({
+            width: widthAfter,
+            height: heightAfter
+          })
+        }
       })
     }
     prepRerender()
     window.addEventListener('resize', prepRerender, true)
     return () => window.removeEventListener('resize', prepRerender, true)
-  }, [setDimensions, active, scale, data, labels])
+  }, [dimensions, setDimensions, active, scale, data, labels])
 
   // Spinner
   return (data.length)
@@ -262,6 +271,24 @@ const graphOptions = [
     populationAssemblyProp: 'gc_content',
     populationAssemblyRequest: populationAssemblyStatsGcContent,
     roundDigits: -100000
+  },
+  {
+    button: 'Total BPS',
+    title: 'Total BPS',
+    xAxis: 'Genome length (bp)',
+    yAxis: 'Population frequency',
+    isolateInfoProp: 'total_bps',
+    populationAssemblyProp: 'genome_length',
+    populationAssemblyRequest: populationAssemblyTotalBps
+  },
+  {
+    button: 'Contig Count',
+    title: 'Contig Count',
+    xAxis: 'Number of contigs',
+    yAxis: 'Population frequency',
+    isolateInfoProp: 'sequence_count',
+    populationAssemblyProp: 'contig_count',
+    populationAssemblyRequest: populationAssemblyContigCount
   }
 ]
 
@@ -318,10 +345,8 @@ const IsolateDisplay = ({
       labels: Array.from(Array(populationAssemblyStats.groups.length)).map((_, index) => {
         const range = populationAssemblyStats.max - populationAssemblyStats.min
         const interval = range / populationAssemblyStats.groups.length
-
         const start = populationAssemblyStats.min + (interval * index)
 
-        // return Math.round(start).toLocaleString('en-US')
         return start.toLocaleString('en-US')
       }),
       active: activeRows,
@@ -353,9 +378,21 @@ const IsolateDisplay = ({
   }, [updateResults])
 
   useEffect(() => {
+    const timeout = setTimeout(() => {
+      setPopulationAssemblyStats({
+        min: 0,
+        max: 0,
+        groups: []
+      })
+    }, 200)
+
     graphOptions[activeGraphIndex].populationAssemblyRequest().then((data) => {
+      clearTimeout(timeout)
       setPopulationAssemblyStats(data)
     })
+    return () => {
+      clearTimeout(timeout)
+    }
   }, [activeGraphIndex])
 
   return (
