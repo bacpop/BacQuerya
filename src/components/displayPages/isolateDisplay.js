@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { populationAssemblyStats as requestPopulationAssemblyStats } from '../indexQuerying/isolateQuery.js'
+import {
+  populationAssemblyStatsN50,
+  populationAssemblyStatsGcContent,
+  populationAssemblyTotalBps,
+  populationAssemblyContigCount
+} from '../indexQuerying/isolateQuery.js'
+import Spinner from 'react-bootstrap/Spinner'
 
 import KeyVals from '../common/KeyVals.js'
 
@@ -52,10 +58,20 @@ const Histogram = ({
   ...props
 }) => {
   const canvasRef = useRef()
-  const [dimensions, setDimensions] = useState(0)
-  const yAxisMargin = 24
+  const [dimensions, setDimensions] = useState({
+    width: 0,
+    height: 0
+  })
+  const yAxisMargin = 80
+  const rowCount = Math.floor(dimensions.height / 20)
+
+  const minNum = +`${min}`.replace(/,/g, '')
+  const maxNum = +`${max}`.replace(/,/g, '')
 
   useEffect(() => {
+    if (!canvasRef.current) {
+      return
+    }
     let isRendering = false
     const update = ({ context, width, height }) => {
       context.save()
@@ -65,7 +81,7 @@ const Histogram = ({
       context.fillStyle = '#aaa'
       context.fillRect(0, 0, width, height)
 
-      context.font = `${barWidth / 2}px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"`
+      context.font = `${barWidth / 1.3}px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"`
 
       data.forEach((n, index) => {
         context.fillStyle = '#888'
@@ -93,9 +109,9 @@ const Histogram = ({
         if (labels && labels[index]) {
           context.save()
           context.fillStyle = 'rgba(0,0,0,0.6)'
-          context.translate(Math.floor((index + 1) * barWidth) - 6, height - 10)
+          context.translate(Math.floor((index + 1) * barWidth) - 5, height - 10)
           context.rotate(270 * Math.PI / 180)
-          context.fillText(n, 0, 0)
+          context.fillText(n.toLocaleString('en-US'), 0, 0)
           context.restore()
         }
       })
@@ -109,6 +125,9 @@ const Histogram = ({
         isRendering = false
 
         const canvas = canvasRef.current
+        if (!canvas) {
+          return
+        }
         const context = canvas.getContext('2d')
 
         const { width: rawWidth, height } = canvas.parentNode.getBoundingClientRect()
@@ -119,100 +138,161 @@ const Histogram = ({
         canvas.width = ratio * width
         canvas.height = ratio * height
         context.scale(ratio, ratio)
-        update({ context, width, height })
+        if (dimensions.width && dimensions.height) {
+          update({ context, width, height })
+        }
 
         // Recalc the width AFTER render
         const { width: widthAfter, height: heightAfter } = canvas.parentNode.getBoundingClientRect()
-        setDimensions({
-          width: widthAfter,
-          height: heightAfter
-        })
+        if (dimensions.width !== widthAfter || dimensions.height !== heightAfter) {
+          setDimensions({
+            width: widthAfter,
+            height: heightAfter
+          })
+        }
       })
     }
     prepRerender()
     window.addEventListener('resize', prepRerender, true)
     return () => window.removeEventListener('resize', prepRerender, true)
-  }, [setDimensions, active, scale, data])
+  }, [dimensions, setDimensions, active, scale, data, labels])
 
-  return (
-    <div className='d-flex flex-column overflow-hidden position-relative' {...props}>
-      <h6
-        className='position-absolute'
-        style={{
-          transform: 'rotate(270deg)',
-          transformOrigin: `${dimensions.height / 2}px ${dimensions.height / 2}px`,
-          width: `${dimensions.height}px`,
-          top: `${yAxisMargin - 4}px`
-        }}
-      >
-        {yAxisLabel}
-      </h6>
-      <h6
-        style={{
-          marginLeft: `${yAxisMargin}px`,
-          marginBottom: '2px'
-        }}
-      >
-        {xAxisLabel}
-      </h6>
-      <div
-        className='flex-fill overflow-hidden'
-        style={{
-          margin: `0 ${yAxisMargin}px`
-        }}
-      >
-        <canvas ref={canvasRef} className='w-100 h-100' />
-      </div>
-      <div
-        className='position-absolute d-flex justify-content-between'
-        style={{
-          transform: 'rotate(270deg)',
-          transformOrigin: `${dimensions.height / 2}px ${dimensions.height / 2}px`,
-          width: `${dimensions.height}px`,
-          top: `${yAxisMargin - 4}px`,
-          left: `${dimensions.width + yAxisMargin}px`,
-          fontSize: `${(dimensions.width / 2 / labels.length)}px`
-        }}
-      >
-        <div>{min}</div>
-        <div>{max}</div>
-      </div>
-      {labels && (
-        <div
-          className='position-relative'
+  // Spinner
+  return (data.length)
+    ? (
+      <div className='d-flex flex-column overflow-hidden position-relative' {...props}>
+        <h6
+          className='position-absolute'
           style={{
-            height: '100px',
-            marginLeft: `${yAxisMargin}px`
+            transform: 'rotate(270deg)',
+            transformOrigin: `${dimensions.height / 2}px ${dimensions.height / 2}px`,
+            width: `${dimensions.height}px`,
+            top: '20px'
+          }}
+        >
+          {yAxisLabel}
+        </h6>
+        <h6
+          style={{
+            marginLeft: `${yAxisMargin}px`,
+            marginBottom: '2px'
+          }}
+        >
+          {xAxisLabel}
+        </h6>
+        <div
+          className='flex-fill overflow-hidden'
+          style={{
+            marginLeft: `${yAxisMargin}px`,
+            marginRight: '48px'
+          }}
+        >
+          <canvas ref={canvasRef} className='w-100 h-100' />
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column-reverse',
+            fontSize: '14px',
+            height: `${dimensions.height}px`,
+            justifyContent: 'space-between',
+            left: '24px',
+            lineHeight: '0',
+            position: 'absolute',
+            textAlign: 'right',
+            top: '21px',
+            width: `${yAxisMargin - 28}px`
           }}
         >
           {
-            labels.map((label, index) => (
-              <div
-                key={`${label}-${index}`}
-                style={{
-                  position: 'absolute',
-                  width: '100px',
-                  textAlign: 'right',
-                  left: `${-48 + (index / labels.length * dimensions.width)}px`,
-                  top: '85px',
-                  transform: 'rotate(300deg)',
-                  transformOrigin: '0% 0%',
-                  fontSize: `${(dimensions.width / 2 / labels.length)}px`
-                }}
-              >
-                {
-                  label
-                }
+            Array.from(Array(rowCount)).map((_, index) => (
+              <div key={`${xAxisLabel}-${index}`}>
+                {Math.round(minNum + (maxNum - minNum) * (index / (rowCount - 1))).toLocaleString('en-US')}
               </div>
             ))
           }
         </div>
-      )}
-    </div>
-  )
+        {labels && (
+          <div
+            className='position-relative'
+            style={{
+              height: '100px',
+              marginLeft: `${yAxisMargin}px`
+            }}
+          >
+            {
+              labels.map((label, index) => (
+                <div
+                  key={`${label}-${index}`}
+                  style={{
+                    position: 'absolute',
+                    width: '100px',
+                    textAlign: 'right',
+                    left: `${-48 + (index / labels.length * dimensions.width)}px`,
+                    top: '85px',
+                    transform: 'rotate(300deg)',
+                    transformOrigin: '0% 0%',
+                    fontSize: `${(dimensions.width / 2 / labels.length)}px`
+                  }}
+                >
+                  {
+                    label
+                  }
+                </div>
+              ))
+            }
+          </div>
+        )}
+      </div>
+      )
+    : (
+      <div className='w-100 d-flex justify-content-center'>
+        <Spinner animation='border' variant='primary' />
+      </div>
+      )
 }
 
-export default ({
+const graphOptions = [
+  {
+    button: 'N50',
+    title: 'Species N50 Distribution',
+    xAxis: 'N50',
+    yAxis: 'Population frequency',
+    isolateInfoProp: 'N50',
+    populationAssemblyProp: 'contig_N50',
+    populationAssemblyRequest: populationAssemblyStatsN50
+  },
+  {
+    button: 'GC Content',
+    title: 'Species GC Content Distribution',
+    xAxis: 'GC Content',
+    yAxis: 'Population frequency',
+    isolateInfoProp: 'gc_content',
+    populationAssemblyProp: 'gc_content',
+    populationAssemblyRequest: populationAssemblyStatsGcContent,
+    roundDigits: -100000
+  },
+  {
+    button: 'Total BPS',
+    title: 'Total BPS',
+    xAxis: 'Genome length (bp)',
+    yAxis: 'Population frequency',
+    isolateInfoProp: 'total_bps',
+    populationAssemblyProp: 'genome_length',
+    populationAssemblyRequest: populationAssemblyTotalBps
+  },
+  {
+    button: 'Contig Count',
+    title: 'Contig Count',
+    xAxis: 'Number of contigs',
+    yAxis: 'Population frequency',
+    isolateInfoProp: 'sequence_count',
+    populationAssemblyProp: 'contig_count',
+    populationAssemblyRequest: populationAssemblyContigCount
+  }
+]
+
+const IsolateDisplay = ({
   isolateInfo
 }) => {
   const [populationAssemblyStats, setPopulationAssemblyStats] = useState({
@@ -228,19 +308,20 @@ export default ({
       .sort((a, b) => a > b ? 1 : a < b ? -1 : 0),
     [isolateInfo.consistentNames]
   )
-
   const [filteredResults, setFilteredResults] = useState()
   const [downloadHref] = useState(() => getJsonHref(isolateInfo))
+  const [activeGraphIndex, setActiveGraphIndex] = useState(0)
+  const activeGraph = graphOptions[activeGraphIndex]
 
   const activeRows = useMemo(() => {
-    const contigRow = isolateInfo.contig_stats.N50
+    const contigRow = isolateInfo.contig_stats[activeGraph.isolateInfoProp]
     return populationAssemblyStats.groups.map(
       contigs => contigs.reduce(
-        (total, { contig_N50: contigN50 }) => total + (`${contigN50}` === `${contigRow}`),
+        (total, { [activeGraph.populationAssemblyProp]: val }) => total + (`${val}` === `${contigRow}`),
         0
       )
     )
-  }, [populationAssemblyStats])
+  }, [populationAssemblyStats, activeGraph, isolateInfo])
 
   const histogramProps = useMemo(() => {
     if (!isolateInfo) return Array.from(Array(populationAssemblyStats.groups.length)).map((_) => [])
@@ -253,8 +334,8 @@ export default ({
     })
 
     return {
-      xAxisLabel: 'N50',
-      yAxisLabel: 'Population frequency',
+      xAxisLabel: activeGraph.xAxis,
+      yAxisLabel: activeGraph.yAxis,
       min: minGroupCount.toLocaleString('en-US'),
       max: Math.round(maxGroupCount / histogramScale).toLocaleString('en-US'),
       scale: histogramScale,
@@ -264,15 +345,14 @@ export default ({
       labels: Array.from(Array(populationAssemblyStats.groups.length)).map((_, index) => {
         const range = populationAssemblyStats.max - populationAssemblyStats.min
         const interval = range / populationAssemblyStats.groups.length
-
         const start = populationAssemblyStats.min + (interval * index)
 
-        return Math.round(start).toLocaleString('en-US')
+        return start.toLocaleString('en-US')
       }),
       active: activeRows,
       data: populationAssemblyStats.groups.map(interval => interval.length)
     }
-  }, [histogramScale, populationAssemblyStats, isolateInfo])
+  }, [histogramScale, populationAssemblyStats, isolateInfo, activeGraph, activeRows])
 
   const updateResults = useCallback(() => {
     setFilteredResults(
@@ -298,10 +378,22 @@ export default ({
   }, [updateResults])
 
   useEffect(() => {
-    requestPopulationAssemblyStats().then((data) => {
+    const timeout = setTimeout(() => {
+      setPopulationAssemblyStats({
+        min: 0,
+        max: 0,
+        groups: []
+      })
+    }, 200)
+
+    graphOptions[activeGraphIndex].populationAssemblyRequest().then((data) => {
+      clearTimeout(timeout)
       setPopulationAssemblyStats(data)
     })
-  }, [])
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [activeGraphIndex])
 
   return (
     <div className='d-flex flex-column container text-left text-start h-100 position-absolute'>
@@ -432,7 +524,24 @@ export default ({
             )
           }
           <SectionContainer>
-            <h4 className='mt-2'>Species N50 Distribution</h4>
+            <div className='btn-group'>
+              {
+                graphOptions.map(({ button }, index) => (
+                  <button
+                    key={`${button}-${index}`}
+                    className={`btn btn-secondary${index === activeGraphIndex ? ' active' : ''}`}
+                    onClick={
+                      () => {
+                        setActiveGraphIndex(index)
+                      }
+                    }
+                  >
+                    {button}
+                  </button>
+                ))
+              }
+            </div>
+            <h4 className='mt-2'>{activeGraph.title}</h4>
             <div
               className='d-flex'
               style={{
@@ -488,3 +597,5 @@ export default ({
     </div>
   )
 }
+
+export default IsolateDisplay
