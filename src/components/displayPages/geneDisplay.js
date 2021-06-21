@@ -38,7 +38,6 @@ const GeneTable = ({ data, scale, differences }) => {
   if (!dataRows.length) return null
 
   const leadRow = dataRows[0][1].split('')
-  console.log(leadRow)
 
   return (
     <div
