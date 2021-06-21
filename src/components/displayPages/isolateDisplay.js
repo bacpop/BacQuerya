@@ -398,12 +398,15 @@ const IsolateDisplay = ({
   return (
     <div className='d-flex flex-column container text-left text-start h-100 position-absolute'>
       <header>
+        {/*
+        Commenting out for now
         <div className='container mt-4 mb-2'>
           <NavLink>streptococcus</NavLink>{' > '}
           <NavLink to='/pneumoniae'>pneumoniae</NavLink>{' > '}
           <NavLink to={`/pneumoniae/${isolateInfo.BioSample}`}>{isolateInfo.BioSample}</NavLink>
         </div>
-        <div className='container'>
+        */}
+        <div className='container mt-4'>
           <h1>Isolate: {isolateInfo.isolateName}</h1>
         </div>
       </header>
