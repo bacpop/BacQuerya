@@ -44,7 +44,6 @@ export async function specificGeneQuery(accessionList) {
         };
         return true;
     });
-    console.log(filteredResults)
     return filteredResults;
 };
 

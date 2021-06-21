@@ -26,11 +26,6 @@ export const populationAssemblyStats = (() => {
         }
       })
         .then(raw => raw.json())
-        .then(d => {
-          // console.log('popAssembStats', d)
-          console.log(Object.values(d).slice(0, 3))
-          return d
-        })
     }
     return promise
   }
@@ -110,7 +105,6 @@ export async function specificIsolateQuery (accessionList) {
     };
     return true
   })
-  console.log(filteredResults)
   return filteredResults
 };
 
