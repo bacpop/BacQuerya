@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Spinner from 'react-bootstrap/Spinner'
 import { Link } from 'react-router-dom'
 
+import { isIdentical } from '../utils'
 import isolateQuery from './indexQuerying/isolateQuery'
 import studyQuery from './indexQuerying/studyQuery'
 import geneQuery from './indexQuerying/geneQuery'
@@ -163,14 +164,14 @@ const SearchPage = () => {
   const [formState, setFormStateObject] = useState(() => ({
     searchType: 'isolate',
     searchTerm: '',
-    pageNumber: 0,
+    pageNumber: 1,
     searchFilters: {
       assemblies: true,
       Country: 'All',
       Year: [
         // 'Start',
         // 'End'
-        new Date().getFullYear() - 50,
+        1985,
         new Date().getFullYear()
       ],
       minN50: 0,
@@ -194,9 +195,10 @@ const SearchPage = () => {
 
   // The structure varies depending on what's returned
   const [searchResults, setSearchResults] = useState({
+    searchPerformed: false,
     formState,
     searchResult: [],
-    count: 0
+    resultCount: 0
   })
   const [endOfResults, setEndOfResults] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -205,19 +207,28 @@ const SearchPage = () => {
     const options = {
       ...formState,
       ...newProps,
-      pageNumber: newProps.pageNumber || 0,
+      pageNumber: newProps.pageNumber || 1,
       searchFilters: {
         ...formState.searchFilters,
         ...(newProps.searchFilters || {})
       }
     }
-    // The back-end does not handle pageNumber = 0 well
-    if (!options.pageNumber) {
-      delete options.pageNumber
-    }
     setFormStateObject(options)
     return options
-  }, [formState, setFormStateObject]);
+  }, [formState, setFormStateObject])
+
+  const searchResultUpdated = (
+    !searchResults.searchPerformed ||
+    !isIdentical(
+      {
+        ...formState,
+        pageNumber: -1
+      },
+      {
+        ...searchResults.formState,
+        pageNumber: -1
+      })
+  )
 
   const search = useCallback((options) => {
     let cancelled = false
@@ -226,39 +237,44 @@ const SearchPage = () => {
       return
     }
     let searchResultsState = searchResults
-    if (!queryOptions.pageNumber) {
-      if (endOfResults) {
-        setEndOfResults(false)
+    let isNowEndOfResults = endOfResults
+    if (queryOptions.pageNumber === 1) {
+      if (isNowEndOfResults) {
+        setEndOfResults(isNowEndOfResults = false)
       }
       searchResultsState = {
+        searchPerformed: true,
         formState,
         searchResult: [],
-        count: 0
+        resultCount: 0
       }
       setSearchResults(searchResultsState)
     }
-    setLoading(true)
+    if (!isNowEndOfResults) {
+      setLoading(true)
+    }
     setOpenDownloads(false)
-    if (!endOfResults) {
+    if (!isNowEndOfResults) {
       typeRequest[queryOptions.searchType].request(queryOptions)
-        .then(response => {
+        .then(({ resultCount, searchResult }) => {
           if (cancelled) {
             return
           }
-          if (response.length === 0) {
+          if (searchResult.length === 0) {
             setEndOfResults(true)
           }
           setLoading(false)
-          if (queryOptions.pageNumber) {
+          if (queryOptions.pageNumber > 1) {
             setSearchResults({
               ...searchResultsState,
-              searchResult: searchResults.searchResult.concat(response)
+              searchResult: searchResults.searchResult.concat(searchResult),
+              resultCount
             })
           } else {
             setSearchResults({
               ...searchResultsState,
-              searchResult: response,
-              count: 0
+              searchResult,
+              resultCount
             })
           }
         })
@@ -266,19 +282,79 @@ const SearchPage = () => {
     return () => {
       cancelled = true
     }
-  }, [setLoading, endOfResults, setEndOfResults, formState, searchResults])
+  }, [
+    endOfResults,
+    formState,
+    searchResults,
+    setLoading,
+    setEndOfResults,
+    setSearchResults
+  ])
+
+  const loadNextPage = useCallback(() => {
+    let cancelled = false
+    const formState = {
+      ...searchResults.formState,
+      pageNumber: searchResults.formState.pageNumber + 1
+    }
+
+    setSearchResults({
+      ...searchResults,
+      formState
+    })
+
+    setLoading(true)
+    typeRequest[formState.searchType].request(formState)
+      .then(({ resultCount, searchResult }) => {
+        if (cancelled) {
+          return
+        }
+        if (searchResult.length === 0) {
+          setEndOfResults(true)
+        }
+        setLoading(false)
+        if (formState.pageNumber > 1) {
+          setSearchResults({
+            ...searchResults,
+            formState,
+            searchResult: searchResults.searchResult.concat(searchResult),
+            resultCount
+          })
+        } else {
+          setSearchResults({
+            ...searchResults,
+            formState,
+            searchResult,
+            resultCount
+          })
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [
+    searchResults,
+    setFormState,
+    setLoading,
+    search
+  ])
 
   useEffect(() => {
+    if (loading) {
+      return
+    }
+    let cancelled = false
     const onScroll = () => {
       if (
         !loading &&
         tableWrapperRef.current.scrollHeight <= window.scrollY + window.innerHeight
       ) {
-        search(
-          setFormState({
-            pageNumber: (formState.pageNumber || 0) + 1
-          })
-        )
+        // search(
+        //   setFormState({
+        //     pageNumber: (formState.pageNumber || 1) + 1
+        //   })
+        // )
+        loadNextPage()
       }
     }
     const events = [
@@ -290,12 +366,13 @@ const SearchPage = () => {
       window.addEventListener(event, onScroll, true)
     })
     return () => {
+      cancelled = true
       events.forEach(event => {
         window.removeEventListener(event, onScroll, true)
       })
     }
   }, [
-    formState,
+    searchResults,
     loading,
     setFormState,
     setLoading,
@@ -306,7 +383,7 @@ const SearchPage = () => {
     <div
       className='d-flex flex-column container text-left text-start h-100 position-absolute'
     >
-      <header>
+      <header className='mb-2'>
         <div className='container mt-4 d-flex justify-content-between'>
           <h1>Bacquerya</h1>
           <Link to='/about'>About</Link>
@@ -327,12 +404,16 @@ const SearchPage = () => {
             />
             <div className='d-flex align-items-end'>
               <button
-                className='btn btn-primary'
-                disabled={sequenceContainsInvalidChars}
+                className={`btn ${
+                  searchResultUpdated
+                    ? 'btn-primary'
+                    : 'btn-secondary'
+                }`}
+                disabled={sequenceContainsInvalidChars || sequenceIsNotLongEnough}
                 onClick={() => {
                   search(
                     setFormState({
-                      pageNumber: 0
+                      pageNumber: 1
                     })
                   )
                 }}
@@ -393,39 +474,66 @@ const SearchPage = () => {
           }
         </div>
       </div>
-      <div className='mt-4' ref={tableWrapperRef}>
+      <hr
+        className='my-4 w-100'
+        style={{
+          height: '1px'
+        }}
+      />
+      <div
+        ref={tableWrapperRef}
+        style={{
+          opacity: searchResultUpdated ? '0.6' : '1'
+        }}
+      >
         {
           (searchResults?.searchResult?.length
             ? (
               <>
                 {
-                  searchResults.formState.searchType === 'isolate' && (
-                    <div className='my-2 d-flex flex-row-reverse'>
+                  (
+                    searchResults.formState.searchType === 'isolate' ||
+                    searchResults.resultCount !== -1
+                  ) && (
+                    <div className='my-2 d-flex justify-content-between'>
                       {
-                        showDownloadOptions && (
-                          <div
-                            className='position-absolute bg-light rounded p-2'
-                            style={{
-                              right: '0',
-                              width: '500px',
-                              zIndex: '100000',
-                              boxShadow: '0 2px 6px rgb(0,0,0,.5)'
-                            }}
-                          >
-                            <SequenceDownload
-                              setOpenDownloads={setOpenDownloads}
-                              sequenceUrls={searchResults.searchResult.map(r => r._source.sequenceURL)}
-                            />
+                        searchResults.resultCount !== -1 && (
+                          <div>
+                            Results: {searchResults.resultCount.toLocaleString('en-US')}
                           </div>
-
                         )
                       }
-                      <button
-                        className='btn btn-primary btn-sm'
-                        onClick={() => setOpenDownloads(true)}
-                      >
-                        Download all sequences
-                      </button>
+                      {
+                        searchResults.formState.searchType === 'isolate' && (
+                          <>
+                            {
+                              showDownloadOptions && (
+                                <div
+                                  className='position-absolute bg-light rounded p-2'
+                                  style={{
+                                    right: '0',
+                                    width: '500px',
+                                    zIndex: '100000',
+                                    boxShadow: '0 2px 6px rgb(0,0,0,.5)'
+                                  }}
+                                >
+                                  <SequenceDownload
+                                    setOpenDownloads={setOpenDownloads}
+                                    sequenceUrls={searchResults.searchResult.map(r => r._source.sequenceURL)}
+                                  />
+                                </div>
+
+                              )
+                            }
+                            <button
+                              className='btn btn-primary btn-sm'
+                              onClick={() => setOpenDownloads(true)}
+                            >
+                              Download all sequences
+                            </button>
+                          </>
+                        )
+                      }
                     </div>
                   )
                 }
@@ -489,6 +597,28 @@ const SearchPage = () => {
                 />
                 )
               : null
+          }
+          {
+            (
+              !loading &&
+              searchResults.searchResult.length === 0 &&
+              searchResults.searchPerformed
+            ) && (
+              <div className='text-secondary'>
+                &lt;There are no results&gt;
+              </div>
+            )
+          }
+          {
+            (
+              !loading &&
+              searchResults.searchResult.length > 0 &&
+              endOfResults
+            ) && (
+              <div className='text-secondary'>
+                &lt;End of results&gt;
+              </div>
+            )
           }
         </div>
       </div>

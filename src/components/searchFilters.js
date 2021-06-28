@@ -2,6 +2,7 @@
 import { useState } from 'react'
 
 const maxContigs = 50
+const minYear = 1950
 const thisYear = new Date().getFullYear()
 
 const Checkbox = ({ label, value, onChange }) => (
@@ -10,7 +11,7 @@ const Checkbox = ({ label, value, onChange }) => (
       type='checkbox'
       id={`checkbox-${label}`}
       className='form-check-input'
-      value={value}
+      checked={value}
       onChange={e => {
         onChange(e.target.checked)
       }}
@@ -143,15 +144,15 @@ const SearchFilters = ({ formState, setFormState }) => {
         </div>
       </div>
 
-      <div className='d-flex'>
-        <div className='mr-4'>
+      <div className='d-flex flex-wrap'>
+        <div className='mr-4 d-flex flex-column justify-content-end'>
           <label htmlFor='fromYear'>From Year</label>
           <input
             id='fromYear'
             name='fromYear'
             className='d-block form-control'
             type='number'
-            min={1000}
+            min={minYear}
             max={thisYear}
             value={formState.searchFilters.Year[0]}
             onChange={e => {
@@ -167,14 +168,14 @@ const SearchFilters = ({ formState, setFormState }) => {
             }}
           />
         </div>
-        <div className='mr-4'>
+        <div className='mr-4 d-flex flex-column justify-content-end'>
           <label htmlFor='toYear'>To Year</label>
           <input
             id='toYear'
             name='toYear'
             className='d-block form-control'
             type='number'
-            min={1000}
+            min={minYear}
             max={thisYear}
             value={formState.searchFilters.Year[1]}
             onChange={e => {
@@ -190,7 +191,7 @@ const SearchFilters = ({ formState, setFormState }) => {
             }}
           />
         </div>
-        <div>
+        <div className='d-flex flex-column justify-content-end'>
           <label htmlFor='sampleCountry'>Sample country</label>
           <input
             className='d-block form-control'

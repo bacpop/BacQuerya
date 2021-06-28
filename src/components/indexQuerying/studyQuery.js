@@ -11,7 +11,12 @@ async function studyQuery (formData) {
   }
   const fetchResponse = await window.fetch('https://bacquerya.azurewebsites.net:443/study', fetchData)
   const resolvedResponse = await fetchResponse.json()
-  return resolvedResponse.result
+  return {
+    resultCount: resolvedResponse.resultCount == null
+      ? -1
+      : resolvedResponse.resultCount,
+    searchResult: resolvedResponse.result
+  }
 }
 
 export default studyQuery

@@ -10,7 +10,12 @@ async function sequenceQuery(formData) {
   }
   const fetchResponse = await window.fetch('https://bacquerya.azurewebsites.net:443/sequence', fetchData)
   const resolvedResponse = await fetchResponse.json()
-  return resolvedResponse.resultMetrics
+  return {
+    resultCount: resolvedResponse.resultCount == null
+      ? -1
+      : resolvedResponse.resultCount,
+    searchResult: resolvedResponse.resultMetrics
+  }
 }
 
 export default sequenceQuery
