@@ -1,4 +1,4 @@
-async function isolateQuery (formData, filters) {
+async function isolateQuery (formData) {
   const fetchData = {
     method: 'POST',
     mode: 'cors',
