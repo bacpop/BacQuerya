@@ -72,8 +72,10 @@ const typeRequest = {
         </>
       )],
       ['Species', r => r._source.Organism_name],
-      ['Genome representation', r => r._source.Genome_representation],
-      ['Number of contigs', r => r._source.contig_stats?.sequence_count || ''],
+      // ['Genome representation', r => r._source.Genome_representation],
+      ['Country', r => r._source.Country],
+      ['Year', r => r._source.Year],
+      ['Number of Contigs', r => r._source.contig_stats?.sequence_count || ''],
       ['Download links', r => (
         <>
           {
@@ -86,8 +88,13 @@ const typeRequest = {
                 key={link}
                 href={link}
                 rel='noreferrer'
+                title={link.split('/')[link.split('/').length - 1]}
               >
-                {link.split('/')[link.split('/').length - 1]}
+                {
+                  r._source.Genome_representation === 'full'
+                    ? 'Assembly'
+                    : 'Reads'
+                }
               </a>
             ))
           }
@@ -334,26 +341,19 @@ const SearchPage = () => {
     }
   }, [
     searchResults,
-    setFormState,
-    setLoading,
-    search
+    setLoading
   ])
 
   useEffect(() => {
     if (loading) {
       return
     }
-    let cancelled = false
     const onScroll = () => {
       if (
         !loading &&
+        !endOfResults &&
         tableWrapperRef.current.scrollHeight <= window.scrollY + window.innerHeight
       ) {
-        // search(
-        //   setFormState({
-        //     pageNumber: (formState.pageNumber || 1) + 1
-        //   })
-        // )
         loadNextPage()
       }
     }
@@ -366,12 +366,12 @@ const SearchPage = () => {
       window.addEventListener(event, onScroll, true)
     })
     return () => {
-      cancelled = true
       events.forEach(event => {
         window.removeEventListener(event, onScroll, true)
       })
     }
   }, [
+    loadNextPage,
     searchResults,
     loading,
     setFormState,
@@ -509,7 +509,7 @@ const SearchPage = () => {
                             {
                               showDownloadOptions && (
                                 <div
-                                  className='position-absolute bg-light rounded p-2'
+                                  className='position-absolute bg-light rounded p-2 mx-2'
                                   style={{
                                     right: '0',
                                     width: '500px',
@@ -549,7 +549,7 @@ const SearchPage = () => {
                       typeRequest[searchResults.formState.searchType].table.map(([label]) => (
                         <th
                           key={label}
-                          className='sticky-top bg-white py-2 pr-3'
+                          className='sticky-top bg-white py-2 pr-3 align-text-top'
                         >
                           {label}
                         </th>
@@ -581,8 +581,8 @@ const SearchPage = () => {
             : null)
         }
         <div
+          className='position-relative d-flex align-items-center justify-content-center'
           style={{
-            position: 'relative',
             marginTop: '10px',
             marginBottom: '200px'
           }}

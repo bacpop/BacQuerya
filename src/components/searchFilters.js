@@ -1,5 +1,4 @@
 // Isolate search filters (complex enough to warrant their own file)
-import { useState } from 'react'
 
 const maxContigs = 50
 const minYear = 1950
@@ -23,51 +22,10 @@ const Checkbox = ({ label, value, onChange }) => (
 )
 
 const SearchFilters = ({ formState, setFormState }) => {
-  const setMinMaxContigs = ({ min: rawMin, max: rawMax }) => {
-    const min = rawMin != null ? rawMin : formState.searchFilters.minN50
-    const max = rawMax != null
-      ? rawMax
-      : (
-          formState.searchFilters.noContigs === 'All'
-            ? maxContigs
-            : formState.searchFilters.noContigs
-        )
-
-    const newMin = rawMin == null
-      ? Math.min(initialMinMaxContigs.min, max)
-      : min
-
-    const newMax = rawMax == null
-      ? Math.max(min, initialMinMaxContigs.max)
-      : max
-
-    setFormState({
-      searchFilters: {
-        minN50: newMin,
-        noContigs: newMax === maxContigs ? 'All' : newMax
-      }
-    })
-  }
-
   const minContig = formState.searchFilters.minN50
   const maxContig = formState.searchFilters.noContigs === 'All'
     ? maxContigs
     : formState.searchFilters.noContigs
-  const [initialMinMaxContigs, setInitialMinMaxContigs] = useState({
-    min: minContig,
-    max: maxContig
-  })
-  const applyInitialMinMaxContigs = (() => {
-    const onEvent = () => setInitialMinMaxContigs({
-      min: minContig,
-      max: maxContig
-    })
-    return {
-      onMouseDown: onEvent,
-      onKeyDown: onEvent,
-      onTouchStart: onEvent
-    }
-  })()
 
   return (
     <>
@@ -103,19 +61,20 @@ const SearchFilters = ({ formState, setFormState }) => {
             maxWidth: '200px'
           }}
         >
-          <label htmlFor='minContig'>Min Contigs: {minContig}</label>
+          <label htmlFor='minContig'>Min Contigs: {minContig.toLocaleString('en-US')}</label>
           <input
             id='minContig'
             className='display-block form-range custom-range'
             type='range'
             step={1}
             min={0}
-            max={50}
+            max={1e7}
             value={minContig}
-            {...applyInitialMinMaxContigs}
             onChange={e => {
-              setMinMaxContigs({
-                min: +e.target.value
+              setFormState({
+                searchFilters: {
+                  minN50: +e.target.value
+                }
               })
             }}
           />
@@ -134,10 +93,13 @@ const SearchFilters = ({ formState, setFormState }) => {
             min={0}
             max={50}
             value={maxContig}
-            {...applyInitialMinMaxContigs}
             onChange={e => {
-              setMinMaxContigs({
-                max: +e.target.value
+              setFormState({
+                searchFilters: {
+                  noContigs: +e.target.value === maxContigs
+                    ? 'All'
+                    : +e.target.value
+                }
               })
             }}
           />

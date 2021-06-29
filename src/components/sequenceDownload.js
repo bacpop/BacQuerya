@@ -69,13 +69,12 @@ export function SequenceDownload ({ sequenceUrls, setOpenDownloads }) {
               className='my-2'
               name='enteredEmail'
               value={emailValue}
-              placeholder='Email address'
+              placeholder='Email address (optional)'
               onChange={e => setEmailValue(e.target.value)}
             />
             <Button
               className='mt-2'
               type='submit'
-              disabled={!emailValue.trim()}
             >
               Request sequences
             </Button>
