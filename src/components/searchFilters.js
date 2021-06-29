@@ -1,70 +1,178 @@
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import { useState } from 'react';
+// Isolate search filters (complex enough to warrant their own file)
 
-import "../CSS/searchFilters.css"
+const maxContigs = 50
+const minYear = 1950
+const thisYear = new Date().getFullYear()
 
-const intConverter = value =>{
-    if (value === "All") {
-        return value;
-    };
-    return Number(value);
-};
+const Checkbox = ({ label, value, onChange }) => (
+  <div className='form-check mr-4'>
+    <input
+      type='checkbox'
+      id={`checkbox-${label}`}
+      className='form-check-input'
+      checked={value}
+      onChange={e => {
+        onChange(e.target.checked)
+      }}
+    />
+    <label className='form-check-label' htmlFor={`checkbox-${label}`}>
+      {label}
+    </label>
+  </div>
+)
 
-export function FilterComponent(props) {
+const SearchFilters = ({ formState, setFormState }) => {
+  const minContig = formState.searchFilters.minN50
+  const maxContig = formState.searchFilters.noContigs === 'All'
+    ? maxContigs
+    : formState.searchFilters.noContigs
 
-    const [sliderValue, setSliderValue] = useState(props.selectedFilters.minN50);
-    const [contigValue, setContigValue] = useState(props.selectedFilters.noContigs);
-    const [countryValue, setCountryValue] = useState(props.selectedFilters.Country);
-    const [yearValue, setYearValue] = useState(props.selectedFilters.Year);
+  return (
+    <>
+      <h6>Filters</h6>
+      <div className='d-flex'>
+        <Checkbox
+          label='Assemblies'
+          value={formState.searchFilters.assemblies}
+          onChange={assemblies => {
+            setFormState({
+              searchFilters: {
+                assemblies
+              }
+            })
+          }}
+        />
+        <Checkbox
+          label='Reads'
+          value={formState.searchFilters.reads}
+          onChange={reads => {
+            setFormState({
+              searchFilters: {
+                reads
+              }
+            })
+          }}
+        />
+      </div>
+      <div className='d-flex'>
+        <div
+          className='flex-fill mx-2'
+          style={{
+            maxWidth: '200px'
+          }}
+        >
+          <label htmlFor='minContig'>Min N50: {minContig.toLocaleString('en-US')}</label>
+          <input
+            id='minContig'
+            className='display-block form-range custom-range'
+            type='range'
+            step={1}
+            min={0}
+            max={1e6}
+            value={minContig}
+            onChange={e => {
+              setFormState({
+                searchFilters: {
+                  minN50: +e.target.value
+                }
+              })
+            }}
+          />
+        </div>
+        <div
+          className='flex-fill mx-2'
+          style={{
+            maxWidth: '200px'
+          }}
+        >
+          <label htmlFor='minContig'>Max Contigs: {formState.searchFilters.noContigs}</label>
+          <input
+            className='display-block form-range custom-range'
+            type='range'
+            step={1}
+            min={0}
+            max={50}
+            value={maxContig}
+            onChange={e => {
+              setFormState({
+                searchFilters: {
+                  noContigs: +e.target.value === maxContigs
+                    ? 'All'
+                    : +e.target.value
+                }
+              })
+            }}
+          />
+        </div>
+      </div>
 
-    function getFilters(e) {
-        e.preventDefault()
-        props.setSelectedFilters(
-            {assemblies: e.target.assemblies.checked,
-            reads: e.target.reads.checked,
-            minN50: Number(sliderValue),
-            noContigs: intConverter(contigValue),
-            Country: countryValue,
-            Year: yearValue})
-        props.setOpenFilters(false)
-        props.setSearch(true)
-    }
+      <div className='d-flex flex-wrap'>
+        <div className='mr-4 d-flex flex-column justify-content-end'>
+          <label htmlFor='fromYear'>From Year</label>
+          <input
+            id='fromYear'
+            name='fromYear'
+            className='d-block form-control'
+            type='number'
+            min={minYear}
+            max={thisYear}
+            value={formState.searchFilters.Year[0]}
+            onChange={e => {
+              const value = +e.target.value
+              setFormState({
+                searchFilters: {
+                  Year: [
+                    value,
+                    Math.max(value, formState.searchFilters.Year[1])
+                  ]
+                }
+              })
+            }}
+          />
+        </div>
+        <div className='mr-4 d-flex flex-column justify-content-end'>
+          <label htmlFor='toYear'>To Year</label>
+          <input
+            id='toYear'
+            name='toYear'
+            className='d-block form-control'
+            type='number'
+            min={minYear}
+            max={thisYear}
+            value={formState.searchFilters.Year[1]}
+            onChange={e => {
+              const value = +e.target.value
+              setFormState({
+                searchFilters: {
+                  Year: [
+                    Math.min(value, formState.searchFilters.Year[0]),
+                    value
+                  ]
+                }
+              })
+            }}
+          />
+        </div>
+        <div className='d-flex flex-column justify-content-end'>
+          <label htmlFor='sampleCountry'>Sample country</label>
+          <input
+            className='d-block form-control'
+            id='sampleCountry'
+            name='sampleCountry'
+            value={formState.searchFilters.Country}
+            onChange={e => {
+              setFormState({
+                searchFilters: {
+                  Country: e.target.value
+                }
+              })
+            }}
+          />
+        </div>
+      </div>
 
-    return (
-            <div className="filterOptions-options">
-                <Form onSubmit={getFilters}>
-                    <div className="filterOptions-options-item">
-                        <Form.Check type="checkbox" name="assemblies" label="Assemblies" defaultChecked={props.selectedFilters.assemblies}/>
-                    </div>
-                    <div className="filterOptions-options-item">
-                        <Form.Check type="checkbox" name="reads" label="Reads" defaultChecked={props.selectedFilters.reads}/>
-                    </div>
-                    <div className="filterOptions-options-slider-container">
-                        <div className="slider-label" id="mediumLarge-font">
-                            <Form.Label> Minimum N50 </Form.Label>
-                        </div>
-                        <div className="slider">
-                            <Form.Control disabled style={{width: (window.innerWidth*0.0656) + "px", height: (1.64 + "vh")}} type="range" name="N50Slider" min={0} max={100000} value={sliderValue} onChange={e => setSliderValue(e.target.value)}/>
-                        </div>
-                        <div className="slider-input">
-                            <Form.Control disabled size="sm" name="N50Input" value={sliderValue} onChange={e => setSliderValue(e.target.value)} id="mediumLarge-font"/>
-                        </div>
-                    </div>
-                    <div className="filterOptions-options-contigs-container">
-                        <Form.Label className="contig-label" id="mediumLarge-font"> Maximum number of contigs </Form.Label>
-                        <Form.Control className="contig-input" size="sm" name="noContigs" value={contigValue} onChange={e => setContigValue(e.target.value)} id="mediumLarge-font"/>
-                    </div>
-                    <div className="filterOptions-options-year-container">
-                        <Form.Label className="year-label" id="mediumLarge-font">Sample years</Form.Label>
-                        <Form.Control className="year-input" size="sm" name="Year" value={yearValue.join("-")} onChange={e => setYearValue(e.target.value.replace(" ", "").split("-"))} id="mediumLarge-font"/>
-                    </div>
-                    <div className="filterOptions-options-country-container">
-                        <Form.Label className="country-label" id="mediumLarge-font">Sample country</Form.Label>
-                        <Form.Control className="country-input" size="sm" name="Country" value={countryValue} onChange={e => setCountryValue(e.target.value)} id="mediumLarge-font"/>
-                    </div>
-                    <Button className="filterOptions-options-button" variant="outline-primary" type="submit" id="mediumLarge-font">Apply filters</Button>
-                </Form>
-            </div>
-    )
+    </>
+  )
 }
+
+export default SearchFilters

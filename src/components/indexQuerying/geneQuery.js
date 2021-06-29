@@ -1,16 +1,19 @@
-async function geneQuery(formData) {
-    const fetchData =  {
-        method: 'POST',
-        mode: 'cors',
-        headers : {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({'searchTerm': formData, "searchType": "gene"}),
-      };
-    const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/geneQuery", fetchData);
-    const resolvedResponse = await fetchResponse.json();
-    return resolvedResponse.searchResult;
+async function geneQuery (formData) {
+  const fetchData = {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  }
+  const fetchResponse = await window.fetch('https://bacquerya.azurewebsites.net:443/geneQuery', fetchData)
+  const resolvedResponse = await fetchResponse.json()
+  return {
+    resultCount: resolvedResponse.resultCount,
+    searchResult: resolvedResponse.searchResult
+  }
 };
 
 export function geneAlignment () {

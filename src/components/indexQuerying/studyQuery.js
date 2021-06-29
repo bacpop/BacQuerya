@@ -1,19 +1,25 @@
-async function studyQuery(formData) {
-  const fetchData =  {
+async function studyQuery (formData) {
+  const fetchData = {
     method: 'POST',
     mode: 'cors',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify({'searchTerm': formData, 'source': 'searchBar'}),
-  };
-  const fetchResponse = await fetch('https://bacquerya.azurewebsites.net:443/study', fetchData);
-  const resolvedResponse = await fetchResponse.json();
-  return resolvedResponse.result
+    // body: JSON.stringify({'searchTerm': formData, 'source': 'searchBar'}),
+    body: JSON.stringify(formData)
+  }
+  const fetchResponse = await window.fetch('https://bacquerya.azurewebsites.net:443/study', fetchData)
+  const resolvedResponse = await fetchResponse.json()
+  return {
+    resultCount: resolvedResponse.resultCount == null
+      ? -1
+      : resolvedResponse.resultCount,
+    searchResult: resolvedResponse.result
+  }
 }
 
-export default studyQuery;
+export default studyQuery
 
 export async function assignStudyAccessions(uploadedFile) {
   const data = new FormData();
