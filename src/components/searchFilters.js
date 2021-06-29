@@ -61,14 +61,14 @@ const SearchFilters = ({ formState, setFormState }) => {
             maxWidth: '200px'
           }}
         >
-          <label htmlFor='minContig'>Min Contigs: {minContig.toLocaleString('en-US')}</label>
+          <label htmlFor='minContig'>Min N50: {minContig.toLocaleString('en-US')}</label>
           <input
             id='minContig'
             className='display-block form-range custom-range'
             type='range'
             step={1}
             min={0}
-            max={1e7}
+            max={1e6}
             value={minContig}
             onChange={e => {
               setFormState({
