@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Spinner from 'react-bootstrap/Spinner'
 import { Link } from 'react-router-dom'
 
@@ -164,8 +164,50 @@ const typeRequest = {
     ]
   }
 }
-
-// Biosample accessionSpeciesGenome representationNumber of contigs
+const ResultsTable = ({ searchResults }) => {
+  const rendered = useMemo(() => (
+    <table
+      className='w-100'
+      style={{
+        fontSize: '.8rem'
+      }}
+    >
+      <thead>
+        <tr>
+          {
+          typeRequest[searchResults.formState.searchType].table.map(([label]) => (
+            <th
+              key={label}
+              className='sticky-top bg-white py-2 pr-3 align-text-top'
+            >
+              {label}
+            </th>
+          ))
+        }
+        </tr>
+      </thead>
+      <tbody>
+        {
+        searchResults.searchResult.map((data, rowIndex) => (
+          <tr key={data._id || rowIndex}>
+            {
+              typeRequest[searchResults.formState.searchType].table.map(([label, valueFn]) => (
+                <td
+                  key={label}
+                  className='pr-3'
+                >
+                  {valueFn(data)}
+                </td>
+              ))
+            }
+          </tr>
+        ))
+      }
+      </tbody>
+    </table>
+  ), [searchResults])
+  return rendered
+}
 
 const SearchPage = () => {
   const tableWrapperRef = useRef()
@@ -534,45 +576,7 @@ const SearchPage = () => {
                     </div>
                   )
                 }
-                <table
-                  className='w-100'
-                  style={{
-                    fontSize: '.8rem'
-                  }}
-                >
-                  <thead>
-                    <tr>
-                      {
-                      typeRequest[searchResults.formState.searchType].table.map(([label]) => (
-                        <th
-                          key={label}
-                          className='sticky-top bg-white py-2 pr-3 align-text-top'
-                        >
-                          {label}
-                        </th>
-                      ))
-                    }
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {
-                    searchResults.searchResult.map((data, rowIndex) => (
-                      <tr key={data._id || rowIndex}>
-                        {
-                          typeRequest[searchResults.formState.searchType].table.map(([label, valueFn]) => (
-                            <td
-                              key={label}
-                              className='pr-3'
-                            >
-                              {valueFn(data)}
-                            </td>
-                          ))
-                        }
-                      </tr>
-                    ))
-                  }
-                  </tbody>
-                </table>
+                <ResultsTable {...{ searchResults }} />
               </>
               )
             : null)

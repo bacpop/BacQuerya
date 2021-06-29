@@ -24,7 +24,7 @@ const AboutContent = ({ visible }) => {
       }}
     >
       <div ref={wrapperRef}>
-        <p>
+        <span className='d-block'>
           BacQuerya has been designed to streamline information sharing
           and reuse in Pathogen informatics by retrieving and linking
           genomic metadata from a range of information sources.
@@ -32,13 +32,13 @@ const AboutContent = ({ visible }) => {
           and the appropriate index is searched for the query term.
           BacQuerya currently only supports isolate and gene queries
           for Streptococcus pneumoniae.
-        </p>
-        <p>
-          <strong className='d-block mb-3'>Isolates</strong>
+        </span>
+        <span className='d-block'>
+          <strong className='d-block my-3'>Isolates</strong>
           <ul>
             <li>
               <strong>Searching</strong>
-              <p>
+              <span className='d-block'>
                 Users choose to search through isolates by selecting the
                 "Isolate" tab on the BacQuerya landing page (
                 <a href='www.bacquerya.com'>www.bacquerya.com</a>
@@ -50,30 +50,30 @@ const AboutContent = ({ visible }) => {
                 The first 100 search results are displayed by default and an
                 additional 100 results are displayed by scrolling to the
                 bottom of the search page.
-              </p>
+              </span>
             </li>
             <li>
               <strong>Filtering</strong>
-              <p>
+              <span className='d-block'>
                 Users can choose to apply filters to the search results.
                 These include whether to show isolates with available assemblies,
                 reads or both, isolates sample from a certain country or range
                 of years, the minimum N50 for assemblies and the maximum number
                 of contigs for assemblies.
-              </p>
+              </span>
             </li>
             <li>
               <strong>Downloading sequences</strong>
-              <p>
+              <span className='d-block'>
                 Users may also download up to 100 genomic sequences by filtering
                 through isolate search results and clicking "Download all sequences".
                 Above 100 sequences, a text file listing the sequence URLs for the
                 requested isolates is served instead.
-              </p>
+              </span>
             </li>
             <li>
               <strong>Isolate Overview</strong>
-              <p>
+              <span className='d-block'>
                 Clicking on an individual search result will open an isolate
                 overview page, summarising available metadata for that isolate.
                 These include: the species, accession IDs linked to external
@@ -90,22 +90,22 @@ const AboutContent = ({ visible }) => {
                 Bar charts are used to highlight how the assembly statistics
                 for this isolate compare to the rest of the population of
                 isolates in our databases.
-              </p>
+              </span>
             </li>
           </ul>
           <strong className='d-block mb-3'>Genes</strong>
           <ul>
             <li>
               <strong>Searching</strong>
-              <p>
+              <span className='d-block'>
                 Users can search through genes by selecting the "Gene" tab
                 and entering a search term that may be a gene name or protein
                 function.
-              </p>
+              </span>
             </li>
             <li>
               <strong>Gene Overview</strong>
-              <p>
+              <span className='d-block'>
                 Clicking on a result will open a gene overview page,
                 summarising metadata for the gene of interest, as identified
                 by Panaroo. The "Names/Aliases" field displays all publicly
@@ -120,14 +120,14 @@ const AboutContent = ({ visible }) => {
                 this alignment includes 1 representative sequence per GPSC,
                 with GPSCs assigned by the Global Pneumococcal Sequencing Project
                 (<a href='https://www.pneumogen.net/gps/'>https://www.pneumogen.net/gps/</a>).
-              </p>
+              </span>
             </li>
           </ul>
           <strong className='d-block mb-3'>Sequence</strong>
           <ul>
             <li>
               <strong>Searching</strong>
-              <p>
+              <span className='d-block'>
                 Genes can also be searched through or identified by nucleotide
                 sequence by selecting the "Sequence" tab. Sequences are
                 identified using a COBS index (Bingmann T, Bradley P, Gauger F,
@@ -139,14 +139,14 @@ const AboutContent = ({ visible }) => {
                 results link to the gene overview pages. Sequence queries
                 must be at least 31 characters long and contain only
                 "A", "C", "T" and "G" characters.
-              </p>
+              </span>
             </li>
           </ul>
           <strong className='d-block mb-3'>Study</strong>
           <ul>
             <li>
               <strong>Searching</strong>
-              <p>
+              <span className='d-block'>
                 Studies can be searched by selecting the "Study" tab and
                 searching for a title, author, DOI or study topic. Queries
                 are searched for in PubMed using Biopython (Cock PJA, Antao T,
@@ -154,11 +154,11 @@ const AboutContent = ({ visible }) => {
                 freely available Python tools for computational molecular
                 biology and bioinformatics. Computer applications in the
                 biosciences. 2009; 25 (11): 1422-1423).
-              </p>
+              </span>
             </li>
             <li>
               <strong>Study Overview</strong>
-              <p>
+              <span className='d-block'>
                 Clicking on a search result will load the metadata for that study,
                 retrieved using the CrossRef API (
                 <a
@@ -166,11 +166,11 @@ const AboutContent = ({ visible }) => {
                 >
                   https://www.crossref.org/documentation/retrieve-metadata/rest-api/
                 </a>).
-              </p>
+              </span>
             </li>
             <li>
               <strong>Submitting Supplementary Data **Currently in Beta**</strong>
-              <p>
+              <span className='d-block'>
                 There is currently no standardisation for or way to
                 programmatically access a list of isolates used in a particular
                 study. This may lead to a duplication of effort or time wasted
@@ -183,10 +183,10 @@ const AboutContent = ({ visible }) => {
                 of improving the efficiency of this process for everyone.
                 This submission portal is available through the study overview
                 pages.
-              </p>
+              </span>
             </li>
           </ul>
-          <p>All source code is available from:</p>
+          <span className='d-block'>All source code is available from:</span>
           <ul>
             <li>
               <a
@@ -210,7 +210,7 @@ const AboutContent = ({ visible }) => {
               </a>
             </li>
           </ul>
-        </p>
+        </span>
       </div>
     </div>
   )
@@ -231,7 +231,9 @@ const Header = () => {
   }
   return (
     <header className='mb-2'>
-      <div className='sticky-top container my-2 d-flex justify-content-between align-items-center bg-white'>
+      <div className={`container my-2 d-flex justify-content-between align-items-center bg-white ${
+        aboutVisible ? 'sticky-top' : ''
+      }`}>
         <h1>
           <Link to='/'>
             <img
