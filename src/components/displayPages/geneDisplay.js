@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  specificIsolateQuery
-} from '../indexQuerying/isolateQuery'
+// import {
+//   specificIsolateQuery
+// } from '../indexQuerying/isolateQuery'
 import {
   geneAlignment as requestGeneAlignment
 } from '../indexQuerying/geneQuery'
@@ -89,21 +89,13 @@ const GeneTable = ({ data, scale, differences }) => {
                     className={`text-end text-right pr-2${diffChars.some(c => c) ? ' row-different' : ''}`}
                     style={{
                       padding: 0,
+                      paddingTop: '2px',
                       margin: 0
                     }}
                   >
                     {smallLabel || label || rawKey}:
                   </td>
-                  <td
-                    className='text-monospace'
-                    style={{
-                      letterSpacing: '3px',
-                      padding: 0,
-                      margin: 0,
-                      fontSize: '127%',
-                      lineHeight: '0'
-                    }}
-                  >
+                  <td className='acids text-monospace'>
                     {segments.map((str, index) => {
                       const thisActualIndex = actualIndex
                       actualIndex += str.length
@@ -111,6 +103,9 @@ const GeneTable = ({ data, scale, differences }) => {
                       acid = validAcids.includes(acid) ? acid : 'N'
                       return (
                         <span
+                          style={{
+                            left: `${thisActualIndex}em`
+                          }}
                           className={`acid-${acid}${diffChars[thisActualIndex] ? ' different' : ''}`}
                           key={`${rawKey}-${index}`}
                         >
@@ -183,46 +178,143 @@ const GeneVisualizer = ({ data }) => {
 }
 
 const MainWrapper = ({ children }) => (
-  <div className='d-flex flex-column container text-left text-start h-100 position-absolute'>
-    <header>
-      <div className='container mt-4'>
-        <h1>Identified Genes</h1>
-      </div>
-    </header>
-    <main
-      className='d-flex flex-fill position-relative overflow-hidden'
+  <div style={{ padding: 0 }} className='d-flex flex-column container text-left text-start h-100 position-absolute'>
+    <div className='container'>
+      <h1>Identified Genes</h1>
+    </div>
+    <div
+      className='d-flex flex-fill position-relative overflow-auto px-4'
     >
-      <div className='flex-fill d-flex flex-column p-2 overflow-auto'>
+      <div className='flex-fill d-flex flex-column'>
         {children}
       </div>
-    </main>
+    </div>
   </div>
 )
 
+const GeneMetadataTable = ({ geneInfo }) => {
+  const rendered = useMemo(() => {
+    const escape = (value) => (value instanceof Object && !(value instanceof Array))
+      ? null
+      : value
+    if (!geneInfo?.geneMetadata?.isolateMetadata) {
+      return null
+    }
+    return (
+      <table>
+        <thead>
+          <tr className='align-top'>
+            {
+              [
+                'Biosample accession',
+                'Species',
+                'Country',
+                'Year',
+                'Number of contigs',
+                'Download links'
+              ].map(text => (
+                <th
+                  key={text}
+                  className='bg-white sticky-top'
+                  style={{
+                    marginLeft: '1px',
+                    boxShadow: 'inset 0 0 0 1px #dee2e6'
+                  }}
+                >
+                  {text}
+                </th>
+              ))
+            }
+          </tr>
+        </thead>
+        <tbody>
+          {
+          geneInfo.geneMetadata.isolateMetadata.map(({
+            BioSample: bioSample,
+            Organism_name: organismName,
+            Country: country,
+            Year: year,
+            contig_stats: { sequence_count: contigStats },
+            sequenceURL
+          }, index) => {
+            return (
+              <tr
+                key={bioSample}
+                className={index % 2 ? '' : 'bg-light'}
+              >
+                <td className='border'>
+                  <Link
+                    to={`/isolate/streptococcus/pneumoniae/${bioSample}`}
+                    target='_blank'
+                  >
+                    {bioSample}
+                  </Link>
+                </td>
+                <td className='border'>{escape(organismName)}</td>
+                <td className='border'>{escape(country)}</td>
+                <td className='border'>{escape(year)}</td>
+                <td className='border'>{escape(contigStats)}</td>
+                <td className='border' style={{ fontSize: '.75rem' }}>
+                  {
+                    (
+                      sequenceURL instanceof Array
+                        ? sequenceURL
+                        : [sequenceURL]
+                    ).map((link, index, array) => (
+                      // <a
+                      //   key={link}
+                      //   href={link}
+                      //   rel='noreferrer'
+                      // >
+                      //   {link.split('/')[link.split('/').length - 1]}
+                      // </a>
+                      <a
+                        key={link}
+                        href={link}
+                        rel='noreferrer'
+                        title={link.split('/')[link.split('/').length - 1]}
+                      >
+                        {
+                          index < array.length - 1 || array.length === 2
+                            ? `read_${index + 1}`
+                            : 'assembly'
+                        }
+                      </a>
+                    ))
+                  }
+                </td>
+              </tr>
+            )
+          })
+        }
+        </tbody>
+      </table>
+    )
+  }, [geneInfo])
+  return rendered
+}
+
 const GeneDisplay = ({ geneInfo, noResults }) => {
-  const [queryResult, setQueryResult] = useState([])
+  // const [queryResult, setQueryResult] = useState([])
   const [geneAlignment, setGeneAlignment] = useState({})
   const displayNames = useMemo(() => (
     geneInfo && geneInfo.panarooNames.split('~~~').filter(name => !['UNNAMED', 'PRED_'].includes(name))
-  ), [geneInfo?.panarooNames])
+  ), [geneInfo])
 
-  useEffect(() => {
-    if (geneInfo?.foundIn_biosamples) {
-      specificIsolateQuery(geneInfo.foundIn_biosamples).then(response => {
-        setQueryResult(response)
-      })
-    }
-  }, [geneInfo?.foundIn_biosamples])
+  // useEffect(() => {
+  //   console.log(geneInfo)
+  //   if (geneInfo?.foundIn_biosamples) {
+  //     specificIsolateQuery(geneInfo.foundIn_biosamples).then(response => {
+  //       setQueryResult(response)
+  //     })
+  //   }
+  // }, [geneInfo?.foundIn_biosamples])
 
   useEffect(() => {
     requestGeneAlignment().then(alignment => {
       setGeneAlignment(alignment)
     })
   }, [])
-
-  if (noResults) {
-
-  }
 
   return (
     <MainWrapper>
@@ -238,13 +330,18 @@ const GeneDisplay = ({ geneInfo, noResults }) => {
                 {() => (
                   <KeyVals items={[
                     ['Names/Aliases', displayNames.join(', ')],
-                    ['Gene frequency', `${((queryResult.length / 26616) * 100).toFixed(2)}%`]
+                    // ['Gene frequency', `${((queryResult.length / 26616) * 100).toFixed(2)}%`]
+                    ['Gene frequency', `${((geneInfo?.geneMetadata.isolateMetadata.length / 26616) * 100).toFixed(2)}%`]
                   ]}
                   />
                 )}
               </LoadBox>
               <div className='my-4'>
-                Gene was found in {queryResult.length} isolates
+                Gene was found in {
+                  // queryResult.length
+                  geneInfo?.geneMetadata.isolateMetadata.length
+                } isolates
+
               </div>
 
               <div className='mt-4'>
@@ -285,78 +382,13 @@ const GeneDisplay = ({ geneInfo, noResults }) => {
                 </div>
               )
             }
-              {
-              queryResult.length ? (
-                <table>
-                  <thead>
-                    <tr>
-                      <th className='border'>Biosample accession</th>
-                      <th className='border'>Species</th>
-                      <th className='border'>Genome representation</th>
-                      <th className='border'>Number of contigs</th>
-                      <th className='border'>Download links</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {
-                    queryResult.map(({
-                      _source: {
-                        BioSample,
-                        Organism_name: organismName,
-                        Genome_representation: genomeRepresentation,
-                        contig_stats: contigStats,
-                        sequenceURL
-                      }
-                    }, index) => (
-                      <tr
-                        key={BioSample}
-                        className={index % 2 ? '' : 'bg-light'}
-                      >
-                        <td className='border'>
-                          <Link
-                            to={`/isolate/streptococcus/pneumoniae/${BioSample}`}
-                            target='_blank'
-                          >
-                            {BioSample}
-                          </Link>
-                        </td>
-                        <td className='border'>{organismName}</td>
-                        <td className='border'>{genomeRepresentation}</td>
-                        <td className='border'>
-                          {
-                            contigStats && contigStats.sequence_count
-                          }
-                        </td>
-                        <td className='border' style={{ fontSize: '.75rem' }}>
-                          {
-                            (
-                              sequenceURL instanceof Array
-                                ? sequenceURL
-                                : [sequenceURL]
-                            ).map(link => (
-                              <a
-                                key={link}
-                                href={link}
-                                rel='noreferrer'
-                              >
-                                {link.split('/')[link.split('/').length - 1]}
-                              </a>
-                            ))
-                          }
-                        </td>
-                      </tr>
-                    ))
-                  }
-                  </tbody>
-                </table>
-              )
-                : null
-            }
               <LoadBox value={geneAlignment} className='mt-4'>
                 {(genes) => (
                   <GeneVisualizer data={genes} />
                 )}
               </LoadBox>
+              <GeneMetadataTable {...{ geneInfo }} />
+              <div style={{ minHeight: '3rem' }} />
             </>
             )
       }

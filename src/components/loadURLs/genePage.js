@@ -12,12 +12,14 @@ const GenePage = ({ match }) => {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
-    specificGeneQuery([].concat(geneName)).then((responseJson) => {
-      updateResult(responseJson[0]?._source)
-      setLoaded(true)
+    if (loaded) {
+      return
     }
-    )
-  }, [updateResult, setLoaded])
+    specificGeneQuery([].concat(geneName)).then((responseJson) => {
+      setLoaded(true)
+      updateResult(responseJson[0]?._source)
+    })
+  }, [geneName, updateResult, loaded, setLoaded])
 
   return (
     <div className='search_results'>
