@@ -429,7 +429,7 @@ const SearchPage = () => {
 
   return (
     <div
-      className='d-flex flex-column container text-left text-start h-100 position-absolute'
+      className='d-flex mt-3 flex-column container text-left text-start h-100 position-absolute'
     >
       <div className='d-flex'>
         <div className='flex-fill d-flex flex-column mr-4'>

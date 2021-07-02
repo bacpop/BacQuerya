@@ -15,7 +15,7 @@ const AboutContent = ({ visible }) => {
   }, [])
   return (
     <div
-      className='mb-5 mx-3 overflow-hidden'
+      className={`mx-3 overflow-hidden ${visible ? 'mb-5' : ''}`}
       style={{
         transitionDuration: '500ms',
         maxWidth: '60rem',
@@ -229,9 +229,9 @@ const Header = () => {
     }
   }
   return (
-    <header className='mb-2'>
+    <header>
       <div
-        className={`container my-2 d-flex justify-content-between align-items-center bg-white ${
+        className={`container mb-2 d-flex justify-content-between align-items-center bg-white ${
           aboutVisible ? 'sticky-top' : ''
         }`}
       >
