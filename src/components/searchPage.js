@@ -113,7 +113,7 @@ const typeRequest = {
       ['Study title', r => (
         <Link
           className='py-2'
-          to={`/study/${r.encodedDOI}`}
+          to={`/study/${window.encodeURIComponent(r.encodedDOI)}`}
           target='_blank'
         >
           {r.Title}
@@ -209,6 +209,7 @@ const ResultsTable = ({ searchResults }) => {
 }
 
 const SearchPage = () => {
+  const searchInputRef = useRef()
   const tableWrapperRef = useRef()
   const [formState, setFormStateObject] = useState(() => ({
     searchType: 'isolate',
@@ -387,6 +388,10 @@ const SearchPage = () => {
   ])
 
   useEffect(() => {
+    searchInputRef.current.focus()
+  }, [])
+
+  useEffect(() => {
     if (loading) {
       return
     }
@@ -428,8 +433,19 @@ const SearchPage = () => {
     >
       <div className='d-flex'>
         <div className='flex-fill d-flex flex-column mr-4'>
-          <div className='d-flex  mb-4'>
+          <form
+            className='d-flex mb-4'
+            onSubmit={(e) => {
+              e.preventDefault()
+              search(
+                setFormState({
+                  pageNumber: 1
+                })
+              )
+            }}
+          >
             <input
+              ref={searchInputRef}
               name='searchTerm'
               className='flex-fill mr-2 form-control'
               value={formState.searchTerm}
@@ -441,24 +457,18 @@ const SearchPage = () => {
             />
             <div className='d-flex align-items-end'>
               <button
+                type='submit'
                 className={`btn ${
                   searchResultUpdated
                     ? 'btn-primary'
                     : 'btn-secondary'
                 }`}
                 disabled={sequenceContainsInvalidChars || sequenceIsNotLongEnough}
-                onClick={() => {
-                  search(
-                    setFormState({
-                      pageNumber: 1
-                    })
-                  )
-                }}
               >
                 Search
               </button>
             </div>
-          </div>
+          </form>
 
           <div className='btn-group'>
             {
