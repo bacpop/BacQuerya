@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   populationAssemblyStatsN50,
@@ -6,7 +6,8 @@ import {
   populationAssemblyTotalBps,
   populationAssemblyContigCount
 } from '../indexQuerying/isolateQuery.js'
-import Spinner from 'react-bootstrap/Spinner'
+import Histogram from '../common/Histogram.js'
+import StackedBar from '../common/StackedBar.js'
 
 import KeyVals from '../common/KeyVals.js'
 
@@ -35,9 +36,9 @@ const getJsonHref = (data) =>
     )
   )
 
-const NavLink = ({ to = '', children }) => (
-  <Link to={`/isolate/streptococcus${to}`} target='_blank'>{children}</Link>
-)
+// const NavLink = ({ to = '', children }) => (
+//   <Link to={`/isolate/streptococcus${to}`} target='_blank'>{children}</Link>
+// )
 
 const SectionContainer = ({ title, children }) => (
   <div className='container mb-4'>
@@ -45,212 +46,6 @@ const SectionContainer = ({ title, children }) => (
     {children}
   </div>
 )
-
-const Histogram = ({
-  xAxisLabel,
-  yAxisLabel,
-  active,
-  scale,
-  data,
-  labels,
-  min,
-  max,
-  ...props
-}) => {
-  const canvasRef = useRef()
-  const [dimensions, setDimensions] = useState({
-    width: 0,
-    height: 0
-  })
-  const yAxisMargin = 80
-  const rowCount = Math.floor(dimensions.height / 20)
-
-  const minNum = +`${min}`.replace(/,/g, '')
-  const maxNum = +`${max}`.replace(/,/g, '')
-
-  useEffect(() => {
-    if (!canvasRef.current) {
-      return
-    }
-    let isRendering = false
-    const update = ({ context, width, height }) => {
-      context.save()
-      const barWidth = width / data.length
-      const total = data.reduce((total, n) => Math.max(total, n), 0)
-
-      context.fillStyle = '#aaa'
-      context.fillRect(0, 0, width, height)
-
-      context.font = `${barWidth / 1.3}px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"`
-
-      data.forEach((n, index) => {
-        context.fillStyle = '#888'
-        context.fillRect(index * barWidth, 0, 1, height)
-
-        if (active?.[index]) {
-          context.fillStyle = '#fcc'
-          context.fillRect(
-            Math.floor(index * barWidth),
-            0,
-            Math.ceil(barWidth),
-            height
-          )
-          context.fillStyle = '#f00'
-        } else {
-          context.fillStyle = '#88b'
-        }
-        context.fillRect(
-          Math.floor(index * barWidth),
-          (height - ((n / total) * height * scale)),
-          Math.ceil(barWidth),
-          height * scale
-        )
-
-        if (labels && labels[index]) {
-          context.save()
-          context.fillStyle = 'rgba(0,0,0,0.6)'
-          context.translate(Math.floor((index + 1) * barWidth) - 5, height - 10)
-          context.rotate(270 * Math.PI / 180)
-          context.fillText(n.toLocaleString('en-US'), 0, 0)
-          context.restore()
-        }
-      })
-
-      context.restore()
-    }
-    const prepRerender = () => {
-      if (isRendering) return
-      isRendering = true
-      window.requestAnimationFrame(() => {
-        isRendering = false
-
-        const canvas = canvasRef.current
-        if (!canvas) {
-          return
-        }
-        const context = canvas.getContext('2d')
-
-        const { width: rawWidth, height } = canvas.parentNode.getBoundingClientRect()
-        const width = rawWidth
-
-        const ratio = window.devicePixelRatio || 1
-
-        canvas.width = ratio * width
-        canvas.height = ratio * height
-        context.scale(ratio, ratio)
-        if (dimensions.width && dimensions.height) {
-          update({ context, width, height })
-        }
-
-        // Recalc the width AFTER render
-        const { width: widthAfter, height: heightAfter } = canvas.parentNode.getBoundingClientRect()
-        if (dimensions.width !== widthAfter || dimensions.height !== heightAfter) {
-          setDimensions({
-            width: widthAfter,
-            height: heightAfter
-          })
-        }
-      })
-    }
-    prepRerender()
-    window.addEventListener('resize', prepRerender, true)
-    return () => window.removeEventListener('resize', prepRerender, true)
-  }, [dimensions, setDimensions, active, scale, data, labels])
-
-  // Spinner
-  return (data.length)
-    ? (
-      <div className='d-flex flex-column overflow-hidden position-relative' {...props}>
-        <h6
-          className='position-absolute'
-          style={{
-            transform: 'rotate(270deg)',
-            transformOrigin: `${dimensions.height / 2}px ${dimensions.height / 2}px`,
-            width: `${dimensions.height}px`,
-            top: '20px'
-          }}
-        >
-          {yAxisLabel}
-        </h6>
-        <h6
-          style={{
-            marginLeft: `${yAxisMargin}px`,
-            marginBottom: '2px'
-          }}
-        >
-          {xAxisLabel}
-        </h6>
-        <div
-          className='flex-fill overflow-hidden'
-          style={{
-            marginLeft: `${yAxisMargin}px`,
-            marginRight: '48px'
-          }}
-        >
-          <canvas ref={canvasRef} className='w-100 h-100' />
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column-reverse',
-            fontSize: '14px',
-            height: `${dimensions.height}px`,
-            justifyContent: 'space-between',
-            left: '24px',
-            lineHeight: '0',
-            position: 'absolute',
-            textAlign: 'right',
-            top: '21px',
-            width: `${yAxisMargin - 28}px`
-          }}
-        >
-          {
-            Array.from(Array(rowCount)).map((_, index) => (
-              <div key={`${xAxisLabel}-${index}`}>
-                {Math.round(minNum + (maxNum - minNum) * (index / (rowCount - 1))).toLocaleString('en-US')}
-              </div>
-            ))
-          }
-        </div>
-        {labels && (
-          <div
-            className='position-relative'
-            style={{
-              height: '100px',
-              marginLeft: `${yAxisMargin}px`
-            }}
-          >
-            {
-              labels.map((label, index) => (
-                <div
-                  key={`${label}-${index}`}
-                  style={{
-                    position: 'absolute',
-                    width: '100px',
-                    textAlign: 'right',
-                    left: `${-48 + (index / labels.length * dimensions.width)}px`,
-                    top: '85px',
-                    transform: 'rotate(300deg)',
-                    transformOrigin: '0% 0%',
-                    fontSize: `${(dimensions.width / 2 / labels.length)}px`
-                  }}
-                >
-                  {
-                    label
-                  }
-                </div>
-              ))
-            }
-          </div>
-        )}
-      </div>
-      )
-    : (
-      <div className='w-100 d-flex justify-content-center'>
-        <Spinner animation='border' variant='primary' />
-      </div>
-      )
-}
 
 const graphOptions = [
   {
@@ -289,6 +84,13 @@ const graphOptions = [
     isolateInfoProp: 'sequence_count',
     populationAssemblyProp: 'contig_count',
     populationAssemblyRequest: populationAssemblyContigCount
+  },
+  {
+    custom: (props) => <StackedBar {...props} />,
+    button: 'Species Containment',
+    title: 'Species Containment',
+    xAxis: 'x-axis',
+    yAxis: 'y-axis'
   }
 ]
 
@@ -301,7 +103,7 @@ const IsolateDisplay = ({
     groups: []
   })
   const [searchFilter, setSearchFilter] = useState('')
-  const [histogramScale, setHistogramScale] = useState(1)
+  const [graphScale, setGraphScale] = useState(1)
   const sortedConsistentNames = useMemo(
     () => (isolateInfo.consistentNames || [])
       .concat()
@@ -314,6 +116,9 @@ const IsolateDisplay = ({
   const activeGraph = graphOptions[activeGraphIndex]
 
   const activeRows = useMemo(() => {
+    if (activeGraph.custom) {
+      return {}
+    }
     const contigRow = isolateInfo.contig_stats[activeGraph.isolateInfoProp]
     return populationAssemblyStats.groups.map(
       contigs => contigs.reduce(
@@ -324,6 +129,9 @@ const IsolateDisplay = ({
   }, [populationAssemblyStats, activeGraph, isolateInfo])
 
   const histogramProps = useMemo(() => {
+    if (activeGraph.custom) {
+      return {}
+    }
     if (!isolateInfo) return Array.from(Array(populationAssemblyStats.groups.length)).map((_) => [])
 
     let minGroupCount = Infinity
@@ -337,8 +145,8 @@ const IsolateDisplay = ({
       xAxisLabel: activeGraph.xAxis,
       yAxisLabel: activeGraph.yAxis,
       min: minGroupCount.toLocaleString('en-US'),
-      max: Math.round(maxGroupCount / histogramScale).toLocaleString('en-US'),
-      scale: histogramScale,
+      max: Math.round(maxGroupCount / graphScale).toLocaleString('en-US'),
+      scale: +graphScale,
       style: {
         height: '500px'
       },
@@ -352,7 +160,53 @@ const IsolateDisplay = ({
       active: activeRows,
       data: populationAssemblyStats.groups.map(interval => interval.length)
     }
-  }, [histogramScale, populationAssemblyStats, isolateInfo, activeGraph, activeRows])
+  }, [graphScale, populationAssemblyStats, isolateInfo, activeGraph, activeRows])
+
+  // Don't worry about this data too much, important thing is getting the chart working
+  const speciesContainmentProps = useMemo(() => {
+    // return isolateInfo
+    return {
+      ratioScale: +graphScale,
+      data: isolateInfo.mashHashes.map((ratioStr, index) => {
+        // Convert "562/1000" -> 562
+        const ratio = +ratioStr.split('/')[0]
+        const fullSpeciesName = isolateInfo.mashSpecies[index]
+        const species = fullSpeciesName
+          .split(' ')
+          .filter((_, i) => [3, 4].includes(i))
+          .join(' ')
+
+        return {
+          ratio,
+          species,
+          fullSpeciesName
+        }
+      }).reduce((result, row) => {
+        const existingRowIndex = result.findIndex(r => r.species === row.species)
+        if (existingRowIndex !== -1) {
+          const existingRow = result[existingRowIndex]
+          // splice mutates the array!
+          result.splice(existingRowIndex, 1, {
+            ...existingRow,
+            rows: existingRow.rows.concat(row),
+            ratio: existingRow.ratio + row.ratio
+          })
+          return result
+        }
+        return [
+          ...result,
+          {
+            species: row.species,
+            rows: [row],
+            ratio: row.ratio
+          }
+        ]
+      }, []).map(({ species, ratio }) => ({
+        label: `${species} (${ratio})`,
+        amount: ratio
+      }))
+    }
+  }, [graphScale, isolateInfo])
 
   const updateResults = useCallback(() => {
     setFilteredResults(
@@ -385,6 +239,11 @@ const IsolateDisplay = ({
         groups: []
       })
     }, 200)
+
+    if (!graphOptions[activeGraphIndex].populationAssemblyRequest) {
+      clearTimeout(timeout)
+      return
+    }
 
     graphOptions[activeGraphIndex].populationAssemblyRequest().then((data) => {
       clearTimeout(timeout)
@@ -549,19 +408,24 @@ const IsolateDisplay = ({
                 marginRight: '35px'
               }}
             >
-              <Histogram {...histogramProps} />
+              {
+                activeGraph.custom
+                  ? activeGraph.custom(speciesContainmentProps)
+                  : <Histogram {...histogramProps} />
+              }
+
             </div>
             <input
               type='range'
-              value={histogramScale}
+              value={graphScale}
               min={1}
-              max={200}
+              max={100}
               step={0.01}
               style={{
                 marginLeft: '30px',
                 width: 'calc(100% - 100px)'
               }}
-              onChange={(e) => setHistogramScale(e.target.value)}
+              onChange={(e) => setGraphScale(e.target.value)}
             />
           </SectionContainer>
           <SectionContainer>
