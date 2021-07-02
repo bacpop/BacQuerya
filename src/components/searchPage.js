@@ -9,7 +9,6 @@ import geneQuery from './indexQuerying/geneQuery'
 import sequenceQuery from './indexQuerying/sequenceQuery'
 import FilterComponent from './searchFilters'
 import { SequenceDownload } from './sequenceDownload'
-import Header from './header'
 import '../CSS/searchPage.css'
 
 const splitGeneNames = (result) => {
@@ -427,7 +426,6 @@ const SearchPage = () => {
     <div
       className='d-flex flex-column container text-left text-start h-100 position-absolute'
     >
-      <Header />
       <div className='d-flex'>
         <div className='flex-fill d-flex flex-column mr-4'>
           <div className='d-flex  mb-4'>

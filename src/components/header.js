@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
 
 const AboutContent = ({ visible }) => {
   const [maxHeight, setMaxHeight] = useState()
@@ -16,7 +15,7 @@ const AboutContent = ({ visible }) => {
   }, [])
   return (
     <div
-      className='mb-5 overflow-hidden'
+      className='mb-5 mx-3 overflow-hidden'
       style={{
         transitionDuration: '500ms',
         maxWidth: '60rem',
@@ -231,21 +230,23 @@ const Header = () => {
   }
   return (
     <header className='mb-2'>
-      <div className={`container my-2 d-flex justify-content-between align-items-center bg-white ${
-        aboutVisible ? 'sticky-top' : ''
-      }`}>
+      <div
+        className={`container my-2 d-flex justify-content-between align-items-center bg-white ${
+          aboutVisible ? 'sticky-top' : ''
+        }`}
+      >
         <h1>
-          <Link to='/'>
+          <a href='/'>
             <img
               {...{ 'aria-labelledby': 'BacQuerya' }}
-              src='./logo.svg'
+              src='/logo.svg'
               alt='BacQuerya'
               title='BacQuerya'
               style={{
                 width: '200px'
               }}
             />
-          </Link>
+          </a>
         </h1>
         <button className='btn btn-light m-2' onClick={toggleVisibility}>
           About
