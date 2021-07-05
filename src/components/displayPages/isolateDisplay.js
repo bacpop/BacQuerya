@@ -267,9 +267,7 @@ const IsolateDisplay = ({
       <div className='container'>
         <h1>Isolate: {isolateInfo.isolateName}</h1>
       </div>
-      <main
-        className='d-flex flex-fill position-relative overflow-hidden mb-4'
-      >
+      <div className='d-flex flex-fill position-relative overflow-hidden mb-4'>
         <div className='flex-fill p-2 overflow-auto'>
           <SectionContainer title='Overview'>
             <KeyVals items={[
@@ -405,6 +403,8 @@ const IsolateDisplay = ({
             <div
               className='d-flex'
               style={{
+                minWidth: '550px',
+                maxWidth: '1000px',
                 marginRight: '35px'
               }}
             >
@@ -457,7 +457,7 @@ const IsolateDisplay = ({
             {filteredResults}
           </div>
         </div>
-      </main>
+      </div>
 
     </div>
   )

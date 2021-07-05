@@ -113,7 +113,7 @@ const typeRequest = {
       ['Study title', r => (
         <Link
           className='py-2'
-          to={`/study/${window.encodeURIComponent(r.encodedDOI)}`}
+          to={`/study/${r.encodedDOI}`}
           target='_blank'
         >
           {r.Title}

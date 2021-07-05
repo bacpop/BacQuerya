@@ -187,7 +187,7 @@ const Histogram = ({
                     top: '85px',
                     transform: 'rotate(300deg)',
                     transformOrigin: '0% 0%',
-                    fontSize: `${(dimensions.width / 2 / labels.length)}px`
+                    fontSize: `${Math.max(12, dimensions.width / 2 / labels.length)}px`
                   }}
                 >
                   {
