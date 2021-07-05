@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Spinner from 'react-bootstrap/Spinner'
 import { Link } from 'react-router-dom'
+import xss from 'xss'
 
 import { isIdentical } from '../utils'
 import isolateQuery from './indexQuerying/isolateQuery'
@@ -40,6 +41,7 @@ const typeRequest = {
   isolate: {
     name: 'Isolate',
     request: isolateQuery,
+    infiniteScroll: true,
     table: [
       ['Biosample accession', r => (
         <>
@@ -109,21 +111,24 @@ const typeRequest = {
       source: formState.searchType,
       pageNumber: formState.pageNumber
     }),
+    rowHeight: 32,
     table: [
       ['Study title', r => (
         <Link
-          className='py-2'
+          className='d-block max-w-readable'
           to={`/study/${r.encodedDOI}`}
           target='_blank'
-        >
-          {r.Title}
-        </Link>
+          dangerouslySetInnerHTML={{
+            __html: xss(r.Title)
+          }}
+        />
       )]
     ]
   },
   gene: {
     name: 'Gene',
     request: ({ searchFilters, ...props }) => geneQuery(props),
+    infiniteScroll: true,
     table: [
       ['Gene Name', r => splitGeneNames(r)[0]],
       ['Aliases', r => (
@@ -164,47 +169,56 @@ const typeRequest = {
   }
 }
 const ResultsTable = ({ searchResults }) => {
-  const rendered = useMemo(() => (
-    <table
-      className='w-100'
-      style={{
-        fontSize: '.8rem'
-      }}
-    >
-      <thead>
-        <tr>
+  const rendered = useMemo(() => {
+    const tableInfo = typeRequest[searchResults.formState.searchType]
+    console.log('tableInfo: ', tableInfo)
+    return (
+      <table
+        className='w-100'
+        style={{
+          fontSize: '.8rem'
+        }}
+      >
+        <thead>
+          <tr>
+            {
+            tableInfo.table.map(([label]) => (
+              <th
+                key={label}
+                className='sticky-top bg-white py-2 pr-3 align-text-top'
+              >
+                {label}
+              </th>
+            ))
+          }
+          </tr>
+        </thead>
+        <tbody>
           {
-          typeRequest[searchResults.formState.searchType].table.map(([label]) => (
-            <th
-              key={label}
-              className='sticky-top bg-white py-2 pr-3 align-text-top'
+          searchResults.searchResult.map((data, rowIndex) => (
+            <tr
+              key={data._id || rowIndex}
+              style={tableInfo.rowHeight && {
+                height: `${tableInfo.rowHeight}px`
+              }}
             >
-              {label}
-            </th>
+              {
+                tableInfo.table.map(([label, valueFn]) => (
+                  <td
+                    key={label}
+                    className='pr-3'
+                  >
+                    {valueFn(data)}
+                  </td>
+                ))
+              }
+            </tr>
           ))
         }
-        </tr>
-      </thead>
-      <tbody>
-        {
-        searchResults.searchResult.map((data, rowIndex) => (
-          <tr key={data._id || rowIndex}>
-            {
-              typeRequest[searchResults.formState.searchType].table.map(([label, valueFn]) => (
-                <td
-                  key={label}
-                  className='pr-3'
-                >
-                  {valueFn(data)}
-                </td>
-              ))
-            }
-          </tr>
-        ))
-      }
-      </tbody>
-    </table>
-  ), [searchResults])
+        </tbody>
+      </table>
+    )
+  }, [searchResults])
   return rendered
 }
 
@@ -392,7 +406,7 @@ const SearchPage = () => {
   }, [])
 
   useEffect(() => {
-    if (loading) {
+    if (loading || !typeRequest[searchResults.formState.searchType].infiniteScroll) {
       return
     }
     const onScroll = () => {
