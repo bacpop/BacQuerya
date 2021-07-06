@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   geneAlignment as requestGeneAlignment
@@ -6,6 +6,23 @@ import {
 import '../../CSS/geneDisplay.css'
 import KeyVals from '../common/KeyVals.js'
 import Table from '../common/Table.js'
+import Spinner from 'react-bootstrap/Spinner'
+
+const acidColors = {
+  A: '#f77',
+  T: '#77f',
+  G: '#7f7',
+  C: '#ff7',
+  N: '#888888'
+}
+
+const mutedAcidColors = {
+  A: '#fff8f8',
+  T: '#f8f8ff',
+  G: '#f8fff8',
+  C: '#fffff8',
+  N: '#888888'
+}
 
 const LoadBox = ({ value, children, ...props }) => (
   <div {...props}>
@@ -25,120 +42,194 @@ const LoadBox = ({ value, children, ...props }) => (
   </div>
 )
 
-// May replace with classes
 const GeneTable = ({ data, scale, differences }) => {
-  if (!data) return null
-  const validAcids = ['A', 'T', 'C', 'G']
+  const fontHeight = 20
+  const fontWidth = 15
 
-  const dataRows = Object.entries(data).sort(([rawKeyA], [rawKeyB]) => (
-    rawKeyA > rawKeyB ? 1 : rawKeyA < rawKeyB ? -1 : 0
-  ))
-  if (!dataRows.length) return null
+  const dataRows = useMemo(() => {
+    const dataRows = Object.entries(data).sort(([rawKeyA], [rawKeyB]) => (
+      rawKeyA > rawKeyB ? 1 : rawKeyA < rawKeyB ? -1 : 0
+    ))
+    if (!dataRows.length) return []
 
-  const leadRow = dataRows[0][1].split('')
+    const leadRow = dataRows[0][1].split('')
 
+    return dataRows.map(([rawKey, sequence]) => {
+      const label = rawKey.split(';')[0]
+      const smallLabel = label.substring(
+        0,
+        label.indexOf(
+          '_',
+          label.indexOf('.')
+        )
+      ) || label
+
+      const diffChars = sequence.split('').map((a, index) => a !== leadRow[index])
+
+      // To speed up performance, group like-acids together
+      const segments = []
+      sequence.split('').forEach((a, index) => {
+        const lastSegment = segments[segments.length - 1]
+        const lastChar = lastSegment?.[0] || null
+        if ((!diffChars[index - 1] === !diffChars[index]) && lastChar === a) {
+          segments[segments.length - 1] += a
+        } else {
+          segments.push(a)
+        }
+      })
+
+      return [smallLabel, ...segments]
+    })
+  }, [data])
+
+  const draw = useCallback(({
+    beforeLabelRender = () => {},
+    beforeSegmentRender = () => {}
+  }) => {
+    if (!dataRows || !dataRows.length) {
+      return null
+    }
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')
+
+    const longestLabel = dataRows.reduce((total, row) => Math.max(total, row[0].length), 0)
+
+    const canvasWidth = dataRows.reduce(
+      (total, row) => Math.max(total, row.reduce(
+        (total, segments) => total + segments.length,
+        0
+      )),
+      0
+    ) * fontWidth
+    const canvasHeight = dataRows.length * fontHeight
+
+    canvas.width = canvasWidth + fontWidth * 2
+    canvas.height = canvasHeight + 2
+    context.font = `${fontHeight}px monospace`
+
+    const rowToString = (row) => row
+      .reduce(
+        (array, segment, index) => array.concat(
+          index
+            ? segment
+            : segment.padStart(longestLabel, ' ')
+        ),
+        []
+      )
+      .join('')
+
+    const leadRow = rowToString(dataRows[0])
+
+    dataRows.forEach((row, rowIndex) => {
+      context.translate(0, fontHeight)
+      context.save()
+      const rowDifferent = rowIndex !== 0 && (
+        leadRow.substring(longestLabel, leadRow.length) !==
+        rowToString(row).substring(longestLabel, leadRow.length)
+      )
+      row.reduce((currentIndex, segment, index) => {
+        if (index === 0) {
+          context.save()
+          context.translate(-1, -fontHeight + 2)
+          beforeLabelRender({
+            context,
+            text: segment,
+            width: longestLabel * fontWidth,
+            height: fontHeight,
+            different: rowDifferent
+          })
+          context.restore()
+          context.fillText(segment, (longestLabel - segment.length) * fontWidth, 0)
+        } else {
+          context.save()
+          context.translate(-1, -fontHeight + 1)
+          beforeSegmentRender({
+            context,
+            text: segment,
+            width: segment.length * fontWidth,
+            height: fontHeight,
+            different: rowDifferent && leadRow[currentIndex] !== segment[0]
+          })
+          context.restore()
+          segment.split('').forEach((character, index) => {
+            context.fillText(character, index * fontWidth, 0)
+          })
+        }
+
+        const indexOffset = (index ? segment.length : longestLabel)
+        context.translate(fontWidth * indexOffset, 0)
+        return currentIndex + indexOffset
+      }, 0)
+      context.restore()
+    })
+
+    const data = canvas.toDataURL('image/png')
+    return data
+  }, [dataRows])
+
+  console.log(dataRows)
+
+  const baseImage = useMemo(() => draw({
+    beforeSegmentRender: ({ context, text, width, height }) => {
+      context.fillStyle = acidColors[text?.[0]] || acidColors.N
+      context.fillRect(0, 0, width, height)
+    }
+  }), [draw])
+
+  const differencesImage = useMemo(() => draw({
+    beforeLabelRender: ({ context, different, width, height }) => {
+      if (different) {
+        context.fillStyle = '#ccc'
+        context.fillRect(0, 0, width, height)
+      }
+    },
+    beforeSegmentRender: ({ context, different, text, width, height }) => {
+      if (different) {
+        context.fillStyle = acidColors[text?.[0]] || acidColors.N
+        context.strokeStyle = '#000'
+        context.lineWidth = 1
+      } else {
+        context.fillStyle = mutedAcidColors[text?.[0]] || acidColors.N
+      }
+      context.fillRect(0, 0, width, height)
+      if (different) {
+        context.strokeRect(0, 0, width, height)
+      }
+    }
+  }), [draw])
   return (
     <div
       style={{
-        minHeight: '115px',
-        overflow: 'scroll',
-        fontSize: scale / 7.1
+        maxWidth: 'calc(100vw - 50px)',
+        overflow: 'auto',
+        height: `${Math.min(
+          500,
+          fontHeight * dataRows.length * scale / 120
+        )}px`
       }}
     >
-      <table cellPadding='0' cellSpacing='0' className={`gene-table${differences ? ' differences' : ''}`}>
-        <tbody>
-          {
-            dataRows.map(([rawKey, sequence]) => {
-              const label = rawKey.split(';')[0]
-              const smallLabel = label.substring(
-                0,
-                label.indexOf(
-                  '_',
-                  label.indexOf('.')
-                )
-              )
-
-              const diffChars = differences
-                ? sequence.split('').map((a, index) => a !== leadRow[index])
-                : sequence.split('').map(_ => 0)
-
-              // To speed up performance, group like-acids together
-              const segments = []
-              sequence.split('').forEach((a, index) => {
-                const lastSegment = segments[segments.length - 1]
-                const lastChar = lastSegment?.[0] || null
-                if ((!diffChars[index - 1] === !diffChars[index]) && lastChar === a) {
-                  segments[segments.length - 1] += a
-                } else {
-                  segments.push(a)
-                }
-              })
-
-              let actualIndex = 0
-              return (
-                <tr
-                  key={rawKey}
-                  style={{
-                    padding: 0,
-                    margin: 0
-                  }}
-                >
-                  <td
-                    className={`text-end text-right pr-2${diffChars.some(c => c) ? ' row-different' : ''}`}
-                    style={{
-                      padding: 0,
-                      paddingTop: '2px',
-                      margin: 0
-                    }}
-                  >
-                    {smallLabel || label || rawKey}:
-                  </td>
-                  <td className='acids text-monospace'>
-                    {segments.map((str, index) => {
-                      const thisActualIndex = actualIndex
-                      actualIndex += str.length
-                      let acid = str[0]
-                      acid = validAcids.includes(acid) ? acid : 'N'
-                      return (
-                        <span
-                          style={{
-                            left: `${thisActualIndex}em`
-                          }}
-                          className={`acid-${acid}${diffChars[thisActualIndex] ? ' different' : ''}`}
-                          key={`${rawKey}-${index}`}
-                        >
-                          {str}
-                        </span>
-                      )
-                    })}
-                  </td>
-                </tr>
-              )
-            })
-          }
-        </tbody>
-      </table>
+      <img
+        src={differences ? differencesImage : baseImage}
+        alt={differences ? 'Gene difference representation' : 'Gene representation'}
+        style={{
+          transformOrigin: '0 0',
+          transform: `scale(${scale / 120}, ${scale / 120})`,
+          height: `${Math.min(
+            fontHeight * dataRows.length * scale / 120
+          )}px`
+        }}
+      />
     </div>
   )
 }
 
 const GeneVisualizer = ({ data }) => {
   const [scale, setScale] = useState(100)
-  const [debouncedScale, setDebouncedScale] = useState(scale)
   const [differences, setDifferences] = useState(false)
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setDebouncedScale(scale)
-    }, 300)
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [scale, setDebouncedScale])
-
   const renderedTable = useMemo(() => (
-    <GeneTable data={data} scale={debouncedScale} differences={differences} />
-  ), [data, debouncedScale, differences])
+    <GeneTable data={data} scale={scale} differences={differences} />
+  ), [data, scale, differences])
 
   if (!data) {
     return null
@@ -270,11 +361,14 @@ const GeneDisplay = ({ geneInfo, noResults }) => {
     geneInfo && geneInfo.panarooNames.split('~~~').filter(name => !['UNNAMED', 'PRED_'].includes(name))
   ), [geneInfo])
 
+  const consistentName = geneInfo?.consistentNames
   useEffect(() => {
-    requestGeneAlignment().then(alignment => {
-      setGeneAlignment(alignment)
-    })
-  }, [])
+    if (consistentName) {
+      requestGeneAlignment(consistentName).then(alignment => {
+        setGeneAlignment(alignment)
+      })
+    }
+  }, [consistentName, setGeneAlignment])
 
   return (
     <MainWrapper>
@@ -347,7 +441,21 @@ const GeneDisplay = ({ geneInfo, noResults }) => {
                   <GeneVisualizer data={genes} />
                 )}
               </LoadBox>
-              <GeneMetadataTable {...{ geneInfo }} />
+              {
+                Object.keys(geneAlignment).length
+                  ? (
+                    <GeneMetadataTable {...{ geneInfo }} />
+                    )
+                  : (
+                    <div className='d-flex align-items-center justify-content-center'>
+                      <Spinner
+                        className='search-spinner'
+                        animation='border'
+                        variant='primary'
+                      />
+                    </div>
+                    )
+              }
               <div style={{ minHeight: '3rem' }} />
             </>
             )
