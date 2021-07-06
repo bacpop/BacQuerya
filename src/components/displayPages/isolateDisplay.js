@@ -202,7 +202,7 @@ const IsolateDisplay = ({
           }
         ]
       }, []).map(({ species, ratio }) => ({
-        label: `${species} (${ratio})`,
+        label: `<i>${species}</i> (${ratio})`,
         amount: ratio
       }))
     }

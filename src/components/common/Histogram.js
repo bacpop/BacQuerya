@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Spinner from 'react-bootstrap/Spinner'
+import Canvas from './Canvas.js'
 
 const Histogram = ({
   xAxisLabel,
@@ -12,7 +13,6 @@ const Histogram = ({
   max,
   ...props
 }) => {
-  const canvasRef = useRef()
   const [dimensions, setDimensions] = useState({
     width: 0,
     height: 0
@@ -23,94 +23,54 @@ const Histogram = ({
   const minNum = +`${min}`.replace(/,/g, '')
   const maxNum = +`${max}`.replace(/,/g, '')
 
-  useEffect(() => {
-    if (!canvasRef.current) {
-      return
+  const render = useCallback(({ context, width, height }) => {
+    if (width !== dimensions.width || height !== dimensions.height) {
+      setDimensions({ width, height })
     }
-    let isRendering = false
-    const update = ({ context, width, height }) => {
-      context.save()
-      const barWidth = width / data.length
-      const total = data.reduce((total, n) => Math.max(total, n), 0)
+    context.save()
+    const barWidth = width / data.length
+    const total = data.reduce((total, n) => Math.max(total, n), 0)
 
-      context.fillStyle = '#aaa'
-      context.fillRect(0, 0, width, height)
+    context.fillStyle = '#aaa'
+    context.fillRect(0, 0, width, height)
 
-      context.font = `${barWidth / 1.3}px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"`
+    context.font = `${barWidth / 1.3}px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"`
 
-      data.forEach((n, index) => {
-        context.fillStyle = '#888'
-        context.fillRect(index * barWidth, 0, 1, height)
+    data.forEach((n, index) => {
+      context.fillStyle = '#888'
+      context.fillRect(index * barWidth, 0, 1, height)
 
-        if (active?.[index]) {
-          context.fillStyle = '#fcc'
-          context.fillRect(
-            Math.floor(index * barWidth),
-            0,
-            Math.ceil(barWidth),
-            height
-          )
-          context.fillStyle = '#f00'
-        } else {
-          context.fillStyle = '#88b'
-        }
+      if (active?.[index]) {
+        context.fillStyle = '#fcc'
         context.fillRect(
           Math.floor(index * barWidth),
-          (height - ((n / total) * height * scale)),
+          0,
           Math.ceil(barWidth),
-          height * scale
+          height
         )
+        context.fillStyle = '#f00'
+      } else {
+        context.fillStyle = '#88b'
+      }
+      context.fillRect(
+        Math.floor(index * barWidth),
+        (height - ((n / total) * height * scale)),
+        Math.ceil(barWidth),
+        height * scale
+      )
 
-        if (labels && labels[index]) {
-          context.save()
-          context.fillStyle = 'rgba(0,0,0,0.6)'
-          context.translate(Math.floor((index + 1) * barWidth) - 5, height - 10)
-          context.rotate(270 * Math.PI / 180)
-          context.fillText(n.toLocaleString('en-US'), 0, 0)
-          context.restore()
-        }
-      })
+      if (labels && labels[index]) {
+        context.save()
+        context.fillStyle = 'rgba(0,0,0,0.6)'
+        context.translate(Math.floor((index + 1) * barWidth) - 5, height - 10)
+        context.rotate(270 * Math.PI / 180)
+        context.fillText(n.toLocaleString('en-US'), 0, 0)
+        context.restore()
+      }
+    })
 
-      context.restore()
-    }
-    const prepRerender = () => {
-      if (isRendering) return
-      isRendering = true
-      window.requestAnimationFrame(() => {
-        isRendering = false
-
-        const canvas = canvasRef.current
-        if (!canvas) {
-          return
-        }
-        const context = canvas.getContext('2d')
-
-        const { width: rawWidth, height } = canvas.parentNode.getBoundingClientRect()
-        const width = rawWidth
-
-        const ratio = window.devicePixelRatio || 1
-
-        canvas.width = ratio * width
-        canvas.height = ratio * height
-        context.scale(ratio, ratio)
-        if (dimensions.width && dimensions.height) {
-          update({ context, width, height })
-        }
-
-        // Recalc the width AFTER render
-        const { width: widthAfter, height: heightAfter } = canvas.parentNode.getBoundingClientRect()
-        if (dimensions.width !== widthAfter || dimensions.height !== heightAfter) {
-          setDimensions({
-            width: widthAfter,
-            height: heightAfter
-          })
-        }
-      })
-    }
-    prepRerender()
-    window.addEventListener('resize', prepRerender, true)
-    return () => window.removeEventListener('resize', prepRerender, true)
-  }, [dimensions, setDimensions, active, scale, data, labels])
+    context.restore()
+  }, [active, scale, data, labels, dimensions, setDimensions])
 
   // Spinner
   return (data.length)
@@ -142,7 +102,7 @@ const Histogram = ({
             marginRight: '48px'
           }}
         >
-          <canvas ref={canvasRef} className='w-100 h-100' />
+          <Canvas render={render} />
         </div>
         <div
           style={{
