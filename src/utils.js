@@ -18,6 +18,11 @@ export const ERROR_UNSUPPORTED = 'unsupported'
 export const getType = value => {
   const type = typeof value
 
+  // Ignore React elements
+  if (value.$$typeof) {
+    return TYPE_UNKNOWN
+  }
+
   if (type === 'undefined') return TYPE_UNDEFINED
   if (type === TYPE_NUMBER) return TYPE_NUMBER
   if (type === TYPE_STRING) return TYPE_STRING
@@ -41,6 +46,10 @@ export const isIdentical = (base, compare) => {
     if (base.length !== compare.length) {
       return false
     }
+  }
+  // No idea what this is, assume it matches
+  if (type === TYPE_UNKNOWN) {
+    return true
   }
   if (type === TYPE_OBJECT || type === TYPE_ARRAY) {
     return Object.keys(base).every(prop => isIdentical(base[prop], compare[prop]))
