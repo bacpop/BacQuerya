@@ -231,7 +231,7 @@ const Header = () => {
   return (
     <header>
       <div
-        className={`container mb-2 d-flex justify-content-between align-items-center bg-white ${
+        className={`container mb-2 pt-2 d-flex justify-content-between align-items-center bg-white ${
           aboutVisible ? 'sticky-top' : ''
         }`}
       >
@@ -243,7 +243,7 @@ const Header = () => {
               alt='BacQuerya'
               title='BacQuerya'
               style={{
-                width: '200px'
+                width: '400px'
               }}
             />
           </a>
