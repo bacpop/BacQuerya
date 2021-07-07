@@ -16,14 +16,14 @@ async function geneQuery (formData) {
   }
 };
 
-export function geneAlignment () {
+export function geneAlignment (geneConsistentName) {
   return window.fetch(
-    'https://bacquerya.azurewebsites.net:443/alignmentView/example',
+    `https://bacquerya.azurewebsites.net:443/alignmentView/${geneConsistentName}`,
     {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       }
     }
   ).then(response => response.json())
