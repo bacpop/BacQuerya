@@ -207,7 +207,7 @@ const ResultsTable = ({ searchResults }) => {
                     key={label}
                     className='pr-3'
                   >
-                    {valueFn(data)}
+                    {label == 'Species' ? <em>{valueFn(data)}</em> : valueFn(data)}
                   </td>
                 ))
               }
