@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import {
   geneAlignment as requestGeneAlignment
 } from '../indexQuerying/geneQuery'
-import '../../CSS/geneDisplay.css'
 import KeyVals from '../common/KeyVals.js'
 import Table from '../common/Table.js'
 import Spinner from 'react-bootstrap/Spinner'
