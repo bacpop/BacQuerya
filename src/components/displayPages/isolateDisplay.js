@@ -240,7 +240,7 @@ const IsolateDisplay = ({
       return
     }
 
-    graphOptions[activeGraphIndex].populationAssemblyRequest().then((data) => {
+    graphOptions[activeGraphIndex].populationAssemblyRequest(isolateInfo.Organism_name.split(" ").join("_")).then((data) => {
       clearTimeout(timeout)
       setPopulationAssemblyStats(data)
     })
