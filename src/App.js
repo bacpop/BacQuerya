@@ -32,7 +32,7 @@ function App () {
           <Route exact path='/' component={SearchPage} />
           <Route exact path='/study/:encodedDOI' component={StudyPage} />
           <Route exact path='/gene/:geneName' component={GenePage} />
-          <Route exact path='/isolate/:Genus/:Species/:BioSample' component={IsolatePage} />
+          <Route exact path='/isolate/:BioSample' component={IsolatePage} />
           <Route exact path='/submit/:encodedDOI/' component={SubmissionPage} />
         </Router>
       </main>

@@ -36,10 +36,6 @@ const getJsonHref = (data) =>
     )
   )
 
-// const NavLink = ({ to = '', children }) => (
-//   <Link to={`/isolate/streptococcus${to}`} target='_blank'>{children}</Link>
-// )
-
 const SectionContainer = ({ title, children }) => (
   <div className='container mb-4'>
     <h4>{title}</h4>
@@ -164,7 +160,6 @@ const IsolateDisplay = ({
 
   // Don't worry about this data too much, important thing is getting the chart working
   const speciesContainmentProps = useMemo(() => {
-    // return isolateInfo
     return {
       ratioScale: +graphScale,
       data: isolateInfo.mashHashes.map((ratioStr, index) => {
@@ -174,7 +169,7 @@ const IsolateDisplay = ({
         const species = fullSpeciesName
           .split(' ')
           .filter((_, i) => [3, 4].includes(i))
-          .join(' ')
+          .join(' ') || fullSpeciesName
 
         return {
           ratio,
@@ -256,14 +251,6 @@ const IsolateDisplay = ({
 
   return (
     <div className='d-flex flex-column container text-left text-start h-100 position-absolute'>
-      {/*
-      Commenting out for now
-      <div className='container mt-4 mb-2'>
-        <NavLink>streptococcus</NavLink>{' > '}
-        <NavLink to='/pneumoniae'>pneumoniae</NavLink>{' > '}
-        <NavLink to={`/pneumoniae/${isolateInfo.BioSample}`}>{isolateInfo.BioSample}</NavLink>
-      </div>
-      */}
       <div className='container'>
         <h1>Isolate: {isolateInfo.isolateName}</h1>
       </div>
@@ -423,7 +410,8 @@ const IsolateDisplay = ({
               step={0.01}
               style={{
                 marginLeft: '30px',
-                width: 'calc(100% - 100px)'
+                width: 'calc(100% - 100px)',
+                maxWidth: '300px'
               }}
               onChange={(e) => setGraphScale(e.target.value)}
             />
@@ -440,6 +428,8 @@ const IsolateDisplay = ({
             </div>
           </SectionContainer>
         </div>
+
+        {/* Hide this div if the isolate if there's no genes */}
         <div
           className='flex-fill d-flex flex-column p-2 overflow-auto'
           style={{

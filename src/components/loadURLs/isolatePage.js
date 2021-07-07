@@ -6,7 +6,7 @@ import { specificIsolateQuery } from '../indexQuerying/isolateQuery'
 
 const IsolatePage = ({ match }) => {
     const {
-        params: { Genus, Species, BioSample },
+        params: { BioSample },
     } = match;
 
     const [searched, setSearched] = useState(false)
