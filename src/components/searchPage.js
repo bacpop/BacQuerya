@@ -442,10 +442,16 @@ const SearchPage = () => {
 
   return (
     <div
-      className='d-flex mt-3 flex-column container text-left text-start h-100 position-absolute'
+      className='d-flex mt-2 flex-column container text-left text-start h-100 position-absolute'
     >
       <div className='d-flex'>
         <div className='flex-fill d-flex flex-column mr-4'>
+          <div className='mb-1'>
+            <p class="mb-0"
+            style={{
+              fontSize: '.9rem'
+            }}><em>BacQuerya</em>: a search engine for bacterial genomes</p>
+          </div>
           <form
             className='d-flex mb-4'
             onSubmit={(e) => {
@@ -513,7 +519,7 @@ const SearchPage = () => {
               <div style={{ maxWidth: '300px' }}>
                 <h6>Gene Sequence</h6>
                 <p>
-                  Enter a gene chemical sequence{' '}
+                  Enter a DNA sequence of a gene{' '}
                   <span
                     className={sequenceContainsInvalidChars ? 'font-weight-bold' : ''}
                   >

@@ -24,13 +24,12 @@ const AboutContent = ({ visible }) => {
     >
       <div ref={wrapperRef}>
         <span className='d-block'>
-          BacQuerya has been designed to streamline information sharing
-          and reuse in Pathogen informatics by retrieving and linking
-          genomic metadata from a range of information sources.
-          Users specify a query type (gene, isolate, sequence or study)
-          and the appropriate index is searched for the query term.
-          BacQuerya currently only supports isolate and gene queries
-          for Streptococcus pneumoniae.
+          <p class="font-thin">Search for isolate names (ENA, SRA), species, metadata (country,
+          serotype) or any combination of the above, flexibly.</p>
+
+          <p>BacQuerya is currently 'enhanced' for the following species
+          and additionally has linked gene and sequence data:</p>
+          <ul><li><em>Streptococcus pneumoniae</em></li></ul>
         </span>
         <span className='d-block'>
           <strong className='d-block my-3'>Isolates</strong>
@@ -45,7 +44,7 @@ const AboutContent = ({ visible }) => {
                 and searching for an isolate identifier.
                 This may be an accession ID associated with isolate in external
                 websites (e.g. BioSample accessions IDs), a species
-                (e.g. Streptococcus penumoiae) or a sampling country (e.g. Nepal).
+                (e.g. Streptococcus pneumoniae) or a sampling country (e.g. Nepal).
                 The first 100 search results are displayed by default and an
                 additional 100 results are displayed by scrolling to the
                 bottom of the search page.
@@ -231,7 +230,7 @@ const Header = () => {
   return (
     <header>
       <div
-        className={`container mb-2 pt-2 d-flex justify-content-between align-items-center bg-white ${
+        className={`container mb-1 pt-2 d-flex justify-content-between align-items-center bg-white ${
           aboutVisible ? 'sticky-top' : ''
         }`}
       >
