@@ -102,7 +102,6 @@ const Table = (props) => {
         // const max = Math.max(1000, -tableYOffset + window.innerHeight + 500)
 
         if (min !== visibleRange.min || max !== visibleRange.max) {
-          console.log('min: ', min, 'max: ', max)
           setVisibleRange({ min, max })
         }
       })

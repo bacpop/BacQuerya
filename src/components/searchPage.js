@@ -47,7 +47,7 @@ const typeRequest = {
         <>
           <Link
             className='position-relative isolate-link'
-            to={`/isolate/streptococcus/pneumoniae/${r._source.BioSample}`}
+            to={`/isolate/${r._source.BioSample}`}
             target='_blank'
           >
             {r._source.BioSample}
@@ -171,7 +171,6 @@ const typeRequest = {
 const ResultsTable = ({ searchResults }) => {
   const rendered = useMemo(() => {
     const tableInfo = typeRequest[searchResults.formState.searchType]
-    console.log('tableInfo: ', tableInfo)
     return (
       <table
         className='w-100'

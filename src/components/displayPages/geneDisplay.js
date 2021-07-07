@@ -167,8 +167,6 @@ const GeneTable = ({ data, scale, differences }) => {
     return data
   }, [dataRows])
 
-  console.log(dataRows)
-
   const baseImage = useMemo(() => draw({
     beforeSegmentRender: ({ context, text, width, height }) => {
       context.fillStyle = acidColors[text?.[0]] || acidColors.N
@@ -320,7 +318,7 @@ const GeneMetadataTable = ({ geneInfo }) => (
       }) => ({
         bioSample: (
           <Link
-            to={`/isolate/streptococcus/pneumoniae/${bioSample}`}
+            to={`/isolate/${bioSample}`}
             target='_blank'
           >
             {bioSample}

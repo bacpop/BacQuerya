@@ -5,10 +5,10 @@ import Canvas from './Canvas.js'
 
 const colorHash = new ColorHash()
 
-const graphHeight = 500
 const labelHeight = 27
 
 const StackedBar = ({ ratioScale, data }) => {
+  const graphHeight = Math.max(500, data.length * labelHeight)
   const [yCoords, setYCoords] = useState([])
   const total = data.reduce((total, { amount }) => total + amount, 0)
   const render = useCallback(({ context, width }) => {
@@ -79,7 +79,7 @@ const StackedBar = ({ ratioScale, data }) => {
           left: '32px',
           maxWidth: `${100 - 32}px`,
           width: `${100 - 32}px`,
-          height: '500px'
+          height: `${graphHeight}px`
         }}
       >
         <Canvas
