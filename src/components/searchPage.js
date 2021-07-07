@@ -12,6 +12,15 @@ import FilterComponent from './searchFilters'
 import { SequenceDownload } from './sequenceDownload'
 import '../CSS/searchPage.css'
 
+const cleanAliases = (names, consistentName) => {
+  const cleanedNames = names.map(alias => {
+    if (alias != consistentName) {
+      return alias
+    }
+  })
+  return cleanedNames
+}
+
 const splitGeneNames = (result) => {
   const panarooNames = result._source.panarooNames || ''
   const consistentName = result._source.consistentNames
@@ -21,19 +30,18 @@ const splitGeneNames = (result) => {
     return []
   }
 
-  const vals = panarooNames.split('~~~').concat(pFamNames)
+  const vals = [].concat(consistentName).concat(cleanAliases(panarooNames.split('~~~'), consistentName)).concat(pFamNames)
     .filter(name => name && !(['UNNAMED_', 'PRED_'].some(n => name.includes(n))))
     .sort((a, b) => a === consistentName - b === consistentName)
     .map(name => (
       <Link
         key={name}
-        to={`/gene/${name}`}
+        to={`/gene/${consistentName}`}
         target='_blank'
       >
         {name}
       </Link>
     ))
-
   return vals
 }
 
