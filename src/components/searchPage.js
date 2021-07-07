@@ -450,10 +450,10 @@ const SearchPage = () => {
             <p class="mb-0"
             style={{
               fontSize: '.9rem'
-            }}><em>BacQuerya</em>: a search engine for bacterial genomes</p>
+            }}>Search for bacterial genomes and metadata</p>
           </div>
           <form
-            className='d-flex mb-4'
+            className='d-flex mb-1'
             onSubmit={(e) => {
               e.preventDefault()
               search(
@@ -488,7 +488,33 @@ const SearchPage = () => {
               </button>
             </div>
           </form>
-
+          <div className='mb-1'>
+              <div className='flex-fill'
+              style={{
+                fontSize: '.8rem'
+              }}>
+                {
+                  formState.searchType === 'isolate' && (
+                    "Examples: 'streptococcus pneumoniae nepal 23F', 'e coli IAI1'"
+                  )
+                }
+                {
+                  formState.searchType === 'study' && (
+                    "Examples: 'International Genomic Definition of Pneumococcal Lineages', 'altschul SF blast'"
+                  )
+                }
+                {
+                  formState.searchType === 'gene' && (
+                    "Examples: 'tetM', 'surface protein A', 'penicillin binding'"
+                  )
+                }
+                {
+                  formState.searchType === 'sequence' && (
+                    "Example: 'ATTCCCACAATCTTTTTTATCAATAAGATTGACCAAAATGGAATTGATTTATCAA'"
+                  )
+                }
+                </div>
+        </div>
           <div className='btn-group'>
             {
               ['isolate', 'study', 'gene', 'sequence']
