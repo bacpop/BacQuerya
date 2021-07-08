@@ -1,0 +1,20 @@
+.bi-hover {
+  color: grey;
+  font-size: 2rem;
+  transition: color 0.2s;
+}
+
+.bi-hover:hover {
+  color: black;
+}
+
+.plain-link {
+  text-align: center;
+  color: black;
+  text-decoration: none;
+}
+
+.plain-link:hover, :focus {
+  color: black;
+  text-decoration: none;
+}

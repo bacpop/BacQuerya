@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import '../CSS/header.css'
 
 const AboutContent = ({ visible }) => {
   const [maxHeight, setMaxHeight] = useState()
@@ -24,13 +25,54 @@ const AboutContent = ({ visible }) => {
     >
       <div ref={wrapperRef}>
         <span className='d-block'>
-          <p class="font-thin">Search for isolate names (ENA, SRA), species, metadata (country,
+          <p class="lead font-thin">Search for isolate names (ENA, SRA), species, metadata (country,
           serotype) or any combination of the above, flexibly.</p>
 
-          <p>BacQuerya is currently 'enhanced' for the following species
-          and additionally has linked gene and sequence data:</p>
+          <p class="font-weight-light">BacQuerya is currently 'enhanced' for the following species,
+          and has additional linked, searchable gene and sequence data:
           <ul><li><em>Streptococcus pneumoniae</em></li></ul>
+          </p>
         </span>
+
+        <hr
+          className='my-4 w-100'
+          style={{
+            height: '1px'
+          }}
+        />
+
+        <div className="container d-flex justify-content-between align-items-center bg-white">
+          <div className="d-flex flex-column align-items-center">
+            <a class="plain-link" target="_blank" href="#">
+            <i class="bi bi-hover bi-file-earmark-text-fill" aria-label="Video"></i>
+            <p class="small">More details</p>
+            </a>
+          </div>
+          <div className="d-flex flex-column align-items-center">
+            <a class="plain-link" target="_blank" href="#">
+            <i class="bi bi-hover bi-camera-reels-fill" aria-label="Video"></i>
+            <p class="small">Video guide</p>
+            </a>
+          </div>
+          <div className="d-flex flex-column align-items-center">
+            <a class="plain-link" target="_blank" href="https://github.com/bacpop/BacQuerya">
+            <i class="bi bi-hover bi-github" aria-label="Code (website)"></i>
+            <p class="small">Website code</p>
+            </a>
+          </div>
+          <div className="d-flex flex-column align-items-center">
+            <a class="plain-link" target="_blank" href="https://github.com/bacpop/BacQuerya-api">
+            <i class="bi bi-hover bi-github" aria-label="Code (backend)"></i>
+            <p class="small">API code</p>
+            </a>
+          </div>
+          <div className="d-flex flex-column align-items-center">
+            <a class="plain-link" target="_blank" href="https://github.com/bacpop/BacQuerya-processing">
+            <i class="bi bi-hover bi-github" aria-label="Code (backend)"></i>
+            <p class="small">Backend code</p>
+            </a>
+          </div>
+        </div>
         <span className='d-block'>
           <strong className='d-block my-3'>Isolates</strong>
           <ul>
