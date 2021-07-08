@@ -466,7 +466,7 @@ const SearchPage = () => {
             <div class="input-group mr-2">
               <div class="input-group-prepend">
                 <span class="input-group-text bg-transparent border-right-0">
-                  <img src="/logo_glass.png" class="img-responsive" alt="Search" width="22" height="22" />
+                  <img src="/logo_glass.png" class="img-responsive" alt="Search" width="24" height="24" />
                 </span>
               </div>
               <input
