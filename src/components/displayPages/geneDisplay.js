@@ -359,6 +359,7 @@ const GeneDisplay = ({ geneInfo, noResults }) => {
   ), [geneInfo])
 
   const consistentName = geneInfo?.consistentNames
+
   useEffect(() => {
     if (consistentName) {
       requestGeneAlignment(consistentName).then(alignment => {
@@ -433,13 +434,16 @@ const GeneDisplay = ({ geneInfo, noResults }) => {
                 </div>
               )
             }
-              <LoadBox value={geneAlignment} className='mt-4'>
+            {
+              (geneAlignment.Result !== 'Not found') &&
+                <LoadBox value={geneAlignment} className='mt-4'>
                 {(genes) => (
-                  <GeneVisualizer data={genes} />
+                    <GeneVisualizer data={genes} />
                 )}
-              </LoadBox>
+                </LoadBox>
+              }
               {
-                Object.keys(geneAlignment).length
+                geneInfo
                   ? (
                     <GeneMetadataTable {...{ geneInfo }} />
                     )
