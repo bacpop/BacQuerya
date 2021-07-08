@@ -14,6 +14,19 @@ const AboutContent = ({ visible }) => {
       window.removeEventListener('resize', onResize, true)
     }
   }, [])
+  const [detailVisible, setDetailVisible] = useState(false)
+  const toggleDetail = () => {
+    setDetailVisible(!detailVisible)
+    console.log(detailVisible)
+    try {
+      window.scroll({
+        top: 0,
+        behavior: 'smooth'
+      })
+    } catch (error) {
+      window.scrollTo(0, 0)
+    }
+  }
   return (
     <div
       className={`mx-3 overflow-hidden ${visible ? 'mb-5' : ''}`}
@@ -49,6 +62,9 @@ const AboutContent = ({ visible }) => {
             <i className="bi bi-hover bi-file-earmark-text-fill" aria-label="Video"></i>
             <p className="small">More details</p>
             </a>
+            <button className='btn btn-light m-2' onClick={toggleDetail}>
+          About
+        </button>
           </div>
           <div className="d-flex flex-column align-items-center">
             <a className="plain-link" target="_blank" href="#">
@@ -75,6 +91,14 @@ const AboutContent = ({ visible }) => {
             </a>
           </div>
         </div>
+      <div
+      className={`mx-3 overflow-hidden ${detailVisible ? 'mb-5' : ''}`}
+      style={{
+        transitionDuration: '500ms',
+        maxWidth: '60rem',
+        maxHeight: detailVisible ? `${maxHeight}px` : '0'
+      }}
+      >
         <span className='d-block'>
           <strong className='d-block my-3'>Isolates</strong>
           <ul>
@@ -253,6 +277,7 @@ const AboutContent = ({ visible }) => {
             </li>
           </ul>
         </span>
+      </div>
       </div>
     </div>
   )
