@@ -267,7 +267,8 @@ const SearchPage = () => {
       ],
       minN50: 0,
       noContigs: 'All',
-      reads: true
+      reads: true,
+      exactMatches: false
     }
   }))
   const [showDownloadOptions, setOpenDownloads] = useState(false)
