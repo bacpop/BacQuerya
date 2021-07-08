@@ -21,7 +21,7 @@ export const populationAssemblyStats = ((species) => {
   let promise
   return async (species) => {
     if (!promise) {
-      promise = window.fetch('https://bacquerya.azurewebsites.net/population_assembly_stats/' + species, {
+      promise = window.fetch('https://bacquerya.azurewebsites.net:443/population_assembly_stats/' + species, {
         mode: 'cors',
         headers: {
           Accept: 'application/json',

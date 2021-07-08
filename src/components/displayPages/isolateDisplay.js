@@ -269,6 +269,11 @@ const IsolateDisplay = ({
               [
                 'GenBank assembly accession',
                 isolateInfo.GenBank_assembly_accession,
+                { link: `https://www.ncbi.nlm.nih.gov/assembly/${isolateInfo.GenBank_assembly_accession.split(" ").join("_")}` }
+              ],
+              [
+                'BioSample accession',
+                isolateInfo.BioSample,
                 { link: `https://www.ncbi.nlm.nih.gov/biosample/${isolateInfo.BioSample}` }
               ]
             ]}
