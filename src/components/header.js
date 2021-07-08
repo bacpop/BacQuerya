@@ -25,13 +25,15 @@ const AboutContent = ({ visible }) => {
     >
       <div ref={wrapperRef}>
         <span className='d-block'>
-          <p class="lead font-thin">Search for isolate names (ENA, SRA), species, metadata (country,
+          <p className="lead font-thin">Search for isolate names (ENA, SRA), species, metadata (country,
           serotype) or any combination of the above, flexibly.</p>
 
-          <p class="font-weight-light">BacQuerya is currently 'enhanced' for the following species,
-          and has additional linked, searchable gene and sequence data:
-          <ul><li><em>Streptococcus pneumoniae</em></li></ul>
-          </p>
+          <div className="font-weight-light">
+            <p>BacQuerya is currently 'enhanced' for the following species,
+            and has additional linked, searchable gene and sequence data:
+            </p>
+            <ul><li><em>Streptococcus pneumoniae</em></li></ul>
+          </div>
         </span>
 
         <hr
@@ -43,33 +45,33 @@ const AboutContent = ({ visible }) => {
 
         <div className="container d-flex justify-content-between align-items-center bg-white">
           <div className="d-flex flex-column align-items-center">
-            <a class="plain-link" target="_blank" href="#">
-            <i class="bi bi-hover bi-file-earmark-text-fill" aria-label="Video"></i>
-            <p class="small">More details</p>
+            <a className="plain-link" target="_blank" href="#">
+            <i className="bi bi-hover bi-file-earmark-text-fill" aria-label="Video"></i>
+            <p className="small">More details</p>
             </a>
           </div>
           <div className="d-flex flex-column align-items-center">
-            <a class="plain-link" target="_blank" href="#">
-            <i class="bi bi-hover bi-camera-reels-fill" aria-label="Video"></i>
-            <p class="small">Video guide</p>
+            <a className="plain-link" target="_blank" href="#">
+            <i className="bi bi-hover bi-camera-reels-fill" aria-label="Video"></i>
+            <p className="small">Video guide</p>
             </a>
           </div>
           <div className="d-flex flex-column align-items-center">
-            <a class="plain-link" target="_blank" href="https://github.com/bacpop/BacQuerya">
-            <i class="bi bi-hover bi-github" aria-label="Code (website)"></i>
-            <p class="small">Website code</p>
+            <a className="plain-link" target="_blank" href="https://github.com/bacpop/BacQuerya">
+            <i className="bi bi-hover bi-github" aria-label="Code (website)"></i>
+            <p className="small">Website code</p>
             </a>
           </div>
           <div className="d-flex flex-column align-items-center">
-            <a class="plain-link" target="_blank" href="https://github.com/bacpop/BacQuerya-api">
-            <i class="bi bi-hover bi-github" aria-label="Code (backend)"></i>
-            <p class="small">API code</p>
+            <a className="plain-link" target="_blank" href="https://github.com/bacpop/BacQuerya-api">
+            <i className="bi bi-hover bi-github" aria-label="Code (backend)"></i>
+            <p className="small">API code</p>
             </a>
           </div>
           <div className="d-flex flex-column align-items-center">
-            <a class="plain-link" target="_blank" href="https://github.com/bacpop/BacQuerya-processing">
-            <i class="bi bi-hover bi-github" aria-label="Code (backend)"></i>
-            <p class="small">Backend code</p>
+            <a className="plain-link" target="_blank" href="https://github.com/bacpop/BacQuerya-processing">
+            <i className="bi bi-hover bi-github" aria-label="Code (backend)"></i>
+            <p className="small">Backend code</p>
             </a>
           </div>
         </div>

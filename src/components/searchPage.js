@@ -447,7 +447,7 @@ const SearchPage = () => {
       <div className='d-flex'>
         <div className='flex-fill d-flex flex-column mr-4'>
           <div className='mb-1'>
-            <p class="mb-0"
+            <p className="mb-0"
             style={{
               fontSize: '.9rem'
             }}>Search for bacterial genomes and metadata</p>
@@ -463,10 +463,10 @@ const SearchPage = () => {
               )
             }}
           >
-            <div class="input-group mr-2">
-              <div class="input-group-prepend">
-                <span class="input-group-text bg-transparent border-right-0">
-                  <img src="/logo_glass.svg" class="img-responsive" alt="Search" width="24" height="24" />
+            <div className="input-group mr-2">
+              <div className="input-group-prepend">
+                <span className="input-group-text bg-transparent border-right-0">
+                  <img src="/logo_glass.svg" className="img-responsive" alt="Search" width="24" height="24" />
                 </span>
               </div>
               <input
