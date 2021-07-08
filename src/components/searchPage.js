@@ -463,17 +463,24 @@ const SearchPage = () => {
               )
             }}
           >
-            <input
-              ref={searchInputRef}
-              name='searchTerm'
-              className='flex-fill mr-2 form-control'
-              value={formState.searchTerm}
-              onChange={e => {
-                setFormState({
-                  searchTerm: e.target.value
-                })
-              }}
-            />
+            <div class="input-group mr-2">
+              <div class="input-group-prepend">
+                <span class="input-group-text bg-transparent border-right-0">
+                  <img src="/logo_glass.png" class="img-responsive" alt="Search" width="22" height="22" />
+                </span>
+              </div>
+              <input
+                ref={searchInputRef}
+                name='searchTerm'
+                className='flex-fill form-control border-left-0'
+                value={formState.searchTerm}
+                onChange={e => {
+                  setFormState({
+                    searchTerm: e.target.value
+                  })
+                }}
+              />
+            </div>
             <div className='d-flex align-items-end'>
               <button
                 type='submit'
