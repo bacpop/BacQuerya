@@ -58,13 +58,10 @@ const AboutContent = ({ visible }) => {
 
         <div className="container d-flex justify-content-between align-items-center bg-white">
           <div className="d-flex flex-column align-items-center">
-            <a className="plain-link" target="_blank" href="#">
+            <a className="plain-link" onClick={toggleDetail}>
             <i className="bi bi-hover bi-file-earmark-text-fill" aria-label="Video"></i>
             <p className="small">More details</p>
             </a>
-            <button className='btn btn-light m-2' onClick={toggleDetail}>
-          About
-        </button>
           </div>
           <div className="d-flex flex-column align-items-center">
             <a className="plain-link" target="_blank" href="#">
