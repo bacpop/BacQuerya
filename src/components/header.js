@@ -2,22 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import '../CSS/header.css'
 
 const AboutContent = ({ visible }) => {
-  const [maxHeight, setMaxHeight] = useState()
-  const wrapperRef = useRef()
-  useEffect(() => {
-    const onResize = () => {
-      setMaxHeight(wrapperRef.current.getBoundingClientRect().height)
-    }
-    onResize()
-    window.addEventListener('resize', onResize, true)
-    return () => {
-      window.removeEventListener('resize', onResize, true)
-    }
-  }, [])
   const [detailVisible, setDetailVisible] = useState(false)
+  const [maxHeight, setMaxHeight] = useState(0)
+  const summaryRef = useRef()
+  const moreInfoRef = useRef()
+
   const toggleDetail = () => {
     setDetailVisible(!detailVisible)
-    console.log(detailVisible)
     try {
       window.scroll({
         top: 0,
@@ -27,6 +18,33 @@ const AboutContent = ({ visible }) => {
       window.scrollTo(0, 0)
     }
   }
+
+  useEffect(() => {
+    if (!visible) {
+      setMaxHeight(0)
+      setDetailVisible(false)
+    }
+    const onResize = () => {
+      const summaryHeight = summaryRef.current.getBoundingClientRect().height + 3
+      const fullHeight = summaryHeight + moreInfoRef.current.getBoundingClientRect().height + 100
+
+      setMaxHeight(detailVisible ? fullHeight : summaryHeight)
+
+      Array.from(summaryRef.current.querySelectorAll('[tabIndex]')).forEach(e => {
+        e.setAttribute('tabIndex', visible ? 0 : -1)
+      })
+
+      Array.from(moreInfoRef.current.querySelectorAll('[tabIndex]')).forEach(e => {
+        e.setAttribute('tabIndex', visible && detailVisible ? 0 : -1)
+      })
+    }
+    onResize()
+    window.addEventListener('resize', onResize, true)
+    return () => {
+      window.removeEventListener('resize', onResize, true)
+    }
+  }, [visible, detailVisible, setMaxHeight])
+
   return (
     <div
       className={`mx-3 overflow-hidden ${visible ? 'mb-5' : ''}`}
@@ -36,14 +54,15 @@ const AboutContent = ({ visible }) => {
         maxHeight: visible ? `${maxHeight}px` : '0'
       }}
     >
-      <div ref={wrapperRef}>
+      <div ref={summaryRef}>
         <span className='d-block'>
-          <p className="lead font-thin">Search for isolate names (ENA, SRA), species, metadata (country,
-          serotype) or any combination of the above, flexibly.</p>
+          <p className='lead font-thin'>Search for isolate names (ENA, SRA), species, metadata (country,
+            serotype) or any combination of the above, flexibly.
+          </p>
 
-          <div className="font-weight-light">
+          <div className='font-weight-light'>
             <p>BacQuerya is currently 'enhanced' for the following species,
-            and has additional linked, searchable gene and sequence data:
+              and has additional linked, searchable gene and sequence data:
             </p>
             <ul><li><em>Streptococcus pneumoniae</em></li></ul>
           </div>
@@ -56,45 +75,43 @@ const AboutContent = ({ visible }) => {
           }}
         />
 
-        <div className="container d-flex justify-content-between align-items-center bg-white">
-          <div className="d-flex flex-column align-items-center">
-            <a className="plain-link" onClick={toggleDetail}>
-            <i className="bi bi-hover bi-file-earmark-text-fill" aria-label="Video"></i>
-            <p className="small">More details</p>
+        <div className='container d-flex justify-content-between align-items-center bg-white'>
+          <div className='d-flex flex-column align-items-center'>
+            <button tabIndex='0' className='plain-link btn btn-link' onClick={toggleDetail}>
+              <i className='bi bi-hover bi-file-earmark-text-fill' aria-label='Video' />
+              <p className='small'>More details</p>
+            </button>
+          </div>
+          <div className='d-flex flex-column align-items-center'>
+            <a tabIndex='0' className='plain-link' target='_blank' rel='noreferrer' href='#'>
+              <i className='bi bi-hover bi-camera-reels-fill' aria-label='Video' />
+              <p className='small'>Video guide</p>
             </a>
           </div>
-          <div className="d-flex flex-column align-items-center">
-            <a className="plain-link" target="_blank" href="#">
-            <i className="bi bi-hover bi-camera-reels-fill" aria-label="Video"></i>
-            <p className="small">Video guide</p>
+          <div className='d-flex flex-column align-items-center'>
+            <a tabIndex='0' className='plain-link' target='_blank' rel='noreferrer' href='https://github.com/bacpop/BacQuerya'>
+              <i className='bi bi-hover bi-github' aria-label='Code (website)' />
+              <p className='small'>Website code</p>
             </a>
           </div>
-          <div className="d-flex flex-column align-items-center">
-            <a className="plain-link" target="_blank" href="https://github.com/bacpop/BacQuerya">
-            <i className="bi bi-hover bi-github" aria-label="Code (website)"></i>
-            <p className="small">Website code</p>
+          <div className='d-flex flex-column align-items-center'>
+            <a tabIndex='0' className='plain-link' target='_blank' rel='noreferrer' href='https://github.com/bacpop/BacQuerya-api'>
+              <i className='bi bi-hover bi-github' aria-label='Code (backend)' />
+              <p className='small'>API code</p>
             </a>
           </div>
-          <div className="d-flex flex-column align-items-center">
-            <a className="plain-link" target="_blank" href="https://github.com/bacpop/BacQuerya-api">
-            <i className="bi bi-hover bi-github" aria-label="Code (backend)"></i>
-            <p className="small">API code</p>
-            </a>
-          </div>
-          <div className="d-flex flex-column align-items-center">
-            <a className="plain-link" target="_blank" href="https://github.com/bacpop/BacQuerya-processing">
-            <i className="bi bi-hover bi-github" aria-label="Code (backend)"></i>
-            <p className="small">Backend code</p>
+          <div className='d-flex flex-column align-items-center'>
+            <a tabIndex='0' className='plain-link' target='_blank' rel='noreferrer' href='https://github.com/bacpop/BacQuerya-processing'>
+              <i className='bi bi-hover bi-github' aria-label='Code (backend)' />
+              <p className='small'>Backend code</p>
             </a>
           </div>
         </div>
+      </div>
+
       <div
-      className={`mx-3 overflow-hidden ${detailVisible ? 'mb-5' : ''}`}
-      style={{
-        transitionDuration: '500ms',
-        maxWidth: '60rem',
-        maxHeight: detailVisible ? `${maxHeight}px` : '0'
-      }}
+        ref={moreInfoRef}
+        className='mx-3 mb-5'
       >
         <span className='d-block'>
           <strong className='d-block my-3'>Isolates</strong>
@@ -104,7 +121,7 @@ const AboutContent = ({ visible }) => {
               <span className='d-block'>
                 Users choose to search through isolates by selecting the
                 "Isolate" tab on the BacQuerya landing page (
-                <a href='www.bacquerya.com'>www.bacquerya.com</a>
+                <a tabIndex='0' href='www.bacquerya.com'>www.bacquerya.com</a>
                 )
                 and searching for an isolate identifier.
                 This may be an accession ID associated with isolate in external
@@ -182,7 +199,7 @@ const AboutContent = ({ visible }) => {
                 BacQuerya currently only supports Streptococcus pneumoniae,
                 this alignment includes 1 representative sequence per GPSC,
                 with GPSCs assigned by the Global Pneumococcal Sequencing Project
-                (<a href='https://www.pneumogen.net/gps/'>https://www.pneumogen.net/gps/</a>).
+                (<a tabIndex='0' href='https://www.pneumogen.net/gps/'>https://www.pneumogen.net/gps/</a>).
               </span>
             </li>
           </ul>
@@ -225,6 +242,7 @@ const AboutContent = ({ visible }) => {
                 Clicking on a search result will load the metadata for that study,
                 retrieved using the CrossRef API (
                 <a
+                  tabIndex='0'
                   href='https://www.crossref.org/documentation/retrieve-metadata/rest-api/'
                 >
                   https://www.crossref.org/documentation/retrieve-metadata/rest-api/
@@ -253,6 +271,7 @@ const AboutContent = ({ visible }) => {
           <ul>
             <li>
               <a
+                tabIndex='0'
                 href='https://github.com/bacpop/BacQuerya'
               >
                 https://github.com/bacpop/BacQuerya
@@ -260,6 +279,7 @@ const AboutContent = ({ visible }) => {
             </li>
             <li>
               <a
+                tabIndex='0'
                 href='https://github.com/bacpop/BacQuerya-api'
               >
                 https://github.com/bacpop/BacQuerya-api
@@ -267,6 +287,7 @@ const AboutContent = ({ visible }) => {
             </li>
             <li>
               <a
+                tabIndex='0'
                 href='https://github.com/bacpop/BacQuerya-processing'
               >
                 https://github.com/bacpop/BacQuerya-processing
@@ -274,7 +295,6 @@ const AboutContent = ({ visible }) => {
             </li>
           </ul>
         </span>
-      </div>
       </div>
     </div>
   )

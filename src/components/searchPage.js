@@ -405,7 +405,11 @@ const SearchPage = () => {
   }, [])
 
   useEffect(() => {
-    if (loading || !typeRequest[searchResults.formState.searchType].infiniteScroll) {
+    if (
+      loading ||
+      !typeRequest[searchResults.formState.searchType].infiniteScroll ||
+      !searchResults.searchPerformed
+    ) {
       return
     }
     const onScroll = () => {

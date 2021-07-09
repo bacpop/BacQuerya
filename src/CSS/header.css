@@ -9,12 +9,16 @@
 }
 
 .plain-link {
-  text-align: center;
+  border: 3px solid transparent;
+  border-radius: 3px;
+  box-shadow: none !important;
   color: black;
-  text-decoration: none;
+  outline: none;
+  padding: 0 .5rem;
+  text-align: center;
+  text-decoration: none !important;
 }
 
 .plain-link:hover, :focus {
-  color: black;
-  text-decoration: none;
+  border-color: #007bff;
 }
