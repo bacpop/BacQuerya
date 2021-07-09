@@ -84,7 +84,7 @@ const AboutContent = ({ visible }) => {
           </div>
           <div className='d-flex flex-column align-items-center'>
             <a tabIndex='0' className='plain-link' target='_blank' rel='noreferrer' href='#'>
-              <i className='bi bi-hover bi-camera-reels-fill' aria-label='Video' />
+              <i className='bi bi-hover bi-play-btn-fill' aria-label='Video' />
               <p className='small'>Video guide</p>
             </a>
           </div>
@@ -114,111 +114,150 @@ const AboutContent = ({ visible }) => {
         className='mx-3 mb-5'
       >
         <span className='d-block'>
-          <strong className='d-block my-3'>Isolates</strong>
+          <strong className='d-block my-3'>Isolate search</strong>
           <ul>
             <li>
               <strong>Searching</strong>
               <span className='d-block'>
-                Users choose to search through isolates by selecting the
-                "Isolate" tab on the BacQuerya landing page (
-                <a tabIndex='0' href='www.bacquerya.com'>www.bacquerya.com</a>
-                )
-                and searching for an isolate identifier.
-                This may be an accession ID associated with isolate in external
-                websites (e.g. BioSample accessions IDs), a species
-                (e.g. Streptococcus pneumoniae) or a sampling country (e.g. Nepal).
-                The first 100 search results are displayed by default and an
-                additional 100 results are displayed by scrolling to the
-                bottom of the search page.
+                Search through a flexible index of samples and their metadata:
+                <ul>
+                  <li>An accession ID associated with isolate in external databases
+                    (e.g. NCBI BioSample, ENA numbers, other sample name, GCF number).</li>
+                  <li>A species (e.g. <em>Streptococcus pneumoniae</em> or <em>E coli</em>).</li>
+                  <li>A country name (e.g. Nepal).</li>
+                  <li>A strain or serotype name.</li>
+                </ul>
+                <p>You can search as with a search engine, tolerating mispellings
+                  and combining terms (e.g. 'streptococcus pnuemoniae nepal 23F').
+                </p>
+
+                <p>Results are returned ordered by match to your query. Within
+                  this, we try to return 'high quality' samples such as reference
+                  sequences or those with uncontaminated assemblies at the top
+                  of the results.
+                </p>
               </span>
             </li>
             <li>
               <strong>Filtering</strong>
               <span className='d-block'>
-                Users can choose to apply filters to the search results.
-                These include whether to show isolates with available assemblies,
-                reads or both, isolates sample from a certain country or range
-                of years, the minimum N50 for assemblies and the maximum number
-                of contigs for assemblies.
+                <p>
+                  You can filter the results directly using the provided toggles,
+                  search again after adjusting them.
+                  Select 'exact matches' to remove any 'fuzzy' matches to your query.
+                </p>
               </span>
             </li>
             <li>
               <strong>Downloading sequences</strong>
               <span className='d-block'>
-                Users may also download up to 100 genomic sequences by filtering
-                through isolate search results and clicking "Download all sequences".
-                Above 100 sequences, a text file listing the sequence URLs for the
-                requested isolates is served instead.
+                <p>
+                  You can get the download links for results by clicking
+                  'Download all sequences'.
+                  Above 100 sequences, this will be sent by email, or after a
+                  short wait.
+                </p>
+
+                <p>
+                  <em>This is a work in progress, and we will add more
+                    functionality to get data out of BacQuerya in the near future.
+                  </em>
+                </p>
               </span>
             </li>
             <li>
               <strong>Isolate Overview</strong>
               <span className='d-block'>
-                Clicking on an individual search result will open an isolate
-                overview page, summarising available metadata for that isolate.
-                These include: the species, accession IDs linked to external
-                databases, download links for assemblies or read sets if
-                available, metadata retrieved from BioSample, additional metadata
-                extracted from other information sources, pre-calculated assembly
-                statistics (when an assembly is available) and genes identified
-                in the assembly using population reference graphs constructed
-                using Panaroo (Tonkin-Hill G, MacAlasdair N, Ruis C, Weimann A,
-                Horesh G, Lees JA, et al. Producing polished prokaryotic
-                pangenomes with the Panaroo pipeline. Genome biology.
-                2020; 21 (1): 1-180.
-                Available from: doi: 10.1186/s13059-020-02090-4).
-                Bar charts are used to highlight how the assembly statistics
-                for this isolate compare to the rest of the population of
-                isolates in our databases.
+                <p>
+                  Clicking on an individual search result will open an isolate
+                  overview page, summarising available metadata for that isolate.
+                  These include: the species, accession IDs linked to external
+                  databases, download links for assemblies or read sets if
+                  available, metadata retrieved from the NCBI BioSample database
+                  and additional metadata extracted from other information sources.
+                  A JSON file with this metadata can be downloaded.
+                </p>
+
+                <h6><em>For enhanced species</em></h6>
+                <ul>
+                  <li>Assembly statistics, and histograms of these in the species.</li>
+                  <li>Contaimination, as measured by <a
+                    tabIndex='0'
+                    target='_blank'
+                    href='https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1841-x'>
+                      mash screen</a>
+                    .</li>
+                  <li>A searchable list of genes (see below).</li>
+                </ul>
               </span>
             </li>
           </ul>
-          <strong className='d-block mb-3'>Genes</strong>
+          <strong className='d-block mb-3'>Genes <em>(enhanced species only)</em></strong>
           <ul>
             <li>
               <strong>Searching</strong>
               <span className='d-block'>
-                Users can search through genes by selecting the "Gene" tab
-                and entering a search term that may be a gene name or protein
-                function.
+                Search through a flexible index of clusters of orthologous genes:
+                <ul>
+                  <li>A gene name or alias.</li>
+                  <li>Annotated gene function.</li>
+                </ul>
+                <p>Gene cluster have been defined using <a
+                  tabIndex='0'
+                  target='_blank'
+                  href='https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02090-4'>
+                    panaroo</a>
+                  .</p>
               </span>
             </li>
             <li>
               <strong>Gene Overview</strong>
               <span className='d-block'>
-                Clicking on a result will open a gene overview page,
-                summarising metadata for the gene of interest, as identified
-                by Panaroo. The "Names/Aliases" field displays all publicly
-                seen gene identifiers for this gene and the "Description(s)"
-                all publicly seen functional annotations. Population reference
-                graphs are at the core of the BacQuerya gene identification
-                pipeline, so these pages also display the frequency of the
-                gene in the isolates in our databases. This page also includes
-                an interactive multiple sequence alignment to summarise the
-                variation of the gene sequence across the population. As
-                BacQuerya currently only supports Streptococcus pneumoniae,
-                this alignment includes 1 representative sequence per GPSC,
-                with GPSCs assigned by the Global Pneumococcal Sequencing Project
-                (<a tabIndex='0' href='https://www.pneumogen.net/gps/'>https://www.pneumogen.net/gps/</a>).
+                <p>
+                  Clicking on a result will open a gene overview page,
+                  summarising metadata for the gene of interest.
+                  The 'Names/Aliases' field displays all publicly
+                  seen gene identifiers for this gene and the 'Description(s)'
+                  all publicly seen functional annotations.
+                </p>
+                <p>
+                  Population level information includes gene count and frequency,
+                  and a sequence alignment viewer (rendered as an image). This can be
+                  scaled to get an overview of the amount and position of variation,
+                  and only SNP sites selected. This alignment currently includes one sample
+                  from each strain (as defined by <a
+                    tabIndex='0' target='_blank'
+                    href='https://genome.cshlp.org/content/29/2/304'>PopPUNK</a>).
+                </p>
+                <p>
+                  An inverse lookup table of isolates with this gene in this species is shown below,
+                  similar to the top level isolate results.
+                </p>
               </span>
             </li>
           </ul>
-          <strong className='d-block mb-3'>Sequence</strong>
+          <strong className='d-block mb-3'>Sequence <em>(enhanced species only)</em></strong>
           <ul>
             <li>
               <strong>Searching</strong>
               <span className='d-block'>
-                Genes can also be searched through or identified by nucleotide
-                sequence by selecting the "Sequence" tab. Sequences are
-                identified using a COBS index (Bingmann T, Bradley P, Gauger F,
-                Iqbal Z. COBS: a Compact Bit-Sliced Signature Index. String
-                Processing and Information Retrieval. 2019; 11811 285-303)
-                by k-mer matching. Search results are ranked in descending
-                order by the proportion of matching k-mers between the query
-                sequence and the sequence of the indexed gene and search
-                results link to the gene overview pages. Sequence queries
-                must be at least 31 characters long and contain only
-                "A", "C", "T" and "G" characters.
+                <p>
+                  Genes can also be searched through using a nucleotide
+                  sequence query. Search sequences must be at nucleotides &gt;=31bp long
+                  (as the index was built with 31-mers).
+                </p>
+
+                <p>
+                  Sequences are queried using a <a tabIndex='0'
+                  target='_blank'
+                  href='https://link.springer.com/chapter/10.1007/978-3-030-32686-9_21'>
+                    COBS
+                  </a> index
+                  by exact k-mer matching. Search results are ranked in descending
+                  order by the proportion of matching k-mers between the query
+                  sequence and the sequence of the indexed gene and search
+                  results link to the gene overview pages.
+                </p>
               </span>
             </li>
           </ul>
@@ -227,71 +266,35 @@ const AboutContent = ({ visible }) => {
             <li>
               <strong>Searching</strong>
               <span className='d-block'>
-                Studies can be searched by selecting the "Study" tab and
-                searching for a title, author, DOI or study topic. Queries
-                are searched for in PubMed using Biopython (Cock PJA, Antao T,
-                Chang JT, Chapman BA, Cox CJ, Dalke A, et al. Biopython:
-                freely available Python tools for computational molecular
-                biology and bioinformatics. Computer applications in the
-                biosciences. 2009; 25 (11): 1422-1423).
+                <p>
+                  Studies can be searched by selecting the 'Study' tab and
+                  searching for a title, author, DOI or study topic. Presently this
+                  is an interface to PubMed search, so has the same features and results.
+                </p>
               </span>
             </li>
             <li>
               <strong>Study Overview</strong>
               <span className='d-block'>
-                Clicking on a search result will load the metadata for that study,
-                retrieved using the CrossRef API (
-                <a
-                  tabIndex='0'
-                  href='https://www.crossref.org/documentation/retrieve-metadata/rest-api/'
-                >
-                  https://www.crossref.org/documentation/retrieve-metadata/rest-api/
-                </a>).
+                <p>
+                  Clicking on a search result will load the metadata for that study,
+                  retrieved using the <a
+                    tabIndex='0'
+                    href='https://www.crossref.org/documentation/retrieve-metadata/rest-api/'
+                  >
+                    CrossRef API
+                  </a>).
+                </p>
               </span>
             </li>
             <li>
-              <strong>Submitting Supplementary Data **Currently in Beta**</strong>
+              <strong>Submitting Supplementary Data <em>(in development)</em></strong>
               <span className='d-block'>
-                There is currently no standardisation for or way to
-                programmatically access a list of isolates used in a particular
-                study. This may lead to a duplication of effort or time wasted
-                while attempting to locate the metadata for these isolates.
-                We would like to make this process easier by making the metadata
-                for these isolates immediately available on our study overview
-                pages. We currently do not have the capacity to automate this
-                process however, we have set up a framework for volunteers to
-                submit the accession IDs associated with a study in the hopes
-                of improving the efficiency of this process for everyone.
-                This submission portal is available through the study overview
-                pages.
+                BacQuerya will eventually be expanded to link studies and the isolates
+                they contain (and vice-versa). This is not yet automated, but if you'd
+                like to help, you can submit lists of isolate accessions for returned
+                studies.
               </span>
-            </li>
-          </ul>
-          <span className='d-block'>All source code is available from:</span>
-          <ul>
-            <li>
-              <a
-                tabIndex='0'
-                href='https://github.com/bacpop/BacQuerya'
-              >
-                https://github.com/bacpop/BacQuerya
-              </a>
-            </li>
-            <li>
-              <a
-                tabIndex='0'
-                href='https://github.com/bacpop/BacQuerya-api'
-              >
-                https://github.com/bacpop/BacQuerya-api
-              </a>
-            </li>
-            <li>
-              <a
-                tabIndex='0'
-                href='https://github.com/bacpop/BacQuerya-processing'
-              >
-                https://github.com/bacpop/BacQuerya-processing
-              </a>
             </li>
           </ul>
         </span>
