@@ -240,7 +240,7 @@ const IsolateDisplay = ({
       return
     }
 
-    graphOptions[activeGraphIndex].populationAssemblyRequest().then((data) => {
+    graphOptions[activeGraphIndex].populationAssemblyRequest(isolateInfo.Organism_name.split(" ").join("_")).then((data) => {
       clearTimeout(timeout)
       setPopulationAssemblyStats(data)
     })
@@ -269,6 +269,11 @@ const IsolateDisplay = ({
               [
                 'GenBank assembly accession',
                 isolateInfo.GenBank_assembly_accession,
+                { link: `https://www.ncbi.nlm.nih.gov/assembly/${isolateInfo.GenBank_assembly_accession.split(" ").join("_")}` }
+              ],
+              [
+                'BioSample accession',
+                isolateInfo.BioSample,
                 { link: `https://www.ncbi.nlm.nih.gov/biosample/${isolateInfo.BioSample}` }
               ]
             ]}

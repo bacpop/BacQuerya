@@ -16,12 +16,12 @@ async function isolateQuery (formData) {
   }
 };
 
-export const populationAssemblyStats = (() => {
+export const populationAssemblyStats = ((species) => {
   // This endpoint's result never changes, so cache it in memory to save load time
   let promise
-  return async () => {
+  return async (species) => {
     if (!promise) {
-      promise = window.fetch('https://bacquerya.azurewebsites.net/population_assembly_stats', {
+      promise = window.fetch('https://bacquerya.azurewebsites.net:443/population_assembly_stats/' + species, {
         mode: 'cors',
         headers: {
           Accept: 'application/json',
@@ -36,8 +36,8 @@ export const populationAssemblyStats = (() => {
 
 export const histogramIntervalCount = 30
 
-const formatForHistogram = (groupProp, roundDigits) =>
-  populationAssemblyStats()
+const formatForHistogram = (groupProp, roundDigits, species) => {
+  return populationAssemblyStats(species)
     .then(data => {
       let min = Infinity
       let max = 0
@@ -77,18 +77,23 @@ const formatForHistogram = (groupProp, roundDigits) =>
         groups
       }
     })
+  }
 
-export const populationAssemblyStatsN50 = () =>
-  formatForHistogram('contig_N50')
+export const populationAssemblyStatsN50 = (species) => {
+  return formatForHistogram('contig_N50', 0, species)
+}
 
-export const populationAssemblyStatsGcContent = () =>
-  formatForHistogram('gc_content', -6)
+export const populationAssemblyStatsGcContent = (species) => {
+  return formatForHistogram('gc_content', -6, species)
+}
 
-export const populationAssemblyTotalBps = () =>
-  formatForHistogram('genome_length', -6)
+export const populationAssemblyTotalBps = (species) => {
+  return formatForHistogram('genome_length', -6, species)
+}
 
-export const populationAssemblyContigCount = () =>
-  formatForHistogram('contig_count', -6)
+export const populationAssemblyContigCount = (species) => {
+  return formatForHistogram('contig_count', -6, species)
+}
 
 export async function specificIsolateQuery (accessionList) {
   const fetchData = {

@@ -12,6 +12,10 @@ We also conduct a number of pre-processing steps and include the outputs of thes
 
 The BacQuerya-API ([https://github.com/bacpop/BacQuerya-api](https://github.com/bacpop/BacQuerya-api)) is the backend server for the website, and used to conduct all index querying and additional user requests.
 
+## Contributors
+
+The BacQuerya website was developed by [Daniel Anderson](https://github.com/Danderson123), [John Lees](https://github.com/johnlees) and [Jeffrey Sweeney](https://github.com/jsweeneydev).
+
 ## Available Scripts
 
 In the project directory, you can run:

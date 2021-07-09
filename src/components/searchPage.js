@@ -12,6 +12,36 @@ import FilterComponent from './searchFilters'
 import { SequenceDownload } from './sequenceDownload'
 import '../CSS/searchPage.css'
 
+const cleanAliases = (names, consistentName) => {
+  const cleanedNames = names.map(alias => {
+    if (alias != consistentName) {
+      return alias
+    }
+  })
+  return cleanedNames
+}
+
+const shortLinks = (representation, URLs, index) => {
+  const seqs = URLs instanceof Array
+                ? URLs
+                : [URLs]
+  if (seqs.length === 1) {
+    if (representation === 'full') {
+      return 'Assembly'
+    }
+    return 'Read'
+  }
+  if (seqs.length === 2) {
+    return "Read_" + index + 1
+  }
+  if (seqs.length === 3) {
+    if (index !== 2) {
+      return "Read_" + (index + 1) + ", "
+    }
+    return "Assembly"
+  }
+}
+
 const splitGeneNames = (result) => {
   const panarooNames = result._source.panarooNames || ''
   const consistentName = result._source.consistentNames
@@ -21,19 +51,18 @@ const splitGeneNames = (result) => {
     return []
   }
 
-  const vals = panarooNames.split('~~~').concat(pFamNames)
+  const vals = [].concat(consistentName).concat(cleanAliases(panarooNames.split('~~~'), consistentName)).concat(pFamNames)
     .filter(name => name && !(['UNNAMED_', 'PRED_'].some(n => name.includes(n))))
     .sort((a, b) => a === consistentName - b === consistentName)
     .map(name => (
       <Link
         key={name}
-        to={`/gene/${name}`}
+        to={`/gene/${consistentName}`}
         target='_blank'
       >
         {name}
       </Link>
     ))
-
   return vals
 }
 
@@ -85,19 +114,18 @@ const typeRequest = {
               r._source.sequenceURL instanceof Array
                 ? r._source.sequenceURL
                 : [r._source.sequenceURL]
-            ).map(link => (
-              <a
-                key={link}
-                href={link}
-                rel='noreferrer'
-                title={link.split('/')[link.split('/').length - 1]}
-              >
-                {
-                  r._source.Genome_representation === 'full'
-                    ? 'Assembly'
-                    : 'Reads'
-                }
-              </a>
+            ).map((link, index) => (
+                <a
+                  key={link}
+                  href={link}
+                  rel='noreferrer'
+                  title={link.split('/')[link.split('/').length - 1]}
+                >
+                  {shortLinks(r._source.Genome_representation,
+                              r._source.sequenceURL,
+                              index)
+                  }
+                </a>
             ))
           }
         </>
@@ -239,7 +267,8 @@ const SearchPage = () => {
       ],
       minN50: 0,
       noContigs: 'All',
-      reads: true
+      reads: true,
+      exactMatches: false
     }
   }))
   const [showDownloadOptions, setOpenDownloads] = useState(false)

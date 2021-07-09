@@ -53,6 +53,17 @@ const SearchFilters = ({ formState, setFormState }) => {
             })
           }}
         />
+        <Checkbox
+          label='Exact matches'
+          value={formState.searchFilters.exactMatches}
+          onChange={exactMatches => {
+            setFormState({
+              searchFilters: {
+                exactMatches
+              }
+            })
+          }}
+        />
       </div>
       <div className='d-flex'>
         <div
