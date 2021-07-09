@@ -1,0 +1,24 @@
+.bi-hover {
+  color: grey;
+  font-size: 2rem;
+  transition: color 0.2s;
+}
+
+.bi-hover:hover {
+  color: black;
+}
+
+.plain-link {
+  border: 3px solid transparent;
+  border-radius: 3px;
+  box-shadow: none !important;
+  color: black;
+  outline: none;
+  padding: 0 .5rem;
+  text-align: center;
+  text-decoration: none !important;
+}
+
+.plain-link:hover, :focus {
+  border-color: #007bff;
+}
