@@ -98,6 +98,7 @@ const IsolateDisplay = ({
     max: 0,
     groups: []
   })
+
   const [searchFilter, setSearchFilter] = useState('')
   const [graphScale, setGraphScale] = useState(1)
   const sortedConsistentNames = useMemo(
@@ -269,7 +270,7 @@ const IsolateDisplay = ({
               [
                 'GenBank assembly accession',
                 isolateInfo.GenBank_assembly_accession,
-                { link: `https://www.ncbi.nlm.nih.gov/assembly/${isolateInfo.GenBank_assembly_accession.split(" ").join("_")}` }
+                { link: `https://www.ncbi.nlm.nih.gov/assembly/${isolateInfo.GenBank_assembly_accession}` }
               ],
               [
                 'BioSample accession',
