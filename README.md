@@ -1,6 +1,8 @@
-# BacQuerya
+# BacQuerya <img src='public/logo.svg' align="right" height="75" />
 
-BacQuerya is a search engine that aims to consolidate and present all publicly available genomic metadata for bacterial pathogens. BacQuerya is built using React.js and is currently in beta and as such, is unstable in some circumstances and only houses *S. pneumoniae* genomic metadata at this time. 
+[![Azure Static Web Apps CI/CD](https://github.com/bacpop/BacQuerya/actions/workflows/azure-static-web-apps-kind-field-004c78803.yml/badge.svg)](https://github.com/bacpop/BacQuerya/actions/workflows/azure-static-web-apps-kind-field-004c78803.yml)
+
+BacQuerya is a search engine for genomic metadata for bacterial pathogens. BacQuerya is built using React.js and is currently in beta. The gene and sequence searches on include *S. pneumoniae* genomic metadata at this time.
 
 ## Methods
 

@@ -235,7 +235,7 @@ const ResultsTable = ({ searchResults }) => {
                     key={label}
                     className='pr-3'
                   >
-                    {valueFn(data)}
+                    {label == 'Species' ? <em>{valueFn(data)}</em> : valueFn(data)}
                   </td>
                 ))
               }
@@ -434,7 +434,11 @@ const SearchPage = () => {
   }, [])
 
   useEffect(() => {
-    if (loading || !typeRequest[searchResults.formState.searchType].infiniteScroll) {
+    if (
+      loading ||
+      !typeRequest[searchResults.formState.searchType].infiniteScroll ||
+      !searchResults.searchPerformed
+    ) {
       return
     }
     const onScroll = () => {
@@ -471,12 +475,18 @@ const SearchPage = () => {
 
   return (
     <div
-      className='d-flex mt-3 flex-column container text-left text-start h-100 position-absolute'
+      className='d-flex mt-2 flex-column container text-left text-start h-100 position-absolute'
     >
       <div className='d-flex'>
         <div className='flex-fill d-flex flex-column mr-4'>
+          <div className='mb-1'>
+            <p className="mb-0"
+            style={{
+              fontSize: '.9rem'
+            }}>Search for bacterial genomes and metadata</p>
+          </div>
           <form
-            className='d-flex mb-4'
+            className='d-flex mb-1'
             onSubmit={(e) => {
               e.preventDefault()
               search(
@@ -486,17 +496,24 @@ const SearchPage = () => {
               )
             }}
           >
-            <input
-              ref={searchInputRef}
-              name='searchTerm'
-              className='flex-fill mr-2 form-control'
-              value={formState.searchTerm}
-              onChange={e => {
-                setFormState({
-                  searchTerm: e.target.value
-                })
-              }}
-            />
+            <div className="input-group mr-2">
+              <div className="input-group-prepend">
+                <span className="input-group-text bg-transparent border-right-0">
+                  <img src="/logo_glass.svg" className="img-responsive" alt="Search" width="24" height="24" />
+                </span>
+              </div>
+              <input
+                ref={searchInputRef}
+                name='searchTerm'
+                className='flex-fill form-control border-left-0'
+                value={formState.searchTerm}
+                onChange={e => {
+                  setFormState({
+                    searchTerm: e.target.value
+                  })
+                }}
+              />
+            </div>
             <div className='d-flex align-items-end'>
               <button
                 type='submit'
@@ -511,7 +528,33 @@ const SearchPage = () => {
               </button>
             </div>
           </form>
-
+          <div className='mb-1'>
+              <div className='flex-fill'
+              style={{
+                fontSize: '.8rem'
+              }}>
+                {
+                  formState.searchType === 'isolate' && (
+                    "Examples: 'streptococcus pneumoniae nepal 23F', 'e coli IAI1'"
+                  )
+                }
+                {
+                  formState.searchType === 'study' && (
+                    "Examples: 'International Genomic Definition of Pneumococcal Lineages', 'altschul SF blast'"
+                  )
+                }
+                {
+                  formState.searchType === 'gene' && (
+                    "Examples: 'tetM', 'surface protein A', 'penicillin binding'"
+                  )
+                }
+                {
+                  formState.searchType === 'sequence' && (
+                    "Example: 'ATTCCCACAATCTTTTTTATCAATAAGATTGACCAAAATGGAATTGATTTATCAA'"
+                  )
+                }
+                </div>
+        </div>
           <div className='btn-group'>
             {
               ['isolate', 'study', 'gene', 'sequence']
@@ -542,7 +585,7 @@ const SearchPage = () => {
               <div style={{ maxWidth: '300px' }}>
                 <h6>Gene Sequence</h6>
                 <p>
-                  Enter a gene chemical sequence{' '}
+                  Enter a DNA sequence of a gene{' '}
                   <span
                     className={sequenceContainsInvalidChars ? 'font-weight-bold' : ''}
                   >
