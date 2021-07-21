@@ -383,7 +383,7 @@ const GeneDisplay = ({ geneInfo, noResults }) => {
                   <KeyVals items={[
                     ['Names/Aliases', displayNames.join(', ')],
                     // ['Gene frequency', `${((queryResult.length / 26616) * 100).toFixed(2)}%`]
-                    ['Gene frequency', `${((geneInfo?.geneMetadata.isolateMetadata.length / 26616) * 100).toFixed(2)}%`]
+                    ['Gene frequency', `${((geneInfo?.geneMetadata.foundIn_labels.length / 26616) * 100).toFixed(2)}%`]
                   ]}
                   />
                 )}
@@ -391,7 +391,7 @@ const GeneDisplay = ({ geneInfo, noResults }) => {
               <div className='my-4'>
                 Gene was found in {
                   // queryResult.length
-                  geneInfo?.geneMetadata.isolateMetadata.length
+                  geneInfo?.geneMetadata.foundIn_labels.length
                 } isolates
 
               </div>
