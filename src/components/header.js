@@ -300,26 +300,12 @@ const AboutContent = ({ visible }) => {
           <strong className='d-block mb-3'>Authors and Contributors</strong>
               <span className='d-block'>
                 <p>
-                  <a 
-                    tabIndex='0'
-                    href='https://github.com/johnlees' 
-                    >
-                      Dr John Lees 
-                  </a>, 
-                  <a 
-                    tabIndex='0'
-                    href='https://github.com/Danderson123' 
-                    >
-                      Daniel Anderson 
-                  </a>, and 
-                  <a tabIndex='0'
-                    href='https://github.com/bruhad-dave' 
-                    >
-                      Bruhad Dave 
+                  <a href='https://github.com/johnlees' >Dr John Lees </a>, 
+                  <a href='https://github.com/Danderson123' >&nbsp;Daniel Anderson </a>, and 
+                  <a href='https://github.com/bruhad-dave' >&nbsp;Bruhad Dave 
                   </a>
                 </p>
               </span>
-            <li></li>
         </span>
       </div>
     </div>
