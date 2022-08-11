@@ -297,6 +297,14 @@ const AboutContent = ({ visible }) => {
               </span>
             </li>
           </ul>
+          <strong className='d-block mb-3'>Authors and Contributors</strong>
+              <span className='d-block'>
+                <p>
+                  <a href='https://github.com/johnlees' >Dr John Lees</a>,&nbsp;
+                  <a href='https://github.com/Danderson123' >Daniel Anderson</a>, and&nbsp;
+                  <a href='https://github.com/bruhad-dave' >Bruhad Dave</a>
+                </p>
+              </span>
         </span>
       </div>
     </div>
