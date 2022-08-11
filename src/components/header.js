@@ -301,9 +301,8 @@ const AboutContent = ({ visible }) => {
               <span className='d-block'>
                 <p>
                   <a href='https://github.com/johnlees' >Dr John Lees</a>, 
-                  <a href='https://github.com/Danderson123' >&nbsp;Daniel Anderson</a>, and 
-                  <a href='https://github.com/bruhad-dave' >&nbsp;Bruhad Dave 
-                  </a>
+                  &nbsp;<a href='https://github.com/Danderson123' >Daniel Anderson</a>, and 
+                  &nbsp;<a href='https://github.com/bruhad-dave' >Bruhad Dave</a>
                 </p>
               </span>
         </span>
