@@ -8,7 +8,7 @@ async function geneQuery (formData) {
     },
     body: JSON.stringify(formData)
   }
-  const fetchResponse = await window.fetch('https://bacquerya.azurewebsites.net:443/geneQuery', fetchData)
+  const fetchResponse = await window.fetch(`${process.env.REACT_APP_URL_HOST}:${process.env.REACT_APP_URL_PORT}/geneQuery`, fetchData)
   const resolvedResponse = await fetchResponse.json()
   return {
     resultCount: resolvedResponse.resultCount,
@@ -18,7 +18,7 @@ async function geneQuery (formData) {
 
 export function geneAlignment (geneConsistentName) {
   return window.fetch(
-    `https://bacquerya.azurewebsites.net:443/alignmentView/${geneConsistentName}`,
+  `${process.env.REACT_APP_URL_HOST}:${process.env.REACT_APP_URL_PORT}/alignmentView/${geneConsistentName}`,
     {
       mode: 'cors',
       headers: {
@@ -39,7 +39,7 @@ export async function specificGeneQuery(accessionList) {
         },
         body: JSON.stringify({'searchTerm': accessionList, "searchType": "consistentNameList"}),
       };
-    const fetchResponse = await fetch("https://bacquerya.azurewebsites.net:443/geneQuery", fetchData);
+    const fetchResponse = await fetch(`${process.env.REACT_APP_URL_HOST}:${process.env.REACT_APP_URL_PORT}/geneQuery`, fetchData);
     const resolvedResponse = await fetchResponse.json();
     const filteredResults = await resolvedResponse.searchResult.filter(function( obj ) {
         if (obj === null) {

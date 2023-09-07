@@ -8,7 +8,7 @@ async function isolateQuery (formData) {
     },
     body: JSON.stringify(formData)
   }
-  const fetchResponse = await window.fetch('https://bacquerya.azurewebsites.net:443/isolateQuery', fetchData)
+  const fetchResponse = await window.fetch(`${process.env.REACT_APP_URL_HOST}:${process.env.REACT_APP_URL_PORT}/isolateQuery`, fetchData)
   const resolvedResponse = await fetchResponse.json()
   return {
     resultCount: resolvedResponse.resultCount,
@@ -21,7 +21,7 @@ export const populationAssemblyStats = ((species) => {
   let promise
   return async (species) => {
     if (!promise) {
-      promise = window.fetch('https://bacquerya.azurewebsites.net:443/population_assembly_stats/' + species, {
+      promise = window.fetch(`${process.env.REACT_APP_URL_HOST}:${process.env.REACT_APP_URL_PORT}/population_assembly_stats/` + species, {
         mode: 'cors',
         headers: {
           Accept: 'application/json',
@@ -105,7 +105,7 @@ export async function specificIsolateQuery (accessionList) {
     },
     body: JSON.stringify({ searchTerm: accessionList, searchType: 'biosampleList' })
   }
-  const fetchResponse = await window.fetch('https://bacquerya.azurewebsites.net:443/isolateQuery', fetchData)
+  const fetchResponse = await window.fetch(`${process.env.REACT_APP_URL_HOST}:${process.env.REACT_APP_URL_PORT}/isolateQuery`, fetchData)
   const resolvedResponse = await fetchResponse.json()
   const filteredResults = await resolvedResponse.searchResult.filter(function (obj) {
     if (obj === null) {

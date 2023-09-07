@@ -11,7 +11,7 @@ const StudyPage = ({ match }) => {
     const [searchResult, updateResult] = useState();
 
     useEffect(() => {
-        fetch('https://bacquerya.azurewebsites.net:443/study', {
+        fetch(`${process.env.REACT_APP_URL_HOST}:${process.env.REACT_APP_URL_PORT}/study`, {
             method: 'POST',
             mode: 'cors',
             headers : {

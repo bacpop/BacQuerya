@@ -13,7 +13,7 @@ async function postSequenceUrls (sequenceURLs, email) {
     },
     body: JSON.stringify({ sequenceURLs: sequenceURLs, email: email })
   }
-  const fetchResponse = await window.fetch('https://bacquerya.azurewebsites.net:443/bulkdownloads', fetchData)
+  const fetchResponse = await window.fetch(`${process.env.REACT_APP_URL_HOST}:${process.env.REACT_APP_URL_PORT}/bulkdownloads`, fetchData)
   const resolvedResponse = await fetchResponse.json()
   return resolvedResponse.downloadURL
 };

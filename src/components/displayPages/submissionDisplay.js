@@ -52,7 +52,7 @@ const SubmissionPage = ({ match }) => {
                 <p style={{textAlign: "left", marginTop: "1%", marginLeft: "3%", marginRight: "3%"}}>
                     To submit accessions, please complete the "upload_template.csv" file below, completing ONE field per row, with ONE row per isolate. When you are done, save the completed template as a CSV file titled "{decodedDOI}.csv" and upload it using the drag and drop uploader below. When you are ready to submit, click "Submit accession IDs". If the accession IDs are included in our databases, the information will automatically be linked to the study and presented on the study overview page.
                 </p>
-                <Button style={{float: "right", marginRight: "4%"}} variant="outline-primary" type="submit" id="mediumLarge-font" href="https://bacquerya.azurewebsites.net:443/upload_template">Click to download the upload template</Button>
+                <Button style={{float: "right", marginRight: "4%"}} variant="outline-primary" type="submit" id="mediumLarge-font" href="{process.env.REACT_APP_URL_HOST}:{process.env.REACT_APP_URL_PORT}/upload_template"ß>Click to download the upload template</Button>
                 <DropZone onDrop={ onDrop } DOI={ decodedDOI }/>
                 </>}
             {(success) && <h3 id="header-font" style={{marginTop: "2%"}}>Thank you for your submission!</h3>}

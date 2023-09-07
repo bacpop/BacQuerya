@@ -9,7 +9,7 @@ async function studyQuery (formData) {
     // body: JSON.stringify({'searchTerm': formData, 'source': 'searchBar'}),
     body: JSON.stringify(formData)
   }
-  const fetchResponse = await window.fetch('https://bacquerya.azurewebsites.net:443/study', fetchData)
+  const fetchResponse = await window.fetch(`${process.env.REACT_APP_URL_HOST}:${process.env.REACT_APP_URL_PORT}/study`, fetchData)
   const resolvedResponse = await fetchResponse.json()
   return {
     resultCount: resolvedResponse.resultCount == null
@@ -24,7 +24,7 @@ export default studyQuery
 export async function assignStudyAccessions(uploadedFile) {
   const data = new FormData();
   data.append('file', uploadedFile);
-  fetch('https://bacquerya.azurewebsites.net:443/upload_accessions', {
+  fetch(`${process.env.REACT_APP_URL_HOST}:${process.env.REACT_APP_URL_PORT}/upload_accessions`, {
       method: 'POST',
       body: data,
       });
